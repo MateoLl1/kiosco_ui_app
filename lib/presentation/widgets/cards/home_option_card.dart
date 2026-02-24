@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 class HomeOptionCard extends StatelessWidget {
   final String title;
   final IconData icon;
@@ -14,9 +15,11 @@ class HomeOptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return SizedBox(
       height: 180,
       child: Card(
+        color: colors.primaryContainer,
         elevation: 1,
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
