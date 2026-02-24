@@ -14,9 +14,9 @@ class App extends ConsumerWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context,ref) {
-    final isDark = ref.watch(isDarkThemeProvider);
+  Widget build(BuildContext context,WidgetRef ref) {
     final colorTheme = ref.watch(selectColorThemeProvider);
+    final isDark = ref.watch(isDarkThemeProvider);
     return MaterialApp.router(
       theme: AppTheme(
         isDark: isDark,
@@ -24,6 +24,7 @@ class App extends ConsumerWidget {
       ).getTheme(),
       routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
+      
     );
   }
 }
