@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -10,6 +9,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final isWide = width >= 900;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       body: SafeArea(
@@ -36,6 +36,8 @@ class HomeScreen extends StatelessWidget {
                             child: HomeOptionCard(
                               title: 'Taller / Servicios',
                               icon: Icons.car_repair,
+                              backgroundColor: colorScheme.primary,
+                              foregroundColor: colorScheme.onPrimary,
                               onTap: () => context.go('/service'),
                             ),
                           ),
@@ -44,6 +46,10 @@ class HomeScreen extends StatelessWidget {
                             child: HomeOptionCard(
                               title: 'Mostrador de Repuestos',
                               icon: Icons.inventory_2_outlined,
+                              backgroundColor:
+                                  colorScheme.surfaceContainerHighest,
+                              foregroundColor:
+                                  colorScheme.onSurfaceVariant,
                               onTap: () => context.go('/parts'),
                             ),
                           ),
@@ -55,12 +61,18 @@ class HomeScreen extends StatelessWidget {
                           HomeOptionCard(
                             title: 'Taller / Servicios',
                             icon: Icons.car_repair,
+                            backgroundColor: colorScheme.primary,
+                            foregroundColor: colorScheme.onPrimary,
                             onTap: () => context.go('/service'),
                           ),
                           const SizedBox(height: 20),
                           HomeOptionCard(
                             title: 'Mostrador de Repuestos',
                             icon: Icons.inventory_2_outlined,
+                            backgroundColor:
+                                colorScheme.surfaceContainerHighest,
+                            foregroundColor:
+                                colorScheme.onSurfaceVariant,
                             onTap: () => context.go('/parts'),
                           ),
                         ],
