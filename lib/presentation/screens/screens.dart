@@ -1,2 +1,3 @@
 export './home/home_screen.dart';
 export './loading/loading_screen.dart';
+export './home/taller_servicio_screen.dart';

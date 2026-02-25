@@ -15,5 +15,10 @@ final appRouter = GoRouter(
       path: '/loading',
       builder: (context, state) => LoadingScreen(),
     ),
+
+    GoRoute(
+      path: '/taller-servicio',
+      builder: (context, state) => TallerServicioScreen(),
+    ),
   ]
 );

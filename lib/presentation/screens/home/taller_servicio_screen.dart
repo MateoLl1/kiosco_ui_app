@@ -3,15 +3,14 @@ import 'package:go_router/go_router.dart';
 import 'package:kiosco_au/presentation/screens/painters/painters.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class TallerServicioScreen extends StatelessWidget {
+  const TallerServicioScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final isWide = width >= 900;
     final colors = Theme.of(context).colorScheme;
-    
 
     return Scaffold(
       body: SafeArea(
@@ -20,10 +19,28 @@ class HomeScreen extends StatelessWidget {
             Positioned.fill(
               child: CustomPaint(
                 painter: HomePainter(
-                  primaryColor: colors.primary
+                  primaryColor: colors.primary,
                 ),
               ),
             ),
+
+            Positioned(
+              top: 16,
+              left: 16,
+              child: Material(
+                color: colors.surface,
+                borderRadius: BorderRadius.circular(12),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () => context.pop(),
+                  child: const Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Icon(Icons.arrow_back),
+                  ),
+                ),
+              ),
+            ),
+
             Column(
               children: [
                 Expanded(
@@ -36,8 +53,8 @@ class HomeScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const HomeHeader(
-                          title: 'Bienvenido',
-                          subtitle: 'Seleccione el área a la que se dirige',
+                          title: 'Taller / Servicios',
+                          subtitle: '¿Tiene cita agendada?',
                         ),
                         const SizedBox(height: 32),
                         if (isWide)
@@ -45,23 +62,23 @@ class HomeScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: HomeOptionCard(
-                                  title: 'Taller / Servicios',
-                                  icon: Icons.car_repair,
+                                  title: 'Sí, tengo cita',
+                                  icon: Icons.event_available_outlined,
                                   backgroundColor: colors.primary,
                                   foregroundColor: colors.onPrimary,
-                                  onTap: () => context.go('/service'),
+                                  onTap: () => context.go('/service/appointment'),
                                 ),
                               ),
                               const SizedBox(width: 24),
                               Expanded(
                                 child: HomeOptionCard(
-                                  title: 'Mostrador de Repuestos',
-                                  icon: Icons.inventory_2_outlined,
+                                  title: 'No, sin cita',
+                                  icon: Icons.event_busy_outlined,
                                   backgroundColor:
                                       colors.surfaceContainerHighest,
                                   foregroundColor:
                                       colors.onSurfaceVariant,
-                                  onTap: () => context.go('/parts'),
+                                  onTap: () => context.go('/service/walkin'),
                                 ),
                               ),
                             ],
@@ -70,21 +87,21 @@ class HomeScreen extends StatelessWidget {
                           Column(
                             children: [
                               HomeOptionCard(
-                                title: 'Taller / Servicios',
-                                icon: Icons.car_repair,
+                                title: 'Sí, tengo cita',
+                                icon: Icons.event_available_outlined,
                                 backgroundColor: colors.primary,
                                 foregroundColor: colors.onPrimary,
-                                onTap: () => context.push('/taller-servicio'),
+                                onTap: () => context.go('/service/appointment'),
                               ),
                               const SizedBox(height: 20),
                               HomeOptionCard(
-                                title: 'Mostrador de Repuestos',
-                                icon: Icons.inventory_2_outlined,
+                                title: 'No, sin cita',
+                                icon: Icons.event_busy_outlined,
                                 backgroundColor:
                                     colors.surfaceContainerHighest,
                                 foregroundColor:
                                     colors.onSurfaceVariant,
-                                onTap: () => context.go('/parts'),
+                                onTap: () => context.go('/service/walkin'),
                               ),
                             ],
                           ),
@@ -92,12 +109,6 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-
-                
-                const AcFooter(),
-
-
-
               ],
             ),
           ],
