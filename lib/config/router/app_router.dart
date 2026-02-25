@@ -10,5 +10,10 @@ final appRouter = GoRouter(
       path: '/',
       builder: (context, state) => HomeScreen(),
     ),
+
+    GoRoute(
+      path: '/loading',
+      builder: (context, state) => LoadingScreen(),
+    ),
   ]
 );
