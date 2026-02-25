@@ -94,7 +94,22 @@ class _IngresarPlacaScreenState extends State<IngresarPlacaScreen> {
   void _buscarCita() {
     if (!_placaCompletaValida) return;
     final placa = _placaParaBackend;
-    context.go('/');
+
+
+    mostrarAlerta(
+      context, 
+      icono: Icons.info, 
+      colorIcono: Theme.of(context).colorScheme.primary, 
+      titulo: 'Sin cita registrada', 
+      mensaje: 'No se encontró cita para la placa $placa', 
+      textoBoton: 'Generar turno',
+      onBoton: () => {
+        _borrarTodo(),
+        context.pushReplacement('/ingresar-ruc')
+      }
+    );
+
+    // context.go('/');
   }
 
   @override
