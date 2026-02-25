@@ -11,6 +11,7 @@ class HomeScreen extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final isWide = width >= 900;
     final colors = Theme.of(context).colorScheme;
+    
 
     return Scaffold(
       body: SafeArea(
@@ -91,7 +92,12 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+
+                
                 const AcFooter(),
+
+
+
               ],
             ),
           ],

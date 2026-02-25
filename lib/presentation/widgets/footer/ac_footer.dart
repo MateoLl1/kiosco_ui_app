@@ -7,14 +7,28 @@ class AcFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 14),
+      padding: const EdgeInsets.only(bottom: 10),
       alignment: Alignment.center,
-      child: const Text(
-        'Automotores Continental',
-        style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
-        ),
+      child: Column(
+        children: [
+
+          Image.asset(
+            'assets/img/chevrolet-logo.png',
+            width: 100,
+          ),
+          Divider(
+            endIndent: 50,
+            indent: 50,
+          ),
+
+          const Text(
+            'Automotores Continental',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
       ),
     );
   }
