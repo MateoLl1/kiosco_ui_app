@@ -20,5 +20,10 @@ final appRouter = GoRouter(
       path: '/taller-servicio',
       builder: (context, state) => TallerServicioScreen(),
     ),
+
+    GoRoute(
+      path: '/ingresar-placa',
+      builder: (context, state) => IngresarPlacaScreen(),
+    ),
   ]
 );

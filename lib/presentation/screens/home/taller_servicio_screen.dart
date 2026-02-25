@@ -66,19 +66,19 @@ class TallerServicioScreen extends StatelessWidget {
                                   icon: Icons.event_available_outlined,
                                   backgroundColor: colors.primary,
                                   foregroundColor: colors.onPrimary,
-                                  onTap: () => context.go('/service/appointment'),
+                                  onTap: () => context.push('/ingresar-placa'),
                                 ),
                               ),
                               const SizedBox(width: 24),
                               Expanded(
                                 child: HomeOptionCard(
-                                  title: 'No, sin cita',
+                                  title: 'No, tengo cita',
                                   icon: Icons.event_busy_outlined,
                                   backgroundColor:
                                       colors.surfaceContainerHighest,
                                   foregroundColor:
                                       colors.onSurfaceVariant,
-                                  onTap: () => context.go('/service/walkin'),
+                                  onTap: () => context.push('/service/walkin'),
                                 ),
                               ),
                             ],
@@ -91,17 +91,17 @@ class TallerServicioScreen extends StatelessWidget {
                                 icon: Icons.event_available_outlined,
                                 backgroundColor: colors.primary,
                                 foregroundColor: colors.onPrimary,
-                                onTap: () => context.go('/service/appointment'),
+                                onTap: () => context.push('/ingresar-placa'),
                               ),
                               const SizedBox(height: 20),
                               HomeOptionCard(
-                                title: 'No, sin cita',
+                                title: 'No, tengo cita',
                                 icon: Icons.event_busy_outlined,
                                 backgroundColor:
                                     colors.surfaceContainerHighest,
                                 foregroundColor:
                                     colors.onSurfaceVariant,
-                                onTap: () => context.go('/service/walkin'),
+                                onTap: () => context.push('/service/walkin'),
                               ),
                             ],
                           ),

@@ -49,7 +49,7 @@ class HomeScreen extends StatelessWidget {
                                   icon: Icons.car_repair,
                                   backgroundColor: colors.primary,
                                   foregroundColor: colors.onPrimary,
-                                  onTap: () => context.go('/service'),
+                                  onTap: () => context.push('/taller-servicio'),
                                 ),
                               ),
                               const SizedBox(width: 24),
