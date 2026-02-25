@@ -29,5 +29,10 @@ final appRouter = GoRouter(
       path: '/ingresar-ruc',
       builder: (context, state) => IngresarRucScreen(),
     ),
+
+    GoRoute(
+      path: '/turno-asignado',
+      builder: (context, state) => TurnoAsignadoScreen(),
+    ),
   ]
 );

@@ -27,18 +27,7 @@ class TallerServicioScreen extends StatelessWidget {
             Positioned(
               top: 16,
               left: 16,
-              child: Material(
-                color: colors.surface,
-                borderRadius: BorderRadius.circular(12),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(12),
-                  onTap: () => context.pop(),
-                  child: const Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Icon(Icons.arrow_back),
-                  ),
-                ),
-              ),
+              child: ReturnPageButton()
             ),
 
             Column(
