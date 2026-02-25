@@ -78,7 +78,7 @@ class TallerServicioScreen extends StatelessWidget {
                                       colors.surfaceContainerHighest,
                                   foregroundColor:
                                       colors.onSurfaceVariant,
-                                  onTap: () => context.push('/service/walkin'),
+                                  onTap: () => context.push('/ingresar-ruc'),
                                 ),
                               ),
                             ],
@@ -101,7 +101,7 @@ class TallerServicioScreen extends StatelessWidget {
                                     colors.surfaceContainerHighest,
                                 foregroundColor:
                                     colors.onSurfaceVariant,
-                                onTap: () => context.push('/service/walkin'),
+                                onTap: () => context.push('/ingresar-ruc'),
                               ),
                             ],
                           ),

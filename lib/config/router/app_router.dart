@@ -25,5 +25,9 @@ final appRouter = GoRouter(
       path: '/ingresar-placa',
       builder: (context, state) => IngresarPlacaScreen(),
     ),
+    GoRoute(
+      path: '/ingresar-ruc',
+      builder: (context, state) => IngresarRucScreen(),
+    ),
   ]
 );

@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
@@ -93,7 +94,7 @@ class _IngresarPlacaScreenState extends State<IngresarPlacaScreen> {
   void _buscarCita() {
     if (!_placaCompletaValida) return;
     final placa = _placaParaBackend;
-    context.go('/loading');
+    context.go('/');
   }
 
   @override
@@ -279,11 +280,13 @@ class _IngresarPlacaScreenState extends State<IngresarPlacaScreen> {
                         const SizedBox(height: 18),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 50),
-                          child: CustomIconTextButton(
-                            texto: 'Buscar cita',
-                            icono: Icons.search_rounded,
-                            onTap: _buscarCita,
-                            colorFondo: colores.primary,
+                          child: FadeIn(
+                            child: CustomIconTextButton(
+                              texto: 'Buscar cita',
+                              icono: Icons.search_rounded,
+                              onTap: _buscarCita,
+                              colorFondo: colores.primary,
+                            ),
                           ),
                         ),
                       ],
