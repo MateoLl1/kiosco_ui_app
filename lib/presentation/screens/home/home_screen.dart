@@ -61,7 +61,7 @@ class HomeScreen extends StatelessWidget {
                                       colors.surfaceContainerHighest,
                                   foregroundColor:
                                       colors.onSurfaceVariant,
-                                  onTap: () => context.go('/parts'),
+                                  onTap: () => context.go('/ingresar-ruc'),
                                 ),
                               ),
                             ],
@@ -84,7 +84,7 @@ class HomeScreen extends StatelessWidget {
                                     colors.surfaceContainerHighest,
                                 foregroundColor:
                                     colors.onSurfaceVariant,
-                                onTap: () => context.go('/parts'),
+                                onTap: () => context.go('/ingresar-ruc'),
                               ),
                             ],
                           ),

@@ -54,7 +54,8 @@ class _IngresarRucScreenState extends State<IngresarRucScreen> {
   void _continuar() {
     if (!_cedulaORucValido) return;
     final identificacion = _identificacionIngresada;
-    context.go('/');
+    _borrarTodo();
+    context.push('/turno-asignado');
   }
 
   @override
