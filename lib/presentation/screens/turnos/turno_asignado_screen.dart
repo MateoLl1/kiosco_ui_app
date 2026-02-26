@@ -33,89 +33,91 @@ class TurnoAsignadoScreen extends StatelessWidget {
 
             Positioned(
               child: Center(
-                child: SizedBox(
-                  width: 400,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      
-                      HomeHeader(
-                        title: 'Turno asignado', 
-                        subtitle: 'Su turno ha sido generado exitosamente'
-                      ),
-                  
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 20),
-                        child: Column(
-                          children: [
+                child: SingleChildScrollView(
+                  child: SizedBox(
+                    width: 400,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
                         
-                            Card(
-                              color: colors.onSecondary,
-                              elevation: 2,
-                              shadowColor: colors.onSurface,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10,vertical:  30),
-                                child: Column(
-                                  children: [
-                        
-                        
-                                    Card(
-                                      color: colors.surface,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-                                        child: Text(
-                                          'T-044',style: textStyle.titleLarge,
-                                        ),
-                                      )
-                                    ),
-                                    Divider(),
-                        
-                        
-                                    DetalleTurno(
-                                      label: 'Cliente', 
-                                      descripcion: 'Mateo Llerena', 
-                                      icon: Icons.person
-                                    ),
-                                    DetalleTurno(
-                                      label: 'Área', 
-                                      descripcion: 'Taller - Servicios', 
-                                      icon: Icons.area_chart
-                                    ),
-                                    DetalleTurno(
-                                      label: 'Tiempo est.', 
-                                      descripcion: '~15 min', 
-                                      icon: Icons.timelapse
-                                    ),
-                                    DetalleTurno(
-                                      label: 'En cola', 
-                                      descripcion: '3 persona(s) antes', 
-                                      icon: Icons.people
-                                    ),
-
-                                    
-                        
-                        
-                                  ],
+                        HomeHeader(
+                          title: 'Turno asignado', 
+                          subtitle: 'Su turno ha sido generado exitosamente'
+                        ),
+                    
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 20),
+                          child: Column(
+                            children: [
+                          
+                              Card(
+                                color: colors.onSecondary,
+                                elevation: 2,
+                                shadowColor: colors.onSurface,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical:  30),
+                                  child: Column(
+                                    children: [
+                          
+                          
+                                      Card(
+                                        color: colors.surface,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                                          child: Text(
+                                            'T-044',style: textStyle.titleLarge,
+                                          ),
+                                        )
+                                      ),
+                                      Divider(),
+                          
+                          
+                                      DetalleTurno(
+                                        label: 'Cliente', 
+                                        descripcion: 'Mateo Llerena', 
+                                        icon: Icons.person
+                                      ),
+                                      DetalleTurno(
+                                        label: 'Área', 
+                                        descripcion: 'Taller - Servicios', 
+                                        icon: Icons.area_chart
+                                      ),
+                                      DetalleTurno(
+                                        label: 'Tiempo est.', 
+                                        descripcion: '~15 min', 
+                                        icon: Icons.timelapse
+                                      ),
+                                      DetalleTurno(
+                                        label: 'En cola', 
+                                        descripcion: '3 persona(s) antes', 
+                                        icon: Icons.people
+                                      ),
+                                
+                                      
+                          
+                          
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-
-                            SizedBox(height: 10,),
-                            CustomTextCard(),
-                            SizedBox(height: 10,),
-                            CustomIconTextButton(
-                              texto: 'Volver al inico', 
-                              icono: Icons.home, 
-                              colorFondo: colors.primary,
-                              onTap: () => context.go('/')
-                            )
-
-
-                          ],
-                        ),
-                      )
-                  
-                    ],
+                                
+                              SizedBox(height: 10,),
+                              CustomTextCard(),
+                              SizedBox(height: 10,),
+                              CustomIconTextButton(
+                                texto: 'Volver al inico', 
+                                icono: Icons.home, 
+                                colorFondo: colors.primary,
+                                onTap: () => context.go('/')
+                              )
+                                
+                                
+                            ],
+                          ),
+                        )
+                    
+                      ],
+                    ),
                   ),
                 ),
               ),

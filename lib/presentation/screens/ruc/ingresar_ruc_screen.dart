@@ -70,7 +70,7 @@ class _IngresarRucScreenState extends State<IngresarRucScreen> {
           children: [
             Positioned.fill(
               child: CustomPaint(
-                painter: HomePainter(primaryColor: colores.primary),
+                painter: Home2Painter(primaryColor: colores.primary),
               ),
             ),
             Positioned(

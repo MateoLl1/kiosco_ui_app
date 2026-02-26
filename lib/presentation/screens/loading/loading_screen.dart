@@ -13,7 +13,7 @@ class LoadingScreen extends StatelessWidget {
     return Scaffold(
       body: CustomPaint(
         size: Size.infinite,
-        painter: HomePainter(
+        painter: Home2Painter(
           primaryColor: colors.primary,
           // secondaryColor: colors.secondary
         ),

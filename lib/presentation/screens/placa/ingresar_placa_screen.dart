@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kiosco_au/presentation/screens/painters/painters.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 
 class IngresarPlacaScreen extends StatefulWidget {
@@ -122,6 +123,13 @@ class _IngresarPlacaScreenState extends State<IngresarPlacaScreen> {
       body: SafeArea(
         child: Stack(
           children: [
+
+            Positioned.fill(
+              child: CustomPaint(
+                painter: Home2Painter(primaryColor: colores.primary),
+              )    
+            ),
+
             Positioned(
               top: 16,
               left: 16,
@@ -130,171 +138,173 @@ class _IngresarPlacaScreenState extends State<IngresarPlacaScreen> {
             Center(
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: esAncho ? 720 : 560),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: esAncho ? 36 : 20,
-                    vertical: 24,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Ingrese su placa',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headlineMedium
-                            ?.copyWith(fontWeight: FontWeight.w800),
-                      ),
-                      const SizedBox(height: 8),
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 320),
-                        child: Text(
-                          'Digite la placa de su vehículo para consultar su cita',
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: esAncho ? 36 : 20,
+                      vertical: 24,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Ingrese su placa',
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(color: colores.onSurfaceVariant),
+                          style: Theme.of(context).textTheme.headlineMedium
+                              ?.copyWith(fontWeight: FontWeight.w800),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 18,
-                        ),
-                        decoration: BoxDecoration(
-                          color: colores.surfaceContainerHighest.withValues(
-                            alpha: 0.55,
+                        const SizedBox(height: 8),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 320),
+                          child: Text(
+                            'Digite la placa de su vehículo para consultar su cita',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(color: colores.onSurfaceVariant),
                           ),
-                          borderRadius: BorderRadius.circular(16),
                         ),
-                        child: Text(
-                          _placaMostrada,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headlineSmall
-                              ?.copyWith(
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 4,
-                                color: _caracteres.isEmpty
-                                    ? colores.onSurfaceVariant.withValues(
-                                        alpha: 0.40,
-                                      )
-                                    : colores.onSurface,
-                              ),
+                        const SizedBox(height: 20),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 18,
+                          ),
+                          decoration: BoxDecoration(
+                            color: colores.surfaceContainerHighest.withValues(
+                              alpha: 0.55,
+                            ),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Text(
+                            _placaMostrada,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headlineSmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 4,
+                                  color: _caracteres.isEmpty
+                                      ? colores.onSurfaceVariant.withValues(
+                                          alpha: 0.40,
+                                        )
+                                      : colores.onSurface,
+                                ),
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          const columnasMaximas = 9;
-                          const separacion = 8.0;
-
-                          final anchoTecla =
-                              (constraints.maxWidth -
-                                      (separacion * (columnasMaximas - 1))) /
-                                  columnasMaximas;
-
-                          final anchoTeclaTriple =
-                              anchoTecla * 3 + separacion * 2;
-
-                          Widget filaLetras(List<String> fila) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                for (int i = 0; i < fila.length; i++) ...[
-                                  SizedBox(
-                                    width: anchoTecla,
-                                    child: BotonTeclado(
-                                      texto: fila[i],
-                                      onTap: () => _agregarCaracter(fila[i]),
-                                    ),
-                                  ),
-                                  if (i < fila.length - 1)
-                                    const SizedBox(width: separacion),
-                                ],
-                              ],
-                            );
-                          }
-
-                          Widget filaNumeros(List<String> fila) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                for (int i = 0; i < fila.length; i++) ...[
-                                  SizedBox(
-                                    width: anchoTeclaTriple,
-                                    child: BotonTeclado(
-                                      texto: fila[i],
-                                      onTap: () => _agregarCaracter(fila[i]),
-                                    ),
-                                  ),
-                                  if (i < fila.length - 1)
-                                    const SizedBox(width: separacion),
-                                ],
-                              ],
-                            );
-                          }
-
-                          return Column(
-                            children: [
-                              for (final fila in _filasLetras) ...[
-                                filaLetras(fila),
-                                const SizedBox(height: 8),
-                              ],
-                              for (final fila in _filasNumeros) ...[
-                                filaNumeros(fila),
-                                const SizedBox(height: 8),
-                              ],
-                              Row(
+                        const SizedBox(height: 16),
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            const columnasMaximas = 9;
+                            const separacion = 8.0;
+                  
+                            final anchoTecla =
+                                (constraints.maxWidth -
+                                        (separacion * (columnasMaximas - 1))) /
+                                    columnasMaximas;
+                  
+                            final anchoTeclaTriple =
+                                anchoTecla * 3 + separacion * 2;
+                  
+                            Widget filaLetras(List<String> fila) {
+                              return Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SizedBox(
-                                    width: anchoTeclaTriple,
-                                    child: BotonTeclado(
-                                      texto: 'Borrar',
-                                      onTap: _puedeBorrar ? _borrarTodo : null,
-                                      colorFondo: colores.errorContainer,
-                                      colorTexto: colores.onErrorContainer,
+                                  for (int i = 0; i < fila.length; i++) ...[
+                                    SizedBox(
+                                      width: anchoTecla,
+                                      child: BotonTeclado(
+                                        texto: fila[i],
+                                        onTap: () => _agregarCaracter(fila[i]),
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(width: separacion),
-                                  SizedBox(
-                                    width: anchoTeclaTriple,
-                                    child: BotonTeclado(
-                                      texto: '0',
-                                      onTap: () => _agregarCaracter('0'),
-                                    ),
-                                  ),
-                                  const SizedBox(width: separacion),
-                                  SizedBox(
-                                    width: anchoTeclaTriple,
-                                    child: BotonTeclado(
-                                      texto: '',
-                                      onTap:
-                                          _puedeBorrar ? _borrarUltimo : null,
-                                      icono: Icons.close_rounded,
-                                    ),
-                                  ),
+                                    if (i < fila.length - 1)
+                                      const SizedBox(width: separacion),
+                                  ],
                                 ],
+                              );
+                            }
+                  
+                            Widget filaNumeros(List<String> fila) {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  for (int i = 0; i < fila.length; i++) ...[
+                                    SizedBox(
+                                      width: anchoTeclaTriple,
+                                      child: BotonTeclado(
+                                        texto: fila[i],
+                                        onTap: () => _agregarCaracter(fila[i]),
+                                      ),
+                                    ),
+                                    if (i < fila.length - 1)
+                                      const SizedBox(width: separacion),
+                                  ],
+                                ],
+                              );
+                            }
+                  
+                            return Column(
+                              children: [
+                                for (final fila in _filasLetras) ...[
+                                  filaLetras(fila),
+                                  const SizedBox(height: 8),
+                                ],
+                                for (final fila in _filasNumeros) ...[
+                                  filaNumeros(fila),
+                                  const SizedBox(height: 8),
+                                ],
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: anchoTeclaTriple,
+                                      child: BotonTeclado(
+                                        texto: 'Borrar',
+                                        onTap: _puedeBorrar ? _borrarTodo : null,
+                                        colorFondo: colores.errorContainer,
+                                        colorTexto: colores.onErrorContainer,
+                                      ),
+                                    ),
+                                    const SizedBox(width: separacion),
+                                    SizedBox(
+                                      width: anchoTeclaTriple,
+                                      child: BotonTeclado(
+                                        texto: '0',
+                                        onTap: () => _agregarCaracter('0'),
+                                      ),
+                                    ),
+                                    const SizedBox(width: separacion),
+                                    SizedBox(
+                                      width: anchoTeclaTriple,
+                                      child: BotonTeclado(
+                                        texto: '',
+                                        onTap:
+                                            _puedeBorrar ? _borrarUltimo : null,
+                                        icono: Icons.close_rounded,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        if (_placaCompletaValida) ...[
+                          const SizedBox(height: 18),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 50),
+                            child: FadeIn(
+                              child: CustomIconTextButton(
+                                texto: 'Buscar cita',
+                                icono: Icons.search_rounded,
+                                onTap: _buscarCita,
+                                colorFondo: colores.primary,
                               ),
-                            ],
-                          );
-                        },
-                      ),
-                      if (_placaCompletaValida) ...[
-                        const SizedBox(height: 18),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 50),
-                          child: FadeIn(
-                            child: CustomIconTextButton(
-                              texto: 'Buscar cita',
-                              icono: Icons.search_rounded,
-                              onTap: _buscarCita,
-                              colorFondo: colores.primary,
                             ),
                           ),
-                        ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
               ),
