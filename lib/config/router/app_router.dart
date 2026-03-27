@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kiosco_au/presentation/screens/screens.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/config',
   routes: [
     GoRoute(
       path: '/',
@@ -33,6 +33,11 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/turno-asignado',
       builder: (context, state) => TurnoAsignadoScreen(),
+    ),
+
+    GoRoute(
+      path: '/config',
+      builder: (context, state) => ConfigScreen(),
     ),
   ]
 );

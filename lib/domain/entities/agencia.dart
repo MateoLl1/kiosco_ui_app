@@ -8,7 +8,7 @@ class Agencia {
     final String agDireccion;
     final String agTelefono1;
     final String agTelefono2;
-    final DateTime agFechMovi;
+    final String agFechMovi;
     
     Agencia({
         required this.agCodigo,
