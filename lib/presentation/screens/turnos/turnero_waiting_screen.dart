@@ -1,109 +1,106 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiosco_au/presentation/providers/providers.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 
-class TurneroWaitingScreen extends ConsumerWidget {
+
+class TurneroWaitingScreen extends ConsumerStatefulWidget {
   const TurneroWaitingScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TurneroWaitingScreen> createState() =>
+      _TurneroWaitingScreenState();
+}
+
+class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
+  DateTime now = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      ref.read(pantallaTurnosProvider.notifier).loadPantalla();
+    });
+
+    _startClock();
+  }
+
+  void _startClock() {
+    Future.doWhile(() async {
+      if (!mounted) return false;
+      await Future.delayed(const Duration(seconds: 1));
+      if (!mounted) return false;
+
+      setState(() {
+        now = DateTime.now();
+      });
+
+      return true;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(pantallaTurnosProvider);
-    final textTheme = Theme.of(context).textTheme;
     final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mesa de espera'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              ref.read(pantallaTurnosProvider.notifier).loadPantalla();
-            },
-            icon: const Icon(Icons.refresh),
-          ),
-        ],
-      ),
-      body: state.when(
-        loading: () => const Center(
-          child: CircularProgressIndicator(),
-        ),
-        error: (error, _) => Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Text(
-              error.toString(),
-              textAlign: TextAlign.center,
+      backgroundColor: colors.surface,
+      body: SafeArea(
+        child: state.when(
+          loading: () => Center(
+            child: CircularProgressIndicator(
+              color: colors.primary,
             ),
           ),
-        ),
-        data: (data) {
-          return RefreshIndicator(
-            onRefresh: () =>
-                ref.read(pantallaTurnosProvider.notifier).loadPantalla(),
-            child: ListView(
-              padding: const EdgeInsets.all(16),
+          error: (error, _) => Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Text(
+                error.toString(),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: colors.onSurface,
+                ),
+              ),
+            ),
+          ),
+          data: (data) {
+            return Column(
               children: [
-                SectionTitle(
-                  title: 'Turno actual',
-                  icon: Icons.campaign_outlined,
-                ),
-                const SizedBox(height: 12),
-                if (data.turnoActual != null)
-                  TurnoActualCard(turno: data.turnoActual!)
-                else
-                  const EmptyCard(
-                    message: 'No hay turno actual en atención',
+                TurneroHeader(now: now),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 16, 12, 12),
+                          child: TurneroAdPlaceholder(
+                            turnoActual: data.turnoActual,
+                            recienLlamados: data.turnosRecienLlamados,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 340,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(12, 16, 0, 12),
+                          child: TurnosSidebar(
+                            pendientes: data.turnosPendientes,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                const SizedBox(height: 20),
-                SectionTitle(
-                  title: 'Recién llamados',
-                  icon: Icons.history,
                 ),
-                const SizedBox(height: 12),
-                if (data.turnosRecienLlamados.isEmpty)
-                  const EmptyCard(
-                    message: 'No hay turnos recién llamados',
-                  )
-                else
-                  ...data.turnosRecienLlamados.map(
-                    (turno) => Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: TurnoCompactCard(turno: turno),
-                    ),
-                  ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Icon(Icons.people_alt_outlined, color: colors.primary),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Turnos pendientes (${data.turnosPendientes.length})',
-                      style: textTheme.titleLarge,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                if (data.turnosPendientes.isEmpty)
-                  const EmptyCard(
-                    message: 'No hay turnos pendientes',
-                  )
-                else
-                  ...data.turnosPendientes.map(
-                    (turno) => Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: TurnoPendienteCard(turno: turno),
-                    ),
-                  ),
+                const TurneroBottomModulesBar(),
               ],
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
 }
-

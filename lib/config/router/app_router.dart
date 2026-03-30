@@ -2,10 +2,9 @@
 
 import 'package:go_router/go_router.dart';
 import 'package:kiosco_au/presentation/screens/screens.dart';
-import 'package:kiosco_au/presentation/screens/turnos/turnero_waiting_screen.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/config',
+  initialLocation: '/loading',
   routes: [
     GoRoute(
       path: '/',
