@@ -29,7 +29,7 @@ class SelectorConfigDropdown<T> extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<T>(
-          value: value,
+          initialValue: value,
           isExpanded: true,
           decoration: InputDecoration(
             hintText: hint,
