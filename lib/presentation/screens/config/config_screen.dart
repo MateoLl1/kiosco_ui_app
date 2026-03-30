@@ -184,7 +184,7 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
                                         ),
                                         const SizedBox(height: 8),
                                         DropdownButtonFormField<Agencia>(
-                                          value: agenciaSeleccionada,
+                                          initialValue: agenciaSeleccionada,
                                           isExpanded: true,
                                           decoration: _inputDecoration(
                                             'Selecciona una agencia',
@@ -213,7 +213,7 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
                                         ),
                                         const SizedBox(height: 8),
                                         DropdownButtonFormField<AppRole>(
-                                          value: rolSeleccionado,
+                                          initialValue: rolSeleccionado,
                                           isExpanded: true,
                                           decoration: _inputDecoration(
                                             'Selecciona un rol',
