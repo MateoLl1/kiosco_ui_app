@@ -15,19 +15,37 @@ class ConfigScreen extends ConsumerStatefulWidget {
 class _ConfigScreenState extends ConsumerState<ConfigScreen> {
   Agencia? agenciaSeleccionada;
   AppRole? rolSeleccionado;
+  bool guardando = false;
 
   List<AppRole> get rolesDisponibles => AppRole.values;
 
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      ref.read(agenciaProvider.notifier).loadAgencias();
+
+    Future.microtask(() async {
+      await ref.read(agenciaProvider.notifier).loadAgencias();
+      await ref.read(appSessionProvider.notifier).loadSession();
+
+      final session = ref.read(appSessionProvider);
+      final agencias = ref.read(agenciaProvider);
+
+      if (!mounted || session == null) return;
+
+      final agencia = agencias.cast<Agencia?>().firstWhere(
+            (item) => item?.agCodigo == session.agenciaId,
+            orElse: () => null,
+          );
+
+      setState(() {
+        agenciaSeleccionada = agencia;
+        rolSeleccionado = session.role;
+      });
     });
   }
 
   bool get puedeContinuar =>
-      agenciaSeleccionada != null && rolSeleccionado != null;
+      !guardando && agenciaSeleccionada != null && rolSeleccionado != null;
 
   String _getRoleLabel(AppRole role) {
     switch (role) {
@@ -63,26 +81,39 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
 
     if (agencia == null || rol == null) return;
 
-    // Aquí luego guardas en Isar o disparas el flujo que necesites
-    // Ejemplo:
-    // await ref.read(appSessionConfigProvider.notifier).save(
-    //   agenciaId: agencia.agId,
-    //   role: rol,
-    // );
+    setState(() {
+      guardando = true;
+    });
 
-    // Navegación según rol
-    // if (!mounted) return;
-    // switch (rol) {
-    //   case AppRole.guardia:
-    //     context.go('/guardia');
-    //     break;
-    //   case AppRole.kiosco:
-    //     context.go('/kiosco');
-    //     break;
-    //   case AppRole.turnero:
-    //     context.go('/turnero');
-    //     break;
-    // }
+    try {
+      await ref.read(appSessionProvider.notifier).saveSession(
+            agenciaId: agencia.agCodigo,
+            role: rol,  
+          );
+
+      if (!mounted) return;
+
+      switch (rol) {
+        case AppRole.guardia:
+          // context.go('/guardia');
+          break;
+        case AppRole.kiosco:
+          // context.go('/kiosco');
+          break;
+        case AppRole.turnero:
+          // context.go('/turnero');
+          break;
+        case AppRole.admin:
+          // context.go('/admin');
+          break;
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          guardando = false;
+        });
+      }
+    }
   }
 
   @override
@@ -153,7 +184,7 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
                                         ),
                                         const SizedBox(height: 8),
                                         DropdownButtonFormField<Agencia>(
-                                          initialValue: agenciaSeleccionada,
+                                          value: agenciaSeleccionada,
                                           isExpanded: true,
                                           decoration: _inputDecoration(
                                             'Selecciona una agencia',
@@ -167,11 +198,13 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
                                               ),
                                             );
                                           }).toList(),
-                                          onChanged: (value) {
-                                            setState(() {
-                                              agenciaSeleccionada = value;
-                                            });
-                                          },
+                                          onChanged: guardando
+                                              ? null
+                                              : (value) {
+                                                  setState(() {
+                                                    agenciaSeleccionada = value;
+                                                  });
+                                                },
                                         ),
                                         const SizedBox(height: 20),
                                         Text(
@@ -180,7 +213,7 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
                                         ),
                                         const SizedBox(height: 8),
                                         DropdownButtonFormField<AppRole>(
-                                          initialValue: rolSeleccionado,
+                                          value: rolSeleccionado,
                                           isExpanded: true,
                                           decoration: _inputDecoration(
                                             'Selecciona un rol',
@@ -194,11 +227,13 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
                                               ),
                                             );
                                           }).toList(),
-                                          onChanged: (value) {
-                                            setState(() {
-                                              rolSeleccionado = value;
-                                            });
-                                          },
+                                          onChanged: guardando
+                                              ? null
+                                              : (value) {
+                                                  setState(() {
+                                                    rolSeleccionado = value;
+                                                  });
+                                                },
                                         ),
                                       ],
                                     ),
@@ -211,7 +246,15 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
                                     onPressed: puedeContinuar
                                         ? _continuar
                                         : null,
-                                    child: const Text('Continuar'),
+                                    child: guardando
+                                        ? const SizedBox(
+                                            height: 22,
+                                            width: 22,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2.4,
+                                            ),
+                                          )
+                                        : const Text('Continuar'),
                                   ),
                                 ),
                                 const SizedBox(height: 16),
