@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kiosco_au/domain/domain.dart';
-import 'package:kiosco_au/presentation/widgets/widgets.dart';
-
+import 'package:kiosco_au/presentation/widgets/turnero/turnero_recent_called_chip.dart';
 
 class TurneroAdPlaceholder extends StatelessWidget {
-  final Turno? turnoActual;
   final List<Turno> recienLlamados;
 
   const TurneroAdPlaceholder({
     super.key,
-    required this.turnoActual,
     required this.recienLlamados,
   });
 
@@ -67,19 +64,6 @@ class TurneroAdPlaceholder extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            if (turnoActual != null)
-              TurneroCurrentTurnCard(turno: turnoActual!),
-            if (recienLlamados.isNotEmpty) ...[
-              const SizedBox(height: 14),
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: recienLlamados
-                    .take(3)
-                    .map((t) => TurneroRecentCalledChip(turno: t))
-                    .toList(),
-              ),
-            ],
           ],
         ),
       ),

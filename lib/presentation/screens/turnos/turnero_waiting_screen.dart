@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kiosco_au/domain/domain.dart';
 import 'package:kiosco_au/presentation/providers/providers.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
-
 
 class TurneroWaitingScreen extends ConsumerStatefulWidget {
   const TurneroWaitingScreen({super.key});
@@ -14,6 +16,9 @@ class TurneroWaitingScreen extends ConsumerStatefulWidget {
 
 class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
   DateTime now = DateTime.now();
+  int? ultimoTurnoMostrado;
+  Turno? activeOverlayTurno;
+  Timer? overlayTimer;
 
   @override
   void initState() {
@@ -24,6 +29,12 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
     });
 
     _startClock();
+  }
+
+  @override
+  void dispose() {
+    overlayTimer?.cancel();
+    super.dispose();
   }
 
   void _startClock() {
@@ -37,6 +48,28 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
       });
 
       return true;
+    });
+  }
+
+  void _handleOverlayTurno(Turno? turnoActual) {
+    if (turnoActual == null) return;
+
+    if (ultimoTurnoMostrado == turnoActual.asgCodigo) return;
+
+    ultimoTurnoMostrado = turnoActual.asgCodigo;
+    activeOverlayTurno = turnoActual;
+
+    overlayTimer?.cancel();
+    overlayTimer = Timer(const Duration(seconds: 8), () {
+      if (!mounted) return;
+      setState(() {
+        activeOverlayTurno = null;
+      });
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      setState(() {});
     });
   }
 
@@ -67,35 +100,48 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
             ),
           ),
           data: (data) {
-            return Column(
+            _handleOverlayTurno(data.turnoActual);
+
+            return Stack(
               children: [
-                TurneroHeader(now: now),
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 5,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 16, 12, 12),
-                          child: TurneroAdPlaceholder(
-                            turnoActual: data.turnoActual,
-                            recienLlamados: data.turnosRecienLlamados,
+                Column(
+                  children: [
+                    TurneroHeader(now: now),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 5,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(20, 16, 12, 12),
+                              child: TurneroAdPlaceholder(
+                                recienLlamados: data.turnosRecienLlamados,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 340,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(12, 16, 0, 12),
-                          child: TurnosSidebar(
-                            pendientes: data.turnosPendientes,
+                          SizedBox(
+                            width: 340,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(12, 16, 0, 12),
+                              child: TurnosSidebar(
+                                turnoActual: data.turnoActual,
+                                pendientes: data.turnosPendientes,
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    TurneroBottomModulesBar(
+                      activeModulo: data.turnoActual?.modulo,
+                    ),
+                  ],
                 ),
-                const TurneroBottomModulesBar(),
+                ActiveCallOverlay(
+                  turno: activeOverlayTurno,
+                ),
               ],
             );
           },

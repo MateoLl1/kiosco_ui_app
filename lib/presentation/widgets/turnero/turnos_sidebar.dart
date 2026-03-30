@@ -1,15 +1,14 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:kiosco_au/domain/domain.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 
 class TurnosSidebar extends StatelessWidget {
+  final Turno? turnoActual;
   final List<Turno> pendientes;
 
   const TurnosSidebar({
     super.key,
+    required this.turnoActual,
     required this.pendientes,
   });
 
@@ -27,6 +26,7 @@ class TurnosSidebar extends StatelessWidget {
         ),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
             height: 56,
@@ -76,6 +76,8 @@ class TurnosSidebar extends StatelessWidget {
               ],
             ),
           ),
+          if (turnoActual != null)
+            TurneroCurrentSidebarCard(turno: turnoActual!),
           Expanded(
             child: pendientes.isEmpty
                 ? Center(
@@ -92,9 +94,9 @@ class TurnosSidebar extends StatelessWidget {
                     ),
                   )
                 : ListView.separated(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.only(bottom: 8),
                     itemCount: pendientes.length,
-                    separatorBuilder: (_, __) => Divider(
+                    separatorBuilder: (_, _) => Divider(
                       height: 1,
                       color: colors.outline.withValues(alpha: 0.2),
                     ),

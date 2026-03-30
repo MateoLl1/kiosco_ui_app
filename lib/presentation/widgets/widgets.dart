@@ -15,3 +15,5 @@ export './turnero/turnero_ad_placeholder.dart';
 export './turnero/turnero_bottom_modules_bar.dart';
 export './turnero/turnos_sidebar_item.dart';
 export './turnero/turnero_recent_called_chip.dart';
+export 'cards/active_call_overlay.dart';
+export './turnero/turnero_current_sidebar_card.dart';

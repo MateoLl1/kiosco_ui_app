@@ -1,14 +1,17 @@
-
-
 import 'package:flutter/material.dart';
 
 class TurneroBottomModulesBar extends StatelessWidget {
-  const TurneroBottomModulesBar({super.key});
+  final String? activeModulo;
+
+  const TurneroBottomModulesBar({
+    super.key,
+    this.activeModulo,
+  });
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final modules = ['MÓDULO 1', 'MÓDULO 2', 'MÓDULO 3', 'MÓDULO 4', 'MÓDULO 5'];
+    final modules = ['1', '2', '3', '4', '5'];
 
     return Container(
       height: 36,
@@ -22,31 +25,49 @@ class TurneroBottomModulesBar extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: modules
-            .map(
-              (module) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 14),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.circle,
-                      size: 10,
-                      color: colors.primary,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      module,
-                      style: TextStyle(
-                        color: colors.onSurface.withValues(alpha: 0.7),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
+        children: modules.map((module) {
+          final isActive = activeModulo?.trim() == module.trim();
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            child: Row(
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  width: isActive ? 12 : 10,
+                  height: isActive ? 12 : 10,
+                  decoration: BoxDecoration(
+                    color: isActive
+                        ? colors.primary
+                        : colors.primary.withValues(alpha: 0.55),
+                    shape: BoxShape.circle,
+                    boxShadow: isActive
+                        ? [
+                            BoxShadow(
+                              color: colors.primary.withValues(alpha: 0.35),
+                              blurRadius: 10,
+                              spreadRadius: 1,
+                            ),
+                          ]
+                        : null,
+                  ),
                 ),
-              ),
-            )
-            .toList(),
+                const SizedBox(width: 8),
+                Text(
+                  'MÓDULO $module',
+                  style: TextStyle(
+                    color: isActive
+                        ? colors.onSurface
+                        : colors.onSurface.withValues(alpha: 0.7),
+                    fontSize: 12,
+                    fontWeight:
+                        isActive ? FontWeight.w800 : FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
       ),
     );
   }
