@@ -19,7 +19,7 @@ class AppSessionConfig {
   AppRole role = AppRole.guardia;
 
   AppSessionConfig({
-    this.agenciaId,
+    this.agenciaId = 0,
     this.role = AppRole.admin,
   });
 }
