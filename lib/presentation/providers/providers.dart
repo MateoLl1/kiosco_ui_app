@@ -4,3 +4,5 @@ export 'agencia/agencia_provider.dart';
 export 'repositories/agencia_repository_provider.dart';
 export './repositories/local_storage_repository_provider.dart';
 export './db/app_session_provider.dart';
+export './repositories/pantalla_turnos_repository_provider.dart';
+export './turnos/pantalla_turnos_provider.dart';

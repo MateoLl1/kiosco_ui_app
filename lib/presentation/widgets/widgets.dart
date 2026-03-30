@@ -7,3 +7,8 @@ export './alerts/alerta_helper.dart';
 export './buttons/return_page_button.dart';
 export 'cards/custom_text_card.dart';
 export './dropdowns/selector_config_dropdown.dart';
+export './titles/section_title.dart';
+export './cards/empty_card.dart';
+export './cards/turno_actual_card.dart';
+export './cards/turno_pendiente_card.dart';
+export './cards/turno_compact_card.dart';
