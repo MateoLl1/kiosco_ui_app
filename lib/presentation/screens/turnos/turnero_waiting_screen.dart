@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:typed_data';
 
+import 'package:audioplayers/audioplayers.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiosco_au/domain/domain.dart';
@@ -15,8 +18,21 @@ class TurneroWaitingScreen extends ConsumerStatefulWidget {
 }
 
 class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
+  static const String kokoroUrl = 'http://localhost:8880/v1/audio/speech';
+
+  final Dio dio = Dio(
+    BaseOptions(
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 30),
+      sendTimeout: const Duration(seconds: 10),
+    ),
+  );
+
+  final AudioPlayer audioPlayer = AudioPlayer();
+
   DateTime now = DateTime.now();
-  int? ultimoTurnoMostrado;
+  String? ultimaLlaveMostrada;
+  String? ultimaLlaveAudio;
   Turno? activeOverlayTurno;
   Timer? overlayTimer;
 
@@ -24,7 +40,7 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
   void initState() {
     super.initState();
 
-    Future.microtask(() {
+    Future.microtask(() async {
       ref.read(pantallaTurnosProvider.notifier).loadPantalla();
     });
 
@@ -34,6 +50,7 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
   @override
   void dispose() {
     overlayTimer?.cancel();
+    audioPlayer.dispose();
     super.dispose();
   }
 
@@ -51,12 +68,75 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
     });
   }
 
+  String _buildLlaveTurno(Turno turno) {
+    final referencia = turno.fechaReferencia?.millisecondsSinceEpoch ?? 0;
+    return '${turno.asgCodigo}_$referencia';
+  }
+
+  String _limpiarTexto(String valor) {
+    return valor.replaceAll(RegExp(r'\s+'), ' ').trim();
+  }
+
+  String _normalizarTurnoParaAudio(String turno) {
+    return turno
+        .replaceAll('-', ' ')
+        .replaceAll('/', ' ')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim();
+  }
+
+  String _crearMensajeAudio(Turno turno) {
+    final turnoTexto = _normalizarTurnoParaAudio(turno.turno);
+    final nombreCliente = _limpiarTexto(turno.nombreCliente);
+    final modulo = _limpiarTexto(turno.modulo);
+
+    return 'Turno $turnoTexto, $nombreCliente, acercarse al módulo $modulo';
+  }
+
+  Future<void> _reproducirAudio(Turno turno) async {
+    final llaveAudio = _buildLlaveTurno(turno);
+
+    if (ultimaLlaveAudio == llaveAudio) return;
+
+    ultimaLlaveAudio = llaveAudio;
+
+    final mensaje = _crearMensajeAudio(turno);
+
+    final response = await dio.post<List<int>>(
+      kokoroUrl,
+      data: {
+        'model': 'kokoro',
+        'voice': 'em_alex',
+        'input': mensaje,
+        'language': 'es',
+        'response_format': 'wav',
+        'speed': 0.95,
+      },
+      options: Options(
+        responseType: ResponseType.bytes,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+
+    final data = response.data;
+    if (data == null || data.isEmpty) return;
+
+    final bytes = Uint8List.fromList(data);
+
+    await audioPlayer.stop();
+    await audioPlayer.play(BytesSource(bytes));
+  }
+
   void _handleOverlayTurno(Turno? turnoActual) {
     if (turnoActual == null) return;
 
-    if (ultimoTurnoMostrado == turnoActual.asgCodigo) return;
+    final llaveActual = _buildLlaveTurno(turnoActual);
 
-    ultimoTurnoMostrado = turnoActual.asgCodigo;
+    if (ultimaLlaveMostrada == llaveActual) return;
+
+    ultimaLlaveMostrada = llaveActual;
     activeOverlayTurno = turnoActual;
 
     overlayTimer?.cancel();
@@ -67,9 +147,14 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
       });
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
+
       setState(() {});
+
+      try {
+        await _reproducirAudio(turnoActual);
+      } catch (_) {}
     });
   }
 

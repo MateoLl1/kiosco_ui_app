@@ -1,0 +1,7 @@
+services:
+  tts:
+    image: ghcr.io/remsky/kokoro-fastapi-cpu:latest
+    container_name: tts
+    restart: unless-stopped
+    ports:
+      - "8880:8880"
