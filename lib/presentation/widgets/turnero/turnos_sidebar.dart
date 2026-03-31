@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:kiosco_au/domain/domain.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
@@ -102,7 +103,7 @@ class TurnosSidebar extends StatelessWidget {
                     ),
                     itemBuilder: (context, index) {
                       final turno = pendientes[index];
-                      return TurnosSidebarItem(turno: turno);
+                      return FadeInRight(child: TurnosSidebarItem(turno: turno));
                     },
                   ),
           ),

@@ -37,10 +37,15 @@ class ActiveCallOverlay extends StatelessWidget {
               color: colors.surface,
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
-                color: colors.primary.withValues(alpha: 0.5),
-                width: 2,
+                color: colors.primary,
+                width: 10,
               ),
               boxShadow: [
+                BoxShadow(
+                  color: colors.primary.withValues(alpha: 0.25),
+                  blurRadius: 30,
+                  spreadRadius: 2,
+                ),
                 BoxShadow(
                   color: colors.shadow.withValues(alpha: 0.18),
                   blurRadius: 24,
