@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kiosco_au/domain/domain.dart';
-import 'package:kiosco_au/presentation/widgets/turnero/turnero_recent_called_chip.dart';
 
 class TurneroAdPlaceholder extends StatelessWidget {
   final List<Turno> recienLlamados;

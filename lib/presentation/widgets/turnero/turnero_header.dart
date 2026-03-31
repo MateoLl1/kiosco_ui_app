@@ -30,10 +30,9 @@ class TurneroHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(
-            Icons.desktop_windows_outlined,
-            color: colors.primary,
-            size: 24,
+          Image.asset(
+            'assets/img/chevrolet-logo.png',
+            width: 100,
           ),
           const SizedBox(width: 12),
           Text(
