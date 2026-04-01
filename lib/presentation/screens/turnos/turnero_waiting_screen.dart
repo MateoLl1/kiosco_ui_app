@@ -18,7 +18,7 @@ class TurneroWaitingScreen extends ConsumerStatefulWidget {
 }
 
 class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
-  static const String kokoroUrl = 'http://localhost:8880/v1/audio/speech';
+  static const String ttsUrl = 'http://192.168.0.194:8000/tts/';
 
   final Dio dio = Dio(
     BaseOptions(
@@ -103,14 +103,12 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
     final mensaje = _crearMensajeAudio(turno);
 
     final response = await dio.post<List<int>>(
-      kokoroUrl,
+      ttsUrl,
       data: {
-        'model': 'kokoro',
-        'voice': 'em_alex',
-        'input': mensaje,
-        'language': 'es',
-        'response_format': 'wav',
-        'speed': 0.95,
+        'text': mensaje,
+        'voice': 'es-EC-AndreaNeural',
+        'rate': '+0%',
+        'pitch': '+0Hz',
       },
       options: Options(
         responseType: ResponseType.bytes,
