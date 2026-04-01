@@ -7,18 +7,13 @@ final appRouter = GoRouter(
   initialLocation: '/loading',
   routes: [
     GoRoute(
-      path: '/',
+      path: '/home',
       builder: (context, state) => HomeScreen(),
     ),
 
     GoRoute(
       path: '/loading',
       builder: (context, state) => LoadingScreen(),
-    ),
-
-    GoRoute(
-      path: '/taller-servicio',
-      builder: (context, state) => TallerServicioScreen(),
     ),
 
     GoRoute(
@@ -41,8 +36,8 @@ final appRouter = GoRouter(
     ),
 
     GoRoute(
-      path: '/pantalla-turnos',
-      builder: (context, state) => TurneroWaitingScreen(),
+      path: '/tipo-atencion',
+      builder: (context, state) => TipoAtencionScreen(),
     ),
   ]
 );

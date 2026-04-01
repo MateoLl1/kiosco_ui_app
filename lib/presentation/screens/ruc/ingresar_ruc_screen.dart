@@ -55,7 +55,7 @@ class _IngresarRucScreenState extends State<IngresarRucScreen> {
     if (!_cedulaORucValido) return;
     final identificacion = _identificacionIngresada;
     _borrarTodo();
-    context.push('/turno-asignado');
+    context.push('/home');
   }
 
   @override
@@ -73,11 +73,7 @@ class _IngresarRucScreenState extends State<IngresarRucScreen> {
                 painter: Home2Painter(primaryColor: colores.primary),
               ),
             ),
-            Positioned(
-              top: 16,
-              left: 16,
-              child: ReturnPageButton()
-            ),
+            
             Positioned.fill(
               child: Center(
                 child: ConstrainedBox(
@@ -91,14 +87,14 @@ class _IngresarRucScreenState extends State<IngresarRucScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Ingrese su Cédula / RUC',
+                          'Bienvenido',
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.headlineMedium
                               ?.copyWith(fontWeight: FontWeight.w800),
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Para asignarle un turno de atención',
+                          'Ingrese su Cédula / RUC para comenzar',
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(color: colores.onSurfaceVariant),

@@ -39,7 +39,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
       case AppRole.turnero:
         return '/pantalla-turnos';
       case AppRole.kiosco:
-        return '/';
+        return '/ingresar-ruc';
       case AppRole.guardia:
         return '/taller-servicio';
       case AppRole.admin:

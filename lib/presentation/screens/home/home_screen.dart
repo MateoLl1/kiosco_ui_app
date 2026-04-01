@@ -24,6 +24,11 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
+            Positioned(
+              top: 16,
+              left: 16,
+              child: ReturnPageButton()
+            ),
             Column(
               children: [
                 Expanded(
@@ -49,7 +54,7 @@ class HomeScreen extends StatelessWidget {
                                   icon: Icons.car_repair,
                                   backgroundColor: colors.primary,
                                   foregroundColor: colors.onPrimary,
-                                  onTap: () => context.push('/taller-servicio'),
+                                  onTap: () => context.push('/tipo-atencion'),
                                 ),
                               ),
                               const SizedBox(width: 24),
@@ -61,7 +66,19 @@ class HomeScreen extends StatelessWidget {
                                       colors.surfaceContainerHighest,
                                   foregroundColor:
                                       colors.onSurfaceVariant,
-                                  onTap: () => context.push('/ingresar-ruc'),
+                                  onTap: () => context.push('/turno-asignado'),
+                                ),
+                              ),
+                              const SizedBox(width: 24),
+                              Expanded(
+                                child: HomeOptionCard(
+                                  title: 'Vehiculos',
+                                  icon: Icons.car_crash,
+                                  backgroundColor:
+                                      colors.surfaceContainerHighest,
+                                  foregroundColor:
+                                      colors.onSurfaceVariant,
+                                  onTap: () => context.push('/turno-asignado'),
                                 ),
                               ),
                             ],
@@ -74,9 +91,9 @@ class HomeScreen extends StatelessWidget {
                                 icon: Icons.car_repair,
                                 backgroundColor: colors.primary,
                                 foregroundColor: colors.onPrimary,
-                                onTap: () => context.push('/taller-servicio'),
+                                onTap: () => context.push('/tipo-atencion'),
                               ),
-                              const SizedBox(height: 20),
+                              const SizedBox(width: 24),
                               HomeOptionCard(
                                 title: 'Mostrador de Repuestos',
                                 icon: Icons.inventory_2_outlined,
@@ -84,7 +101,17 @@ class HomeScreen extends StatelessWidget {
                                     colors.surfaceContainerHighest,
                                 foregroundColor:
                                     colors.onSurfaceVariant,
-                                onTap: () => context.push('/ingresar-ruc'),
+                                onTap: () => context.push('/turno-asignado'),
+                              ),
+                              const SizedBox(width: 24),
+                              HomeOptionCard(
+                                title: 'Vehiculos',
+                                icon: Icons.car_crash,
+                                backgroundColor:
+                                    colors.surfaceContainerHighest,
+                                foregroundColor:
+                                    colors.onSurfaceVariant,
+                                onTap: () => context.push('/turno-asignado'),
                               ),
                             ],
                           ),

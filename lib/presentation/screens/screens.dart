@@ -6,3 +6,4 @@ export './ruc/ingresar_ruc_screen.dart';
 export './turnos/turno_asignado_screen.dart';
 export './config/config_screen.dart';
 export './turnos/turnero_waiting_screen.dart';
+export './kiosco/tipo_atencion_screen.dart';

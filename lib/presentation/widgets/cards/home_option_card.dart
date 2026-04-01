@@ -33,22 +33,25 @@ class HomeOptionCard extends StatelessWidget {
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Row(
-              children: [
-                Icon(icon, size: 42, color: fgColor),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Text(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(icon, size: 42, color: fgColor),
+                  const SizedBox(height: 16),
+                  Text(
                     title,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                       color: fgColor,
                     ),
                   ),
-                ),
-                Icon(Icons.arrow_forward_ios, color: fgColor),
-              ],
+                ],
+              ),
             ),
           ),
         ),

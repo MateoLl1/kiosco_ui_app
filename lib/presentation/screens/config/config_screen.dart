@@ -99,7 +99,7 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
           // context.go('/guardia');
           break;
         case AppRole.kiosco:
-          // context.go('/kiosco');
+          context.go('/ingresar-ruc');
           break;
         case AppRole.turnero:
           context.go('/pantalla-turnos');
