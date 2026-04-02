@@ -8,7 +8,7 @@ import 'package:kiosco_au/presentation/providers/providers.dart';
 
 
 final agenciaProvider = StateNotifierProvider<AgenciaNotifier, List<Agencia>>((ref) {
-  final repository = ref.watch(agenciaRepositoryProvider);
+  final repository = ref.watch(kioscoRepositoryProvider);
   return AgenciaNotifier(repository: repository);
 });
 
@@ -16,7 +16,7 @@ final agenciaProvider = StateNotifierProvider<AgenciaNotifier, List<Agencia>>((r
 
 class AgenciaNotifier extends StateNotifier<List<Agencia>> {
   
-  final AgenciasRepository repository;
+  final KioscoRepository repository;
 
   AgenciaNotifier({required this.repository}): super([]);
   

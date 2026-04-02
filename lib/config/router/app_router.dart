@@ -44,5 +44,10 @@ final appRouter = GoRouter(
       path: '/bienvenida-usuario',
       builder: (context, state) => BienvenidaUsuarioScreen(),
     ),
+
+    GoRoute(
+      path: '/pantalla-turnos',
+      builder: (context, state) => TurneroWaitingScreen(),
+    ),
   ]
 );

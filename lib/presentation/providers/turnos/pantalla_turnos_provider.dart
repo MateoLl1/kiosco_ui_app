@@ -6,7 +6,7 @@ import 'package:kiosco_au/presentation/providers/providers.dart';
 
 final pantallaTurnosProvider = StateNotifierProvider.autoDispose<
     PantallaTurnosNotifier, AsyncValue<PantallaTurnosResponse>>((ref) {
-  final repository = ref.watch(pantallaTurnosRepositoryProvider);
+  final repository = ref.watch(kioscoRepositoryProvider);
   final session = ref.watch(appSessionProvider);
 
   final notifier = PantallaTurnosNotifier(
@@ -23,7 +23,7 @@ final pantallaTurnosProvider = StateNotifierProvider.autoDispose<
 
 class PantallaTurnosNotifier
     extends StateNotifier<AsyncValue<PantallaTurnosResponse>> {
-  final TurnosRepository repository;
+  final KioscoRepository repository;
   final int? agenciaId;
   Timer? _timer;
 
