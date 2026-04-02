@@ -39,5 +39,10 @@ final appRouter = GoRouter(
       path: '/tipo-atencion',
       builder: (context, state) => TipoAtencionScreen(),
     ),
+
+    GoRoute(
+      path: '/bienvenida-usuario',
+      builder: (context, state) => BienvenidaUsuarioScreen(),
+    ),
   ]
 );

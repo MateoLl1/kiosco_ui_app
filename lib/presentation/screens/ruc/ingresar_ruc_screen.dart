@@ -1,37 +1,41 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kiosco_au/config/config.dart';
+import 'package:kiosco_au/presentation/providers/providers.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 import 'package:kiosco_au/presentation/screens/painters/painters.dart';
 
-class IngresarRucScreen extends StatefulWidget {
+class IngresarRucScreen extends ConsumerStatefulWidget {
   const IngresarRucScreen({super.key});
 
   @override
-  State<IngresarRucScreen> createState() => _IngresarRucScreenState();
+  ConsumerState<IngresarRucScreen> createState() => _IngresarRucScreenState();
 }
 
-class _IngresarRucScreenState extends State<IngresarRucScreen> {
+class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
   final List<String> _digitos = [];
+  bool _consultando = false;
 
   static const int _maxLongitud = 13;
 
   void _agregarDigito(String valor) {
-    if (_digitos.length >= _maxLongitud) return;
+    if (_digitos.length >= _maxLongitud || _consultando) return;
     setState(() {
       _digitos.add(valor);
     });
   }
 
   void _borrarUltimo() {
-    if (_digitos.isEmpty) return;
+    if (_digitos.isEmpty || _consultando) return;
     setState(() {
       _digitos.removeLast();
     });
   }
 
   void _borrarTodo() {
-    if (_digitos.isEmpty) return;
+    if (_digitos.isEmpty || _consultando) return;
     setState(() {
       _digitos.clear();
     });
@@ -51,11 +55,51 @@ class _IngresarRucScreenState extends State<IngresarRucScreen> {
 
   bool get _cedulaORucValido => _cedulaValida || _rucValido;
 
-  void _continuar() {
-    if (!_cedulaORucValido) return;
+  Future<void> _continuar() async {
+    if (!_cedulaORucValido || _consultando) return;
+
     final identificacion = _identificacionIngresada;
-    _borrarTodo();
-    context.push('/home');
+    final empresa = int.tryParse(Env.empresaDefault) ?? 1;
+
+    setState(() {
+      _consultando = true;
+    });
+
+    try {
+      await ref.read(databookProvider.notifier).consultarPerfilDatabook(
+            identificacion: identificacion,
+            empresa: empresa,
+          );
+
+      final databook = ref.read(databookProvider);
+
+      if (databook == null) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('No se encontró información para la identificación ingresada.'),
+          ),
+        );
+        return;
+      }
+
+      _borrarTodo();
+
+      if (!mounted) return;
+      context.go('/bienvenida-usuario');
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('No se pudo consultar la información. $e'),
+        ),
+      );
+    } finally {
+      if (!mounted) return;
+      setState(() {
+        _consultando = false;
+      });
+    }
   }
 
   @override
@@ -73,7 +117,6 @@ class _IngresarRucScreenState extends State<IngresarRucScreen> {
                 painter: Home2Painter(primaryColor: colores.primary),
               ),
             ),
-            
             Positioned.fill(
               child: Center(
                 child: ConstrainedBox(
@@ -143,7 +186,9 @@ class _IngresarRucScreenState extends State<IngresarRucScreen> {
                                       width: anchoTecla,
                                       child: BotonTeclado(
                                         texto: valores[i],
-                                        onTap: () => _agregarDigito(valores[i]),
+                                        onTap: _consultando
+                                            ? null
+                                            : () => _agregarDigito(valores[i]),
                                       ),
                                     ),
                                     if (i < valores.length - 1)
@@ -168,7 +213,9 @@ class _IngresarRucScreenState extends State<IngresarRucScreen> {
                                       width: anchoTecla,
                                       child: BotonTeclado(
                                         texto: 'Borrar',
-                                        onTap: _digitos.isNotEmpty ? _borrarTodo : null,
+                                        onTap: _digitos.isNotEmpty && !_consultando
+                                            ? _borrarTodo
+                                            : null,
                                         colorFondo: colores.errorContainer,
                                         colorTexto: colores.onErrorContainer,
                                       ),
@@ -178,7 +225,9 @@ class _IngresarRucScreenState extends State<IngresarRucScreen> {
                                       width: anchoTecla,
                                       child: BotonTeclado(
                                         texto: '0',
-                                        onTap: () => _agregarDigito('0'),
+                                        onTap: _consultando
+                                            ? null
+                                            : () => _agregarDigito('0'),
                                       ),
                                     ),
                                     const SizedBox(width: separacion),
@@ -186,7 +235,9 @@ class _IngresarRucScreenState extends State<IngresarRucScreen> {
                                       width: anchoTecla,
                                       child: BotonTeclado(
                                         texto: '',
-                                        onTap: _digitos.isNotEmpty ? _borrarUltimo : null,
+                                        onTap: _digitos.isNotEmpty && !_consultando
+                                            ? _borrarUltimo
+                                            : null,
                                         icono: Icons.backspace_outlined,
                                       ),
                                     ),
@@ -200,9 +251,11 @@ class _IngresarRucScreenState extends State<IngresarRucScreen> {
                           const SizedBox(height: 18),
                           FadeIn(
                             child: CustomIconTextButton(
-                              texto: 'Continuar',
-                              icono: Icons.search_rounded,
-                              onTap: _continuar,
+                              texto: _consultando ? 'Consultando...' : 'Continuar',
+                              icono: _consultando
+                                  ? Icons.hourglass_top_rounded
+                                  : Icons.search_rounded,
+                              onTap: _consultando ? null : _continuar,
                               colorFondo: colores.primary,
                             ),
                           ),

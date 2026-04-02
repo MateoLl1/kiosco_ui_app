@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
             Positioned(
               top: 16,
               left: 16,
-              child: ReturnPageButton()
+              child: ReturnPageButton(ruta: '/ingresar-ruc',)
             ),
             Column(
               children: [
