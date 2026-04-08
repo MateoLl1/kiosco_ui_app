@@ -36,4 +36,20 @@ class KioscoDatasourceImpl extends KioscoDatasource {
 
     return PantallaTurnosMapper.fromJson(response.data as Map<String, dynamic>);
   }
+  
+  @override
+  Future<List<Cita>> listarCitas(int agenciaId) async {
+    final response = await _dio.get(
+      '/turnos/recepcion',
+      queryParameters: {
+        'agenciaId': agenciaId,
+      },
+    );
+
+    final List<dynamic> data = response.data as List<dynamic>;
+
+    return data
+        .map((json) => CitaMapper.citaToEntity(json as Map<String, dynamic>))
+        .toList();
+  }
 }

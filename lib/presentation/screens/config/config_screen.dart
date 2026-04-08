@@ -96,7 +96,7 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
 
       switch (rol) {
         case AppRole.guardia:
-          // context.go('/guardia');
+          context.go('/guardia');
           break;
         case AppRole.kiosco:
           context.go('/ingresar-ruc');

@@ -49,5 +49,10 @@ final appRouter = GoRouter(
       path: '/pantalla-turnos',
       builder: (context, state) => TurneroWaitingScreen(),
     ),
+
+    GoRoute(
+      path: '/guardia',
+      builder: (context, state) => GuardiaScreen(),
+    ),
   ]
 );

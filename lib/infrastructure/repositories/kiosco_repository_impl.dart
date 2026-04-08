@@ -20,4 +20,9 @@ class KioscoRepositoryImpl extends KioscoRepository {
     return datasource.getPantallaTurnos(agenciaId);
   }
   
+  @override
+  Future<List<Cita>> listarCitas(int agenciaId) {
+    return datasource.listarCitas(agenciaId); 
+  }
+  
 }

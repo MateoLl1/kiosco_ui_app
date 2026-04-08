@@ -9,3 +9,4 @@ export './auth/auth_token_provider.dart';
 export './repositories/info_credito_repository_provider.dart';
 export './data/databook_provider.dart';
 export './repositories/kiosco_repository_provider.dart';
+export './data/citas_provider.dart';

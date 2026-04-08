@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 
 const colorsAppTheme = <Color>[
-  Colors.blueAccent,
+  Colors.amber,
   Colors.deepOrangeAccent,
   Colors.greenAccent,
+
 ];
 
 class AppTheme {
