@@ -22,10 +22,12 @@ class AppSessionNotifier extends StateNotifier<AppSessionConfig?> {
 
   Future<void> saveSession({
     required int agenciaId,
+    required String agenciaNombre,
     required AppRole role,
   }) async {
     final session = AppSessionConfig(
       agenciaId: agenciaId,
+      agenciaNombre: agenciaNombre,
       role: role,
     );
 

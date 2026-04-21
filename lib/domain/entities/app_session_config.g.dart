@@ -22,8 +22,13 @@ const AppSessionConfigSchema = CollectionSchema(
       name: r'agenciaId',
       type: IsarType.long,
     ),
-    r'role': PropertySchema(
+    r'agenciaNombre': PropertySchema(
       id: 1,
+      name: r'agenciaNombre',
+      type: IsarType.string,
+    ),
+    r'role': PropertySchema(
+      id: 2,
       name: r'role',
       type: IsarType.string,
       enumMap: _AppSessionConfigroleEnumValueMap,
@@ -51,6 +56,12 @@ int _appSessionConfigEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  {
+    final value = object.agenciaNombre;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   bytesCount += 3 + object.role.name.length * 3;
   return bytesCount;
 }
@@ -62,7 +73,8 @@ void _appSessionConfigSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.agenciaId);
-  writer.writeString(offsets[1], object.role.name);
+  writer.writeString(offsets[1], object.agenciaNombre);
+  writer.writeString(offsets[2], object.role.name);
 }
 
 AppSessionConfig _appSessionConfigDeserialize(
@@ -73,9 +85,10 @@ AppSessionConfig _appSessionConfigDeserialize(
 ) {
   final object = AppSessionConfig(
     agenciaId: reader.readLongOrNull(offsets[0]),
+    agenciaNombre: reader.readStringOrNull(offsets[1]),
     role:
         _AppSessionConfigroleValueEnumMap[reader.readStringOrNull(
-          offsets[1],
+          offsets[2],
         )] ??
         AppRole.admin,
   );
@@ -93,6 +106,8 @@ P _appSessionConfigDeserializeProp<P>(
     case 0:
       return (reader.readLongOrNull(offset)) as P;
     case 1:
+      return (reader.readStringOrNull(offset)) as P;
+    case 2:
       return (_AppSessionConfigroleValueEnumMap[reader.readStringOrNull(
                 offset,
               )] ??
@@ -282,6 +297,165 @@ extension AppSessionConfigQueryFilter
           upper: upper,
           includeUpper: includeUpper,
         ),
+      );
+    });
+  }
+
+  QueryBuilder<AppSessionConfig, AppSessionConfig, QAfterFilterCondition>
+  agenciaNombreIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'agenciaNombre'),
+      );
+    });
+  }
+
+  QueryBuilder<AppSessionConfig, AppSessionConfig, QAfterFilterCondition>
+  agenciaNombreIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'agenciaNombre'),
+      );
+    });
+  }
+
+  QueryBuilder<AppSessionConfig, AppSessionConfig, QAfterFilterCondition>
+  agenciaNombreEqualTo(String? value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'agenciaNombre',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<AppSessionConfig, AppSessionConfig, QAfterFilterCondition>
+  agenciaNombreGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'agenciaNombre',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<AppSessionConfig, AppSessionConfig, QAfterFilterCondition>
+  agenciaNombreLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'agenciaNombre',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<AppSessionConfig, AppSessionConfig, QAfterFilterCondition>
+  agenciaNombreBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'agenciaNombre',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<AppSessionConfig, AppSessionConfig, QAfterFilterCondition>
+  agenciaNombreStartsWith(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.startsWith(
+          property: r'agenciaNombre',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<AppSessionConfig, AppSessionConfig, QAfterFilterCondition>
+  agenciaNombreEndsWith(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.endsWith(
+          property: r'agenciaNombre',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<AppSessionConfig, AppSessionConfig, QAfterFilterCondition>
+  agenciaNombreContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.contains(
+          property: r'agenciaNombre',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<AppSessionConfig, AppSessionConfig, QAfterFilterCondition>
+  agenciaNombreMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.matches(
+          property: r'agenciaNombre',
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<AppSessionConfig, AppSessionConfig, QAfterFilterCondition>
+  agenciaNombreIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'agenciaNombre', value: ''),
+      );
+    });
+  }
+
+  QueryBuilder<AppSessionConfig, AppSessionConfig, QAfterFilterCondition>
+  agenciaNombreIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(property: r'agenciaNombre', value: ''),
       );
     });
   }
@@ -505,6 +679,20 @@ extension AppSessionConfigQuerySortBy
     });
   }
 
+  QueryBuilder<AppSessionConfig, AppSessionConfig, QAfterSortBy>
+  sortByAgenciaNombre() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'agenciaNombre', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AppSessionConfig, AppSessionConfig, QAfterSortBy>
+  sortByAgenciaNombreDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'agenciaNombre', Sort.desc);
+    });
+  }
+
   QueryBuilder<AppSessionConfig, AppSessionConfig, QAfterSortBy> sortByRole() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'role', Sort.asc);
@@ -532,6 +720,20 @@ extension AppSessionConfigQuerySortThenBy
   thenByAgenciaIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'agenciaId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<AppSessionConfig, AppSessionConfig, QAfterSortBy>
+  thenByAgenciaNombre() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'agenciaNombre', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AppSessionConfig, AppSessionConfig, QAfterSortBy>
+  thenByAgenciaNombreDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'agenciaNombre', Sort.desc);
     });
   }
 
@@ -571,6 +773,16 @@ extension AppSessionConfigQueryWhereDistinct
     });
   }
 
+  QueryBuilder<AppSessionConfig, AppSessionConfig, QDistinct>
+  distinctByAgenciaNombre({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(
+        r'agenciaNombre',
+        caseSensitive: caseSensitive,
+      );
+    });
+  }
+
   QueryBuilder<AppSessionConfig, AppSessionConfig, QDistinct> distinctByRole({
     bool caseSensitive = true,
   }) {
@@ -591,6 +803,13 @@ extension AppSessionConfigQueryProperty
   QueryBuilder<AppSessionConfig, int?, QQueryOperations> agenciaIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'agenciaId');
+    });
+  }
+
+  QueryBuilder<AppSessionConfig, String?, QQueryOperations>
+  agenciaNombreProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'agenciaNombre');
     });
   }
 

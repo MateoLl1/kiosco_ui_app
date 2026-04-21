@@ -89,6 +89,7 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
     try {
       await ref.read(appSessionProvider.notifier).saveSession(
             agenciaId: agencia.agCodigo,
+            agenciaNombre: agencia.agNombre,
             role: rol,  
           );
 

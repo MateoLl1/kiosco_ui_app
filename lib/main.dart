@@ -33,7 +33,7 @@ class App extends ConsumerWidget {
 
     return MaterialApp.router(
       theme: AppTheme(
-        isDark: true,
+        isDark: false,
         selectedColor: colorTheme,
       ).getTheme(),
       routerConfig: appRouter,

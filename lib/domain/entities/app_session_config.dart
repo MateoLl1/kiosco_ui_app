@@ -14,6 +14,7 @@ class AppSessionConfig {
   Id id = 1;
 
   int? agenciaId;
+  String? agenciaNombre;
 
   @Enumerated(EnumType.name)
   AppRole role = AppRole.guardia;
@@ -21,5 +22,6 @@ class AppSessionConfig {
   AppSessionConfig({
     this.agenciaId = 0,
     this.role = AppRole.admin,
+    this.agenciaNombre 
   });
 }

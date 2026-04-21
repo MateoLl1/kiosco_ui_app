@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-
 const colorsAppTheme = <Color>[
+  Colors.blue,
   Colors.amber,
   Colors.deepOrangeAccent,
   Colors.greenAccent,
-
 ];
 
 class AppTheme {
@@ -18,9 +17,9 @@ class AppTheme {
   });
 
   ThemeData getTheme() => ThemeData(
-    useMaterial3: true,
-    brightness: isDark ? Brightness.dark : Brightness.light,
-    colorSchemeSeed: colorsAppTheme[selectedColor],
-    fontFamily: 'Montserrat',
-  );
+        useMaterial3: true,
+        brightness: isDark ? Brightness.dark : Brightness.light,
+        colorSchemeSeed: colorsAppTheme[selectedColor],
+        fontFamily: 'Montserrat',
+      );
 }
