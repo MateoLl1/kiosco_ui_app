@@ -4,22 +4,24 @@ import 'package:kiosco_au/presentation/widgets/widgets.dart';
 
 class CitaTile extends StatelessWidget {
   final Cita cita;
+  final VoidCallback onTap;
 
   const CitaTile({
     super.key,
     required this.cita,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isWide = MediaQuery.of(context).size.width >= 900;
     final colors = Theme.of(context).colorScheme;
+    final isWide = MediaQuery.of(context).size.width >= 900;
     final estilo = resolverEstiloCita(colors, cita.claveVisual);
 
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () {},
+        onTap: onTap,
         borderRadius: BorderRadius.circular(16),
         child: Ink(
           decoration: BoxDecoration(
