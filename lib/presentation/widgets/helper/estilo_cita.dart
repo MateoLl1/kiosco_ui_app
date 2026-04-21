@@ -1,56 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:kiosco_au/config/theme/guardia_theme.dart';
 
-class EstiloCita {
-  final Color fondo;
-  final Color borde;
-  final Color texto;
-  final Color textoSecundario;
-
-  const EstiloCita({
-    required this.fondo,
-    required this.borde,
-    required this.texto,
-    required this.textoSecundario,
-  });
-}
-
-EstiloCita resolverEstiloCita(
+Color resolverColorCita(
   GuardiaTheme guardia,
-  ColorScheme colors,
   String claveVisual,
 ) {
-  switch (claveVisual.toLowerCase()) {
+  switch (claveVisual.toLowerCase().trim()) {
     case 'mantenimiento':
-      return EstiloCita(
-        fondo: colors.surfaceContainerHighest,
-        borde: guardia.mantenimiento,
-        texto: colors.onSurface,
-        textoSecundario: colors.onSurfaceVariant,
-      );
+      return guardia.mantenimiento;
 
     case 'reparacion':
-      return EstiloCita(
-        fondo: colors.surfaceContainerHighest,
-        borde: guardia.reparacion,
-        texto: colors.onSurface,
-        textoSecundario: colors.onSurfaceVariant,
-      );
+      return guardia.reparacion;
 
     case 'no_llego':
-      return EstiloCita(
-        fondo: colors.surfaceContainerHighest,
-        borde: guardia.noLlego,
-        texto: colors.onSurface,
-        textoSecundario: colors.onSurfaceVariant,
-      );
+      return guardia.noLlego;
+
+    case 'cancelado':
+      return guardia.cancelado;
 
     default:
-      return EstiloCita(
-        fondo: colors.surfaceContainerHighest,
-        borde: guardia.bordeDefault,
-        texto: colors.onSurface,
-        textoSecundario: colors.onSurfaceVariant,
-      );
+      return guardia.defaultColor;
   }
 }

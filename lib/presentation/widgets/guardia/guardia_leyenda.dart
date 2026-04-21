@@ -42,6 +42,10 @@ class GuardiaLeyenda extends StatelessWidget {
             color: guardia.noLlego,
             texto: 'No llegó',
           ),
+          LeyendaItem(
+            color: guardia.cancelado,
+            texto: 'Cancelado',
+          ),
         ],
       ),
     );
@@ -51,13 +55,11 @@ class GuardiaLeyenda extends StatelessWidget {
 class LeyendaItem extends StatelessWidget {
   final Color color;
   final String texto;
-  final Color? textColor;
 
   const LeyendaItem({
     super.key,
     required this.color,
     required this.texto,
-    this.textColor,
   });
 
   @override
@@ -82,7 +84,6 @@ class LeyendaItem extends StatelessWidget {
         Text(
           texto,
           style: TextStyle(
-            color: textColor ?? const Color(0xFF111111),
             fontSize: isWide ? 15 : 13,
             fontWeight: FontWeight.w600,
           ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kiosco_au/config/config.dart';
 
 class GuardiaHeader extends StatelessWidget {
   final String? agenciaNombre;
@@ -15,7 +14,6 @@ class GuardiaHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final guardia = Theme.of(context).extension<GuardiaTheme>()!;
     final isWide = MediaQuery.of(context).size.width >= 900;
     final colors = Theme.of(context).colorScheme;
     return Container(

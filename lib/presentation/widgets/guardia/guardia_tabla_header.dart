@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kiosco_au/config/theme/guardia_theme.dart';
 
 class GuardiaTablaHeader extends StatelessWidget {
   const GuardiaTablaHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final guardia = Theme.of(context).extension<GuardiaTheme>()!;
     final isWide = MediaQuery.of(context).size.width >= 900;
-
+    final colors = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
@@ -16,7 +14,7 @@ class GuardiaTablaHeader extends StatelessWidget {
         vertical: isWide ? 14 : 12,
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFF333333),
+        color: colors.secondary, 
         borderRadius: BorderRadius.circular(16),
       ),
       child: DefaultTextStyle(

@@ -4,13 +4,15 @@ class GuardiaTheme extends ThemeExtension<GuardiaTheme> {
   final Color mantenimiento;
   final Color reparacion;
   final Color noLlego;
-  final Color bordeDefault;
+  final Color cancelado;
+  final Color defaultColor;
 
   const GuardiaTheme({
     this.mantenimiento = const Color(0xFF8080FF),
     this.reparacion = const Color(0xFFFFC080),
-    this.noLlego = const Color(0xFF8B0000),
-    this.bordeDefault = const Color(0xFFD2B48C),
+    this.noLlego = Colors.red,
+    this.cancelado = Colors.red,
+    this.defaultColor = const Color(0xFFFAFAD2),
   });
 
   @override
@@ -18,13 +20,15 @@ class GuardiaTheme extends ThemeExtension<GuardiaTheme> {
     Color? mantenimiento,
     Color? reparacion,
     Color? noLlego,
-    Color? bordeDefault,
+    Color? cancelado,
+    Color? defaultColor,
   }) {
     return GuardiaTheme(
       mantenimiento: mantenimiento ?? this.mantenimiento,
       reparacion: reparacion ?? this.reparacion,
       noLlego: noLlego ?? this.noLlego,
-      bordeDefault: bordeDefault ?? this.bordeDefault,
+      cancelado: cancelado ?? this.cancelado,
+      defaultColor: defaultColor ?? this.defaultColor,
     );
   }
 
@@ -39,7 +43,8 @@ class GuardiaTheme extends ThemeExtension<GuardiaTheme> {
       mantenimiento: Color.lerp(mantenimiento, other.mantenimiento, t)!,
       reparacion: Color.lerp(reparacion, other.reparacion, t)!,
       noLlego: Color.lerp(noLlego, other.noLlego, t)!,
-      bordeDefault: Color.lerp(bordeDefault, other.bordeDefault, t)!,
+      cancelado: Color.lerp(cancelado, other.cancelado, t)!,
+      defaultColor: Color.lerp(defaultColor, other.defaultColor, t)!,
     );
   }
 }

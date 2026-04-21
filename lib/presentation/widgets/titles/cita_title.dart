@@ -18,7 +18,7 @@ class CitaTile extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     final guardia = Theme.of(context).extension<GuardiaTheme>()!;
     final isWide = MediaQuery.of(context).size.width >= 900;
-    final estilo = resolverEstiloCita(guardia, colors, cita.claveVisual);
+    final fondo = resolverColorCita(guardia, cita.claveVisual);
 
     return Material(
       color: Colors.transparent,
@@ -27,12 +27,8 @@ class CitaTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         child: Ink(
           decoration: BoxDecoration(
-            color: estilo.fondo,
+            color: fondo,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: estilo.borde,
-              width: 2,
-            ),
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(
@@ -46,7 +42,7 @@ class CitaTile extends StatelessWidget {
                   child: Text(
                     cita.horaCita,
                     style: TextStyle(
-                      color: estilo.texto,
+                      color: colors.onSurface,
                       fontSize: isWide ? 24 : 18,
                       fontWeight: FontWeight.w800,
                     ),
@@ -57,7 +53,7 @@ class CitaTile extends StatelessWidget {
                   child: Text(
                     cita.placa,
                     style: TextStyle(
-                      color: estilo.texto,
+                      color: colors.onSurface,
                       fontSize: isWide ? 20 : 16,
                       fontWeight: FontWeight.w700,
                     ),
@@ -73,7 +69,7 @@ class CitaTile extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: estilo.texto,
+                          color: colors.onSurface,
                           fontSize: isWide ? 19 : 15,
                           fontWeight: FontWeight.w700,
                         ),
@@ -84,7 +80,7 @@ class CitaTile extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: estilo.textoSecundario,
+                          color: colors.onSurfaceVariant,
                           fontSize: isWide ? 15 : 13,
                           fontWeight: FontWeight.w500,
                         ),
@@ -98,7 +94,7 @@ class CitaTile extends StatelessWidget {
                     cita.bahia,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: estilo.texto,
+                      color: colors.onSurface,
                       fontSize: isWide ? 22 : 18,
                       fontWeight: FontWeight.w800,
                     ),
