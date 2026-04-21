@@ -30,4 +30,14 @@ class KioscoRepositoryImpl extends KioscoRepository {
     return datasource.registrarLlegada(agenciaId: agenciaId, citaId: citaId);
   }
   
+  @override
+  Future<TurnoGeneradoResponse> generarTurnoSinCita({required int agenciaId}) {
+    return datasource.generarTurnoSinCita(agenciaId: agenciaId);
+  }
+  
+  @override
+  Future<TurnoGeneradoResponse> generarTurnoSinCitaFlotas({required int agenciaId}) {
+    return datasource.generarTurnoSinCita(agenciaId: agenciaId);
+  }
+  
 }

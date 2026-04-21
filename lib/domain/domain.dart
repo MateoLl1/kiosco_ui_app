@@ -17,3 +17,4 @@ export './datasources/kiosco_datasource.dart';
 export './repositories/kiosco_repository.dart';
 export './entities/cita.dart';
 export './response/registrar_llegada_response.dart';
+export './response/turno_generado_response.dart';

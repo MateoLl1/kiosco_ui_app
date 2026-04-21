@@ -70,6 +70,38 @@ class KioscoDatasourceImpl extends KioscoDatasource {
       response.data as Map<String, dynamic>,
     );
   }
+  
+    @override
+  Future<TurnoGeneradoResponse> generarTurnoSinCita({
+    required int agenciaId,
+  }) async {
+    final response = await _dio.post(
+      '/turnos/sin-cita',
+      queryParameters: {
+        'agenciaId': agenciaId,
+      },
+    );
+
+    return TurnoGeneradoResponseMapper.fromJson(
+      response.data as Map<String, dynamic>,
+    );
+  }
+
+  @override
+  Future<TurnoGeneradoResponse> generarTurnoSinCitaFlotas({
+    required int agenciaId,
+  }) async {
+    final response = await _dio.post(
+      '/turnos/sin-cita-flotas',
+      queryParameters: {
+        'agenciaId': agenciaId,
+      },
+    );
+
+    return TurnoGeneradoResponseMapper.fromJson(
+      response.data as Map<String, dynamic>,
+    );
+  }
 
 
 
