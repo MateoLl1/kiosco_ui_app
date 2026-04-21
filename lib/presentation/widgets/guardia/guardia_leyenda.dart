@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kiosco_au/config/theme/guardia_theme.dart';
 
 class GuardiaLeyenda extends StatelessWidget {
   final bool isWide;
@@ -10,7 +11,7 @@ class GuardiaLeyenda extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
+    final guardia = Theme.of(context).extension<GuardiaTheme>()!;
 
     return Container(
       width: double.infinity,
@@ -19,10 +20,9 @@ class GuardiaLeyenda extends StatelessWidget {
         vertical: 14,
       ),
       decoration: BoxDecoration(
-        color: colors.surfaceContainerLow,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: colors.outlineVariant,
+          color: const Color(0xFFD2B48C),
         ),
       ),
       child: Wrap(
@@ -31,26 +31,16 @@ class GuardiaLeyenda extends StatelessWidget {
         alignment: WrapAlignment.center,
         children: [
           LeyendaItem(
-            color: colors.primaryContainer,
+            color: guardia.mantenimiento,
             texto: 'Mantenimiento',
           ),
           LeyendaItem(
-            color: colors.secondaryContainer,
+            color: guardia.reparacion,
             texto: 'Reparación',
           ),
           LeyendaItem(
-            color: colors.tertiaryContainer,
-            texto: 'Servicio rápido',
-          ),
-          LeyendaItem(
-            color: colors.error,
+            color: guardia.noLlego,
             texto: 'No llegó',
-            textColor: colors.onError,
-          ),
-          LeyendaItem(
-            color: colors.errorContainer,
-            texto: 'Cancelado',
-            textColor: colors.onErrorContainer,
           ),
         ],
       ),
@@ -72,7 +62,6 @@ class LeyendaItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
     final isWide = MediaQuery.of(context).size.width >= 900;
 
     return Row(
@@ -85,7 +74,7 @@ class LeyendaItem extends StatelessWidget {
             color: color,
             borderRadius: BorderRadius.circular(4),
             border: Border.all(
-              color: colors.outlineVariant,
+              color: Colors.grey,
             ),
           ),
         ),
@@ -93,7 +82,7 @@ class LeyendaItem extends StatelessWidget {
         Text(
           texto,
           style: TextStyle(
-            color: textColor ?? colors.onSurface,
+            color: textColor ?? const Color(0xFF111111),
             fontSize: isWide ? 15 : 13,
             fontWeight: FontWeight.w600,
           ),

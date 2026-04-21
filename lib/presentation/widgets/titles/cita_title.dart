@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kiosco_au/config/theme/guardia_theme.dart';
 import 'package:kiosco_au/domain/domain.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 
@@ -15,8 +16,9 @@ class CitaTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final guardia = Theme.of(context).extension<GuardiaTheme>()!;
     final isWide = MediaQuery.of(context).size.width >= 900;
-    final estilo = resolverEstiloCita(colors, cita.claveVisual);
+    final estilo = resolverEstiloCita(guardia, colors, cita.claveVisual);
 
     return Material(
       color: Colors.transparent,
@@ -29,6 +31,7 @@ class CitaTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: estilo.borde,
+              width: 2,
             ),
           ),
           child: Padding(

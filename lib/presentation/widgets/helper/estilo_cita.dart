@@ -1,10 +1,5 @@
-
-
-
-
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
+import 'package:kiosco_au/config/theme/guardia_theme.dart';
 
 class EstiloCita {
   final Color fondo;
@@ -20,47 +15,40 @@ class EstiloCita {
   });
 }
 
-EstiloCita resolverEstiloCita(ColorScheme colors, String claveVisual) {
+EstiloCita resolverEstiloCita(
+  GuardiaTheme guardia,
+  ColorScheme colors,
+  String claveVisual,
+) {
   switch (claveVisual.toLowerCase()) {
-    case 'cancelado':
-      return EstiloCita(
-        fondo: colors.errorContainer,
-        borde: colors.error,
-        texto: colors.onErrorContainer,
-        textoSecundario: colors.onErrorContainer.withOpacity(0.82),
-      );
-    case 'no_llego':
-      return EstiloCita(
-        fondo: colors.error,
-        borde: colors.error,
-        texto: colors.onError,
-        textoSecundario: colors.onError.withOpacity(0.82),
-      );
     case 'mantenimiento':
       return EstiloCita(
-        fondo: colors.primaryContainer,
-        borde: colors.primary,
-        texto: colors.onPrimaryContainer,
-        textoSecundario: colors.onPrimaryContainer.withOpacity(0.82),
+        fondo: colors.surfaceContainerHighest,
+        borde: guardia.mantenimiento,
+        texto: colors.onSurface,
+        textoSecundario: colors.onSurfaceVariant,
       );
+
     case 'reparacion':
       return EstiloCita(
-        fondo: colors.secondaryContainer,
-        borde: colors.secondary,
-        texto: colors.onSecondaryContainer,
-        textoSecundario: colors.onSecondaryContainer.withOpacity(0.82),
+        fondo: colors.surfaceContainerHighest,
+        borde: guardia.reparacion,
+        texto: colors.onSurface,
+        textoSecundario: colors.onSurfaceVariant,
       );
-    case 'servicio_rapido':
+
+    case 'no_llego':
       return EstiloCita(
-        fondo: colors.tertiaryContainer,
-        borde: colors.tertiary,
-        texto: colors.onTertiaryContainer,
-        textoSecundario: colors.onTertiaryContainer.withOpacity(0.82),
+        fondo: colors.surfaceContainerHighest,
+        borde: guardia.noLlego,
+        texto: colors.onSurface,
+        textoSecundario: colors.onSurfaceVariant,
       );
+
     default:
       return EstiloCita(
         fondo: colors.surfaceContainerHighest,
-        borde: colors.outlineVariant,
+        borde: guardia.bordeDefault,
         texto: colors.onSurface,
         textoSecundario: colors.onSurfaceVariant,
       );

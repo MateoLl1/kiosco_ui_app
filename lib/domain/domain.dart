@@ -16,3 +16,4 @@ export './repositories/info_credito_repository.dart';
 export './datasources/kiosco_datasource.dart';
 export './repositories/kiosco_repository.dart';
 export './entities/cita.dart';
+export './response/registrar_llegada_response.dart';

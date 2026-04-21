@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kiosco_au/config/config.dart';
 
 const colorsAppTheme = <Color>[
   Colors.blue,
@@ -21,5 +22,9 @@ class AppTheme {
         brightness: isDark ? Brightness.dark : Brightness.light,
         colorSchemeSeed: colorsAppTheme[selectedColor],
         fontFamily: 'Montserrat',
+
+        extensions: <ThemeExtension<dynamic>>[
+          const GuardiaTheme(),
+        ],
       );
 }

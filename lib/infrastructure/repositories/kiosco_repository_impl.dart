@@ -25,4 +25,9 @@ class KioscoRepositoryImpl extends KioscoRepository {
     return datasource.listarCitas(agenciaId); 
   }
   
+  @override
+  Future<RegistrarLlegadaResponse> registrarLlegada({required int agenciaId, required int citaId}) {
+    return datasource.registrarLlegada(agenciaId: agenciaId, citaId: citaId);
+  }
+  
 }

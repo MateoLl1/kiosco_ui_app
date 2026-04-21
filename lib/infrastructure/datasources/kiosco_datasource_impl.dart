@@ -52,4 +52,26 @@ class KioscoDatasourceImpl extends KioscoDatasource {
         .map((json) => CitaMapper.citaToEntity(json as Map<String, dynamic>))
         .toList();
   }
+  
+  @override
+  Future<RegistrarLlegadaResponse> registrarLlegada({
+    required int agenciaId,
+    required int citaId,
+  }) async {
+    final response = await _dio.post(
+      '/turnos/recepcion/registrar-llegada',
+      data: {
+        'agenciaId': agenciaId,
+        'citaId': citaId,
+      },
+    );
+
+    return RegistrarLlegadaResponseMapper.fromJson(
+      response.data as Map<String, dynamic>,
+    );
+  }
+
+
+
+
 }
