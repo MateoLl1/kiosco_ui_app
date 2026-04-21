@@ -12,9 +12,6 @@ Color resolverColorCita(
     case 'reparacion':
       return guardia.reparacion;
 
-    case 'no_llego':
-      return guardia.noLlego;
-
     case 'cancelado':
       return guardia.cancelado;
 

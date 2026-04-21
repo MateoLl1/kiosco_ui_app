@@ -15,22 +15,27 @@ class GuardiaAcciones extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isWide) {
-      return Row(
-        children: [
-          Expanded(
-            child: AccionGuardiaButton(
-              titulo: 'Sin cita',
-              onPressed: onSinCita,
-            ),
+      return Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1080),
+          child: Row(
+            children: [
+              Expanded(
+                child: AccionGuardiaButton(
+                  titulo: 'Sin cita',
+                  onPressed: onSinCita,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: AccionGuardiaButton(
+                  titulo: 'Sin cita flotas',
+                  onPressed: onSinCitaFlotas,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: AccionGuardiaButton(
-              titulo: 'Sin cita flotas',
-              onPressed: onSinCitaFlotas,
-            ),
-          ),
-        ],
+        ),
       );
     }
 
@@ -73,12 +78,15 @@ class AccionGuardiaButton extends StatelessWidget {
     return FilledButton(
       onPressed: onPressed,
       style: FilledButton.styleFrom(
-        minimumSize: Size.fromHeight(isWide ? 72 : 60),
+        minimumSize: Size.fromHeight(isWide ? 64 : 58),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(isWide ? 26 : 22),
+        ),
       ),
       child: Text(
         titulo,
         style: TextStyle(
-          fontSize: isWide ? 22 : 18,
+          fontSize: isWide ? 18 : 17,
           fontWeight: FontWeight.w700,
         ),
       ),

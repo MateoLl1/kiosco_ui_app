@@ -18,9 +18,12 @@ class GuardiaBody extends ConsumerWidget {
     final colors = Theme.of(context).colorScheme;
 
     return state.when(
-      loading: () => Center(
-        child: CircularProgressIndicator(
-          color: colors.primary,
+      loading: () => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 40),
+        child: Center(
+          child: CircularProgressIndicator(
+            color: colors.primary,
+          ),
         ),
       ),
       error: (error, _) => Center(
@@ -39,14 +42,17 @@ class GuardiaBody extends ConsumerWidget {
       ),
       data: (citas) {
         if (citas.isEmpty) {
-          return Center(
-            child: Text(
-              'No hay citas disponibles',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: colors.onSurface,
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32),
+            child: Center(
+              child: Text(
+                'No hay citas disponibles',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: colors.onSurface,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           );
@@ -56,29 +62,23 @@ class GuardiaBody extends ConsumerWidget {
           children: [
             const GuardiaTablaHeader(),
             const SizedBox(height: 8),
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: onRefresh,
-                child: ListView.separated(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: citas.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 8),
-                  itemBuilder: (context, index) {
-                    final cita = citas[index];
+            ...List.generate(citas.length, (index) {
+              final cita = citas[index];
 
-                    return CitaTile(
-                      cita: cita,
-                      onTap: () => ejecutarAccionCitaGuardia(
-                        context: context,
-                        ref: ref,
-                        cita: cita,
-                        onRefresh: onRefresh,
-                      ),
-                    );
-                  },
+              return Padding(
+                padding: EdgeInsets.only(bottom: index == citas.length - 1 ? 0 : 8),
+                child: CitaTitle(
+                  cita: cita,
+                  onTap: () => ejecutarAccionCitaGuardia(
+                    context: context,
+                    ref: ref,
+                    cita: cita,
+                    onRefresh: onRefresh,
+                  ),
                 ),
-              ),
-            ),
+              );
+
+            }),
           ],
         );
       },

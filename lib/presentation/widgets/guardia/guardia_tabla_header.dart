@@ -5,8 +5,10 @@ class GuardiaTablaHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isWide = MediaQuery.of(context).size.width >= 900;
-    final colors = Theme.of(context).colorScheme;
+    final width = MediaQuery.of(context).size.width;
+    final isWide = width >= 900;
+    final esMovil = width < 600;
+
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
@@ -14,7 +16,7 @@ class GuardiaTablaHeader extends StatelessWidget {
         vertical: isWide ? 14 : 12,
       ),
       decoration: BoxDecoration(
-        color: colors.secondary, 
+        color: const Color(0xFF333333),
         borderRadius: BorderRadius.circular(16),
       ),
       child: DefaultTextStyle(
@@ -23,14 +25,23 @@ class GuardiaTablaHeader extends StatelessWidget {
           fontWeight: FontWeight.w700,
           fontSize: isWide ? 20 : 14,
         ),
-        child: const Row(
-          children: [
-            Expanded(flex: 2, child: Text('Hora')),
-            Expanded(flex: 2, child: Text('Placa')),
-            Expanded(flex: 5, child: Text('Cliente')),
-            Expanded(flex: 2, child: Text('Bahía', textAlign: TextAlign.center)),
-          ],
-        ),
+        child: esMovil
+            ? const Row(
+                children: [
+                  Expanded(child: Text('Hora')),
+                  Expanded(child: Text('Placa')),
+                  Expanded(flex: 2, child: Text('Cliente')),
+                  Text('Bahía'),
+                ],
+              )
+            : const Row(
+                children: [
+                  Expanded(flex: 2, child: Text('Hora')),
+                  Expanded(flex: 2, child: Text('Placa')),
+                  Expanded(flex: 5, child: Text('Cliente')),
+                  Expanded(flex: 2, child: Text('Bahía', textAlign: TextAlign.center)),
+                ],
+              ),
       ),
     );
   }

@@ -45,40 +45,44 @@ class _GuardiaScreenState extends ConsumerState<GuardiaScreen> {
     return Scaffold(
       backgroundColor: colors.surface,
       body: SafeArea(
-        child: Column(
-          children: [
-            GuardiaHeader(
-              agenciaNombre: session?.agenciaNombre,
-              onActualizar: _cargarCitas,
-              cargando: state.isLoading,
-            ),
-            const SizedBox(height: 12),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: isWide ? 24 : 16),
-              child: GuardiaAcciones(
-                isWide: isWide,
-                onSinCita: _generarSinCita,
-                onSinCitaFlotas: _generarSinCitaFlotas,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: isWide ? 24 : 16),
-                child: GuardiaBody(
-                  state: state,
-                  onRefresh: _cargarCitas,
+        child: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          child: Padding(
+            padding: EdgeInsets.only(bottom: isWide ? 12 : 8),
+            child: Column(
+              children: [
+                GuardiaHeader(
+                  agenciaNombre: session?.agenciaNombre,
+                  onActualizar: _cargarCitas,
+                  cargando: state.isLoading,
                 ),
-              ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: isWide ? 24 : 16),
+                  child: GuardiaAcciones(
+                    isWide: isWide,
+                    onSinCita: _generarSinCita,
+                    onSinCitaFlotas: _generarSinCitaFlotas,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: isWide ? 24 : 16),
+                  child: GuardiaBody(
+                    state: state,
+                    onRefresh: _cargarCitas,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: isWide ? 24 : 16),
+                  child: GuardiaLeyenda(isWide: isWide),
+                ),
+                const SizedBox(height: 12),
+                const AcFooter(),
+              ],
             ),
-            const SizedBox(height: 12),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: isWide ? 24 : 16),
-              child: GuardiaLeyenda(isWide: isWide),
-            ),
-            const SizedBox(height: 12),
-            const AcFooter(),
-          ],
+          ),
         ),
       ),
     );

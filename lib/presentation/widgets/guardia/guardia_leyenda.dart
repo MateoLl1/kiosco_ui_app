@@ -39,12 +39,8 @@ class GuardiaLeyenda extends StatelessWidget {
             texto: 'Reparación',
           ),
           LeyendaItem(
-            color: guardia.noLlego,
-            texto: 'No llegó',
-          ),
-          LeyendaItem(
             color: guardia.cancelado,
-            texto: 'Cancelado',
+            texto: 'Cancelado o no llegó',
           ),
         ],
       ),

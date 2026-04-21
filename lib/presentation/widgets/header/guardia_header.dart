@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kiosco_au/config/config.dart';
 
 class GuardiaHeader extends StatelessWidget {
   final String? agenciaNombre;
@@ -16,11 +17,11 @@ class GuardiaHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width >= 900;
     final colors = Theme.of(context).colorScheme;
-    return Container(
-      width: double.infinity,
+
+    return Padding(
       padding: EdgeInsets.fromLTRB(
         isWide ? 24 : 16,
-        20,
+        12,
         isWide ? 24 : 16,
         0,
       ),
@@ -36,15 +37,26 @@ class GuardiaHeader extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 12),
-          FilledButton.tonal(
-            onPressed: cargando ? null : onActualizar,
-            child: Text(
-              'Actualizar',
-              style: TextStyle(
-                fontSize: isWide ? 18 : 15,
-                fontWeight: FontWeight.w600,
-              ),
+          Material(
+            color: colors.primary.withOpacity(0.12),
+            borderRadius: BorderRadius.circular(999),
+            child: IconButton(
+              onPressed: cargando ? null : onActualizar,
+              tooltip: 'Actualizar',
+              icon: cargando
+                  ? SizedBox(
+                      width: isWide ? 22 : 18,
+                      height: isWide ? 22 : 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.4,
+                        color: colors.primary,
+                      ),
+                    )
+                  : Icon(
+                      Icons.refresh_rounded,
+                      size: isWide ? 28 : 24,
+                      color: colors.primary,
+                    ),
             ),
           ),
         ],
