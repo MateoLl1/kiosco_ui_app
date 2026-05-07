@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'dart:typed_data';
+
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiosco_au/domain/domain.dart';
 import 'package:kiosco_au/presentation/providers/providers.dart';
@@ -40,6 +41,11 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
   void initState() {
     super.initState();
 
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+
     Future.microtask(() async {
       ref.read(pantallaTurnosProvider.notifier).loadPantalla();
     });
@@ -51,6 +57,14 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
   void dispose() {
     overlayTimer?.cancel();
     audioPlayer.dispose();
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+
     super.dispose();
   }
 
@@ -160,6 +174,8 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(pantallaTurnosProvider);
     final colors = Theme.of(context).colorScheme;
+    final width = MediaQuery.of(context).size.width;
+    final sidebarWidth = width < 900 ? 280.0 : 340.0;
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -204,7 +220,7 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
                             ),
                           ),
                           SizedBox(
-                            width: 340,
+                            width: sidebarWidth,
                             child: Padding(
                               padding:
                                   const EdgeInsets.fromLTRB(12, 16, 0, 12),
