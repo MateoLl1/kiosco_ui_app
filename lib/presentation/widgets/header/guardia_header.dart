@@ -1,5 +1,6 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
-import 'package:kiosco_au/config/config.dart';
 
 class GuardiaHeader extends StatelessWidget {
   final String? agenciaNombre;

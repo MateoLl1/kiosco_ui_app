@@ -9,3 +9,4 @@ export './turnos/turnero_waiting_screen.dart';
 export './kiosco/tipo_atencion_screen.dart';
 export './kiosco/bienvenida_usuario_screen.dart';
 export './guard/guardia_screen.dart';
+export './config/close_session_screen.dart';

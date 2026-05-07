@@ -66,7 +66,9 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
     });
 
     try {
-      await ref.read(databookProvider.notifier).consultarPerfilDatabook(
+      await ref
+          .read(databookProvider.notifier)
+          .consultarPerfilDatabook(
             identificacion: identificacion,
             empresa: empresa,
           );
@@ -77,7 +79,9 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('No se encontró información para la identificación ingresada.'),
+            content: Text(
+              'No se encontró información para la identificación ingresada.',
+            ),
           ),
         );
         return;
@@ -90,15 +94,14 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('No se pudo consultar la información. $e'),
-        ),
+        SnackBar(content: Text('No se pudo consultar la información. $e')),
       );
     } finally {
-      if (!mounted) return;
-      setState(() {
-        _consultando = false;
-      });
+      if (mounted) {
+        setState(() {
+          _consultando = false;
+        });
+      }
     }
   }
 
@@ -156,7 +159,9 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Text(
-                            _digitos.isEmpty ? '0000000000000' : _identificacionIngresada,
+                            _digitos.isEmpty
+                                ? '0000000000000'
+                                : _identificacionIngresada,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.headlineSmall
                                 ?.copyWith(
@@ -175,7 +180,8 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
                           builder: (context, cons) {
                             const separacion = 12.0;
                             final anchoTotal = cons.maxWidth;
-                            final anchoTecla = (anchoTotal - separacion * 2) / 3;
+                            final anchoTecla =
+                                (anchoTotal - separacion * 2) / 3;
 
                             Widget fila(List<String> valores) {
                               return Row(
@@ -213,7 +219,8 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
                                       width: anchoTecla,
                                       child: BotonTeclado(
                                         texto: 'Borrar',
-                                        onTap: _digitos.isNotEmpty && !_consultando
+                                        onTap:
+                                            _digitos.isNotEmpty && !_consultando
                                             ? _borrarTodo
                                             : null,
                                         colorFondo: colores.errorContainer,
@@ -235,7 +242,8 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
                                       width: anchoTecla,
                                       child: BotonTeclado(
                                         texto: '',
-                                        onTap: _digitos.isNotEmpty && !_consultando
+                                        onTap:
+                                            _digitos.isNotEmpty && !_consultando
                                             ? _borrarUltimo
                                             : null,
                                         icono: Icons.backspace_outlined,
@@ -251,7 +259,9 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
                           const SizedBox(height: 18),
                           FadeIn(
                             child: CustomIconTextButton(
-                              texto: _consultando ? 'Consultando...' : 'Continuar',
+                              texto: _consultando
+                                  ? 'Consultando...'
+                                  : 'Continuar',
                               icono: _consultando
                                   ? Icons.hourglass_top_rounded
                                   : Icons.search_rounded,

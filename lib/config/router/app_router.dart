@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kiosco_au/presentation/screens/screens.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/loading',
+  initialLocation: '/close-session',
   routes: [
     GoRoute(
       path: '/home',
@@ -33,6 +33,11 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/config',
       builder: (context, state) => ConfigScreen(),
+    ),
+
+    GoRoute(
+      path: '/close-session',
+      builder: (context, state) => CloseSessionScreen(),
     ),
 
     GoRoute(
