@@ -37,7 +37,7 @@ class KioscoRepositoryImpl extends KioscoRepository {
   
   @override
   Future<TurnoGeneradoResponse> generarTurnoSinCitaFlotas({required int agenciaId}) {
-    return datasource.generarTurnoSinCita(agenciaId: agenciaId);
+    return datasource.generarTurnoSinCitaFlotas(agenciaId: agenciaId);
   }
   
 }

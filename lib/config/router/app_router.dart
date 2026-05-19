@@ -1,63 +1,93 @@
-
-
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kiosco_au/presentation/screens/screens.dart';
+import 'package:kiosco_au/presentation/widgets/widgets.dart';
+
+Widget withHiddenAdminAccess(BuildContext context, Widget child) {
+  return HiddenAdminAccess(
+    onTriggered: () {
+      context.push('/close-session');
+    },
+    child: child,
+  );
+}
 
 final appRouter = GoRouter(
   initialLocation: '/loading',
   routes: [
     GoRoute(
       path: '/home',
-      builder: (context, state) => HomeScreen(),
+      builder: (context, state) => withHiddenAdminAccess(
+        context,
+        HomeScreen(),
+      ),
     ),
-
     GoRoute(
       path: '/loading',
-      builder: (context, state) => LoadingScreen(),
+      builder: (context, state) => withHiddenAdminAccess(
+        context,
+        LoadingScreen(),
+      ),
     ),
-
     GoRoute(
       path: '/ingresar-placa',
-      builder: (context, state) => IngresarPlacaScreen(),
+      builder: (context, state) => withHiddenAdminAccess(
+        context,
+        IngresarPlacaScreen(),
+      ),
     ),
     GoRoute(
       path: '/ingresar-ruc',
-      builder: (context, state) => IngresarRucScreen(),
+      builder: (context, state) => withHiddenAdminAccess(
+        context,
+        IngresarRucScreen(),
+      ),
     ),
-
     GoRoute(
       path: '/turno-asignado',
-      builder: (context, state) => TurnoAsignadoScreen(),
+      builder: (context, state) => withHiddenAdminAccess(
+        context,
+        TurnoAsignadoScreen(),
+      ),
     ),
-
     GoRoute(
       path: '/config',
-      builder: (context, state) => ConfigScreen(),
+      builder: (context, state) => withHiddenAdminAccess(
+        context,
+        ConfigScreen(),
+      ),
     ),
-
     GoRoute(
       path: '/close-session',
       builder: (context, state) => CloseSessionScreen(),
     ),
-
     GoRoute(
       path: '/tipo-atencion',
-      builder: (context, state) => TipoAtencionScreen(),
+      builder: (context, state) => withHiddenAdminAccess(
+        context,
+        TipoAtencionScreen(),
+      ),
     ),
-
     GoRoute(
       path: '/bienvenida-usuario',
-      builder: (context, state) => BienvenidaUsuarioScreen(),
+      builder: (context, state) => withHiddenAdminAccess(
+        context,
+        BienvenidaUsuarioScreen(),
+      ),
     ),
-
     GoRoute(
       path: '/pantalla-turnos',
-      builder: (context, state) => TurneroWaitingScreen(),
+      builder: (context, state) => withHiddenAdminAccess(
+        context,
+        TurneroWaitingScreen(),
+      ),
     ),
-
     GoRoute(
       path: '/guardia',
-      builder: (context, state) => GuardiaScreen(),
+      builder: (context, state) => withHiddenAdminAccess(
+        context,
+        GuardiaScreen(),
+      ),
     ),
-  ]
+  ],
 );

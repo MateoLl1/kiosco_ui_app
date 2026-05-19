@@ -8,7 +8,7 @@ class CloseSessionScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(appSessionProvider);
+    // final session = ref.watch(appSessionProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
