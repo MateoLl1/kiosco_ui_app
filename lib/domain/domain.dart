@@ -15,4 +15,3 @@ export './entities/cita.dart';
 export './response/registrar_llegada_response.dart';
 export './response/turno_generado_response.dart';
 export './entities/cliente_siac.dart';
-export './entities/turno_kiosco.dart';

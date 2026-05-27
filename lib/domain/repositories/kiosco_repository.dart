@@ -24,8 +24,5 @@ abstract class KioscoRepository {
     required String identificacion,
   });
 
-  Future<TurnoKiosco> generarTurnoKiosco({
-    required int agenciaId,
-    required double clCodigo,
-  });
+  
 }

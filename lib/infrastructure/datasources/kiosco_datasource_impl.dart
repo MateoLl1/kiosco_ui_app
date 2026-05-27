@@ -117,28 +117,5 @@ class KioscoDatasourceImpl extends KioscoDatasource {
     }
   }
 
-  @override
-  Future<TurnoKiosco> generarTurnoKiosco({
-    required int agenciaId,
-    required double clCodigo,
-  }) async {
-    try {
-      final response = await _dio.post(
-        '/turnos/kiosco/generar',
-        data: {'agenciaId': agenciaId, 'clCodigo': clCodigo},
-      );
-
-      if (response.statusCode != 200 || response.data == null) {
-        throw Exception('No se pudo generar el turno');
-      }
-
-      return TurnoKiosco.fromJson(Map<String, dynamic>.from(response.data));
-    } on DioException catch (e) {
-      final detalle =
-          e.response?.data?.toString() ?? e.message ?? 'Error generando turno';
-      throw Exception(detalle);
-    } catch (e) {
-      throw Exception('Error generando turno: $e');
-    }
-  }
+  
 }

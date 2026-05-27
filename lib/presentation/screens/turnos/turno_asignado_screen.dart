@@ -1,37 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kiosco_au/domain/domain.dart';
 import 'package:kiosco_au/presentation/providers/providers.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 import 'package:kiosco_au/presentation/screens/painters/painters.dart';
 
 class TurnoAsignadoScreen extends ConsumerWidget {
-  const TurnoAsignadoScreen({super.key});
+  final TurnoGeneradoResponse? turno;
+
+  const TurnoAsignadoScreen({
+    super.key,
+    this.turno,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).colorScheme;
     final textStyle = Theme.of(context).textTheme;
-    final turno = ref.watch(turnoKioscoProvider);
+    final cliente = ref.watch(clienteSiacProvider);
 
     final turnoTexto = turno?.turno.trim().isNotEmpty == true
         ? turno!.turno.trim()
         : '---';
 
-    final clienteTexto = turno?.cliente.trim().isNotEmpty == true
-        ? turno!.cliente.trim()
+    final clienteTexto = cliente?.nombreCompleto.trim().isNotEmpty == true
+        ? cliente!.nombreCompleto.trim()
         : 'Estimado Cliente';
 
-    final tiempoTexto = turno == null
-        ? '-- min'
-        : '~${turno.tiempoEstimadoMinutos} min';
+    final tipoTexto = turno?.tipo.trim().isNotEmpty == true
+        ? turno!.tipo.trim()
+        : 'Sin cita';
 
-    final colaTexto = turno == null
-        ? '-- persona(s) antes'
-        : '${turno.personasPorDelante} persona(s) antes';
+    final fechaTexto = turno?.fecha == null
+        ? ''
+        : '${turno!.fecha.day.toString().padLeft(2, '0')}/'
+            '${turno!.fecha.month.toString().padLeft(2, '0')}/'
+            '${turno!.fecha.year} '
+            '${turno!.fecha.hour.toString().padLeft(2, '0')}:'
+            '${turno!.fecha.minute.toString().padLeft(2, '0')}';
 
     return Scaffold(
-      body: SafeArea( 
+      body: SafeArea(
         child: Stack(
           children: [
             Positioned.fill(
@@ -107,15 +117,16 @@ class TurnoAsignadoScreen extends ConsumerWidget {
                                         icon: Icons.handyman_outlined,
                                       ),
                                       DetalleTurno(
-                                        label: 'Tiempo est.',
-                                        descripcion: tiempoTexto,
-                                        icon: Icons.timelapse,
+                                        label: 'Tipo',
+                                        descripcion: tipoTexto,
+                                        icon: Icons.confirmation_number,
                                       ),
-                                      DetalleTurno(
-                                        label: 'En cola',
-                                        descripcion: colaTexto,
-                                        icon: Icons.people,
-                                      ),
+                                      if (fechaTexto.isNotEmpty)
+                                        DetalleTurno(
+                                          label: 'Fecha',
+                                          descripcion: fechaTexto,
+                                          icon: Icons.schedule,
+                                        ),
                                     ],
                                   ),
                                 ),
@@ -129,7 +140,6 @@ class TurnoAsignadoScreen extends ConsumerWidget {
                                 colorFondo: colors.primary,
                                 onTap: () {
                                   ref.read(clienteSiacProvider.notifier).limpiar();
-                                  ref.read(turnoKioscoProvider.notifier).limpiar();
                                   context.go('/ingresar-ruc');
                                 },
                               ),

@@ -49,14 +49,5 @@ class KioscoRepositoryImpl extends KioscoRepository {
     );
   }
 
-  @override
-  Future<TurnoKiosco> generarTurnoKiosco({
-    required int agenciaId,
-    required double clCodigo,
-  }) {
-    return datasource.generarTurnoKiosco(
-      agenciaId: agenciaId,
-      clCodigo: clCodigo,
-    );
-  }
+  
 }

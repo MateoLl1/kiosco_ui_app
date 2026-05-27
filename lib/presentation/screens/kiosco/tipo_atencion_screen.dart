@@ -18,31 +18,17 @@ class _TipoAtencionScreenState extends ConsumerState<TipoAtencionScreen> {
 
   static const int _agenciaId = 1;
 
-  Future<void> _generarTurno() async {
+  Future<void> _generarTurnoSinCita() async {
     if (_generandoTurno) return;
-
-    final cliente = ref.read(clienteSiacProvider);
-
-    if (cliente == null || cliente.clCodigo <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No existe un cliente válido para generar el turno.'),
-        ),
-      );
-
-      context.go('/ingresar-ruc');
-      return;
-    }
 
     setState(() {
       _generandoTurno = true;
     });
 
     try {
-      final turno = await ref.read(turnoKioscoProvider.notifier).generarTurno(
-            agenciaId: _agenciaId,
-            clCodigo: cliente.clCodigo,
-          );
+      final turno = await ref
+          .read(kioscoRepositoryProvider)
+          .generarTurnoSinCita(agenciaId: _agenciaId);
 
       if (!mounted) return;
       context.go('/turno-asignado', extra: turno);
@@ -65,7 +51,7 @@ class _TipoAtencionScreenState extends ConsumerState<TipoAtencionScreen> {
 
   void _onGenerarTurnoTap() {
     if (_generandoTurno) return;
-    _generarTurno();
+    _generarTurnoSinCita();
   }
 
   @override
