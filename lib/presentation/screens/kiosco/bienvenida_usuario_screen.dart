@@ -37,8 +37,8 @@ class _BienvenidaClienteScreenState
   @override
   Widget build(BuildContext context) {
     final colores = Theme.of(context).colorScheme;
-    final databook = ref.watch(databookProvider);
-    final nombreCliente = databook?.sdNombre.trim() ?? '';
+    final cliente = ref.watch(clienteSiacProvider);
+    final nombreCliente = cliente?.nombreCompleto.trim() ?? '';
     final mostrarNombre = nombreCliente.isNotEmpty;
 
     return Scaffold(

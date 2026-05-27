@@ -1,10 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kiosco_au/presentation/providers/providers.dart';
 import 'package:kiosco_au/presentation/screens/painters/painters.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 
-class TipoAtencionScreen extends StatelessWidget {
+class TipoAtencionScreen extends ConsumerStatefulWidget {
   const TipoAtencionScreen({super.key});
+
+  @override
+  ConsumerState<TipoAtencionScreen> createState() =>
+      _TipoAtencionScreenState();
+}
+
+class _TipoAtencionScreenState extends ConsumerState<TipoAtencionScreen> {
+  bool _generandoTurno = false;
+
+  static const int _agenciaId = 1;
+
+  Future<void> _generarTurno() async {
+    if (_generandoTurno) return;
+
+    final cliente = ref.read(clienteSiacProvider);
+
+    if (cliente == null || cliente.clCodigo <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No existe un cliente válido para generar el turno.'),
+        ),
+      );
+
+      context.go('/ingresar-ruc');
+      return;
+    }
+
+    setState(() {
+      _generandoTurno = true;
+    });
+
+    try {
+      final turno = await ref.read(turnoKioscoProvider.notifier).generarTurno(
+            agenciaId: _agenciaId,
+            clCodigo: cliente.clCodigo,
+          );
+
+      if (!mounted) return;
+      context.go('/turno-asignado', extra: turno);
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('No se pudo generar el turno. $e'),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _generandoTurno = false;
+        });
+      }
+    }
+  }
+
+  void _onGenerarTurnoTap() {
+    if (_generandoTurno) return;
+    _generarTurno();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +80,16 @@ class TipoAtencionScreen extends StatelessWidget {
           children: [
             Positioned.fill(
               child: CustomPaint(
-                painter: HomePainter(primaryColor: colors.primary),
+                painter: HomePainter(
+                  primaryColor: colors.primary,
+                ),
               ),
             ),
-            Positioned(top: 16, left: 16, child: ReturnPageButton()),
+            Positioned(
+              top: 16,
+              left: 16,
+              child: ReturnPageButton(),
+            ),
             Column(
               children: [
                 Expanded(
@@ -44,22 +112,30 @@ class TipoAtencionScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: HomeOptionCard(
-                                  title: 'Servicio / Personal',
-                                  icon: Icons.person,
+                                  title: _generandoTurno
+                                      ? 'Generando turno...'
+                                      : 'Servicio / Personal',
+                                  icon: _generandoTurno
+                                      ? Icons.hourglass_top_rounded
+                                      : Icons.person,
                                   backgroundColor: colors.primary,
                                   foregroundColor: colors.onPrimary,
-                                  onTap: () => context.push('/taller-servicio'),
+                                  onTap: _onGenerarTurnoTap,
                                 ),
                               ),
                               const SizedBox(width: 24),
                               Expanded(
                                 child: HomeOptionCard(
-                                  title: 'Flota de Empresa',
-                                  icon: Icons.clear_all_outlined,
+                                  title: _generandoTurno
+                                      ? 'Generando turno...'
+                                      : 'Flota de Empresa',
+                                  icon: _generandoTurno
+                                      ? Icons.hourglass_top_rounded
+                                      : Icons.clear_all_outlined,
                                   backgroundColor:
                                       colors.surfaceContainerHighest,
                                   foregroundColor: colors.onSurfaceVariant,
-                                  onTap: () => context.push('/ingresar-ruc'),
+                                  onTap: _onGenerarTurnoTap,
                                 ),
                               ),
                             ],
@@ -68,19 +144,28 @@ class TipoAtencionScreen extends StatelessWidget {
                           Column(
                             children: [
                               HomeOptionCard(
-                                title: 'Taller / Servicios',
-                                icon: Icons.car_repair,
+                                title: _generandoTurno
+                                    ? 'Generando turno...'
+                                    : 'Servicio / Personal',
+                                icon: _generandoTurno
+                                    ? Icons.hourglass_top_rounded
+                                    : Icons.person,
                                 backgroundColor: colors.primary,
                                 foregroundColor: colors.onPrimary,
-                                onTap: () => context.push('/taller-servicio'),
+                                onTap: _onGenerarTurnoTap,
                               ),
                               const SizedBox(height: 20),
                               HomeOptionCard(
-                                title: 'Flota de Empresa',
-                                icon: Icons.clear_all_outlined,
-                                backgroundColor: colors.surfaceContainerHighest,
+                                title: _generandoTurno
+                                    ? 'Generando turno...'
+                                    : 'Flota de Empresa',
+                                icon: _generandoTurno
+                                    ? Icons.hourglass_top_rounded
+                                    : Icons.clear_all_outlined,
+                                backgroundColor:
+                                    colors.surfaceContainerHighest,
                                 foregroundColor: colors.onSurfaceVariant,
-                                onTap: () => context.push('/ingresar-ruc'),
+                                onTap: _onGenerarTurnoTap,
                               ),
                             ],
                           ),
@@ -88,7 +173,6 @@ class TipoAtencionScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 const AcFooter(),
               ],
             ),

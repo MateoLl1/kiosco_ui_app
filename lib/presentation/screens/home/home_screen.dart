@@ -1,17 +1,82 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kiosco_au/presentation/providers/providers.dart';
 import 'package:kiosco_au/presentation/screens/painters/painters.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  bool _generandoTurno = false;
+
+  static const int _agenciaId = 1;
+
+  Future<void> _generarTurno() async {
+    if (_generandoTurno) return;
+
+    final cliente = ref.read(clienteSiacProvider);
+
+    if (cliente == null || cliente.clCodigo <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No existe un cliente válido para generar el turno.'),
+        ),
+      );
+
+      context.go('/ingresar-ruc');
+      return;
+    }
+
+    setState(() {
+      _generandoTurno = true;
+    });
+
+    try {
+      final turno = await ref.read(turnoKioscoProvider.notifier).generarTurno(
+            agenciaId: _agenciaId,
+            clCodigo: cliente.clCodigo,
+          );
+
+      if (!mounted) return;
+      context.go('/turno-asignado', extra: turno);
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('No se pudo generar el turno. $e'),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _generandoTurno = false;
+        });
+      }
+    }
+  }
+
+  void _onGenerarTurnoTap() {
+    if (_generandoTurno) return;
+    _generarTurno();
+  }
+
+  void _onTipoAtencionTap() {
+    if (_generandoTurno) return;
+    context.push('/tipo-atencion');
+  }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final isWide = width >= 900;
     final colors = Theme.of(context).colorScheme;
-    
 
     return Scaffold(
       body: SafeArea(
@@ -20,14 +85,16 @@ class HomeScreen extends StatelessWidget {
             Positioned.fill(
               child: CustomPaint(
                 painter: HomePainter(
-                  primaryColor: colors.primary
+                  primaryColor: colors.primary,
                 ),
               ),
             ),
             Positioned(
               top: 16,
               left: 16,
-              child: ReturnPageButton(ruta: '/ingresar-ruc',)
+              child: ReturnPageButton(
+                ruta: '/ingresar-ruc',
+              ),
             ),
             Column(
               children: [
@@ -54,31 +121,22 @@ class HomeScreen extends StatelessWidget {
                                   icon: Icons.car_repair,
                                   backgroundColor: colors.primary,
                                   foregroundColor: colors.onPrimary,
-                                  onTap: () => context.push('/tipo-atencion'),
+                                  onTap: _onTipoAtencionTap,
                                 ),
                               ),
                               const SizedBox(width: 24),
                               Expanded(
                                 child: HomeOptionCard(
-                                  title: 'Mostrador de Repuestos',
-                                  icon: Icons.inventory_2_outlined,
+                                  title: _generandoTurno
+                                      ? 'Generando turno...'
+                                      : 'Mostrador de Repuestos',
+                                  icon: _generandoTurno
+                                      ? Icons.hourglass_top_rounded
+                                      : Icons.inventory_2_outlined,
                                   backgroundColor:
                                       colors.surfaceContainerHighest,
-                                  foregroundColor:
-                                      colors.onSurfaceVariant,
-                                  onTap: () => context.push('/turno-asignado'),
-                                ),
-                              ),
-                              const SizedBox(width: 24),
-                              Expanded(
-                                child: HomeOptionCard(
-                                  title: 'Vehiculos',
-                                  icon: Icons.car_crash,
-                                  backgroundColor:
-                                      colors.surfaceContainerHighest,
-                                  foregroundColor:
-                                      colors.onSurfaceVariant,
-                                  onTap: () => context.push('/turno-asignado'),
+                                  foregroundColor: colors.onSurfaceVariant,
+                                  onTap: _onGenerarTurnoTap,
                                 ),
                               ),
                             ],
@@ -91,27 +149,20 @@ class HomeScreen extends StatelessWidget {
                                 icon: Icons.car_repair,
                                 backgroundColor: colors.primary,
                                 foregroundColor: colors.onPrimary,
-                                onTap: () => context.push('/tipo-atencion'),
+                                onTap: _onTipoAtencionTap,
                               ),
-                              const SizedBox(width: 24),
+                              const SizedBox(height: 24),
                               HomeOptionCard(
-                                title: 'Mostrador de Repuestos',
-                                icon: Icons.inventory_2_outlined,
+                                title: _generandoTurno
+                                    ? 'Generando turno...'
+                                    : 'Mostrador de Repuestos',
+                                icon: _generandoTurno
+                                    ? Icons.hourglass_top_rounded
+                                    : Icons.inventory_2_outlined,
                                 backgroundColor:
                                     colors.surfaceContainerHighest,
-                                foregroundColor:
-                                    colors.onSurfaceVariant,
-                                onTap: () => context.push('/turno-asignado'),
-                              ),
-                              const SizedBox(width: 24),
-                              HomeOptionCard(
-                                title: 'Vehiculos',
-                                icon: Icons.car_crash,
-                                backgroundColor:
-                                    colors.surfaceContainerHighest,
-                                foregroundColor:
-                                    colors.onSurfaceVariant,
-                                onTap: () => context.push('/turno-asignado'),
+                                foregroundColor: colors.onSurfaceVariant,
+                                onTap: _onGenerarTurnoTap,
                               ),
                             ],
                           ),
@@ -119,12 +170,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-
-                
                 const AcFooter(),
-
-
-
               ],
             ),
           ],

@@ -1,15 +1,10 @@
-
-
-
 import 'package:kiosco_au/domain/domain.dart';
 
 class KioscoRepositoryImpl extends KioscoRepository {
-  
   final KioscoDatasource datasource;
 
-  KioscoRepositoryImpl({required  this.datasource});
-  
-  
+  KioscoRepositoryImpl({required this.datasource});
+
   @override
   Future<List<Agencia>> getAgencias() {
     return datasource.getAgencias();
@@ -19,25 +14,51 @@ class KioscoRepositoryImpl extends KioscoRepository {
   Future<PantallaTurnosResponse> getPantallaTurnos(int agenciaId) {
     return datasource.getPantallaTurnos(agenciaId);
   }
-  
+
   @override
   Future<List<Cita>> listarCitas(int agenciaId) {
-    return datasource.listarCitas(agenciaId); 
+    return datasource.listarCitas(agenciaId);
   }
-  
+
   @override
-  Future<RegistrarLlegadaResponse> registrarLlegada({required int agenciaId, required int citaId}) {
+  Future<RegistrarLlegadaResponse> registrarLlegada({
+    required int agenciaId,
+    required int citaId,
+  }) {
     return datasource.registrarLlegada(agenciaId: agenciaId, citaId: citaId);
   }
-  
+
   @override
   Future<TurnoGeneradoResponse> generarTurnoSinCita({required int agenciaId}) {
     return datasource.generarTurnoSinCita(agenciaId: agenciaId);
   }
-  
+
   @override
-  Future<TurnoGeneradoResponse> generarTurnoSinCitaFlotas({required int agenciaId}) {
+  Future<TurnoGeneradoResponse> generarTurnoSinCitaFlotas({
+    required int agenciaId,
+  }) {
     return datasource.generarTurnoSinCitaFlotas(agenciaId: agenciaId);
   }
-  
+
+  @override
+  Future<ClienteSiac> obtenerClientePorIdentificacion({
+    required String identificacion,
+    int empresa = 1,
+  }) {
+    return datasource.obtenerClientePorIdentificacion(
+      identificacion: identificacion,
+      empresa: empresa,
+    );
+  }
+
+  @override
+  Future<TurnoKiosco> generarTurnoKiosco({
+    required int agenciaId,
+    required double clCodigo,
+  }) {
+    return datasource.generarTurnoKiosco(
+      agenciaId: agenciaId,
+      clCodigo: clCodigo,
+    );
+  }
 }

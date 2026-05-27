@@ -1,5 +1,3 @@
-
-
 import 'package:dio/dio.dart';
 import 'package:kiosco_au/config/config.dart';
 import 'package:kiosco_au/domain/domain.dart';
@@ -29,21 +27,17 @@ class KioscoDatasourceImpl extends KioscoDatasource {
   Future<PantallaTurnosResponse> getPantallaTurnos(int agenciaId) async {
     final response = await _dio.get(
       '/PantallaTurnos',
-      queryParameters: {
-        'agenciaId': agenciaId,
-      },
+      queryParameters: {'agenciaId': agenciaId},
     );
 
     return PantallaTurnosMapper.fromJson(response.data as Map<String, dynamic>);
   }
-  
+
   @override
   Future<List<Cita>> listarCitas(int agenciaId) async {
     final response = await _dio.get(
       '/turnos/recepcion',
-      queryParameters: {
-        'agenciaId': agenciaId,
-      },
+      queryParameters: {'agenciaId': agenciaId},
     );
 
     final List<dynamic> data = response.data as List<dynamic>;
@@ -52,7 +46,7 @@ class KioscoDatasourceImpl extends KioscoDatasource {
         .map((json) => CitaMapper.citaToEntity(json as Map<String, dynamic>))
         .toList();
   }
-  
+
   @override
   Future<RegistrarLlegadaResponse> registrarLlegada({
     required int agenciaId,
@@ -60,26 +54,21 @@ class KioscoDatasourceImpl extends KioscoDatasource {
   }) async {
     final response = await _dio.post(
       '/turnos/recepcion/registrar-llegada',
-      data: {
-        'agenciaId': agenciaId,
-        'citaId': citaId,
-      },
+      data: {'agenciaId': agenciaId, 'citaId': citaId},
     );
 
     return RegistrarLlegadaResponseMapper.fromJson(
       response.data as Map<String, dynamic>,
     );
   }
-  
-    @override
+
+  @override
   Future<TurnoGeneradoResponse> generarTurnoSinCita({
     required int agenciaId,
   }) async {
     final response = await _dio.post(
       '/turnos/sin-cita',
-      queryParameters: {
-        'agenciaId': agenciaId,
-      },
+      queryParameters: {'agenciaId': agenciaId},
     );
 
     return TurnoGeneradoResponseMapper.fromJson(
@@ -93,9 +82,7 @@ class KioscoDatasourceImpl extends KioscoDatasource {
   }) async {
     final response = await _dio.post(
       '/turnos/sin-cita-flotas',
-      queryParameters: {
-        'agenciaId': agenciaId,
-      },
+      queryParameters: {'agenciaId': agenciaId},
     );
 
     return TurnoGeneradoResponseMapper.fromJson(
@@ -103,7 +90,55 @@ class KioscoDatasourceImpl extends KioscoDatasource {
     );
   }
 
+  @override
+  Future<ClienteSiac> obtenerClientePorIdentificacion({
+    required String identificacion,
+    int empresa = 1,
+  }) async {
+    try {
+      final response = await _dio.get(
+        '/cliente/por-identificacion',
+        queryParameters: {'identificacion': identificacion, 'empresa': empresa},
+      );
 
+      if (response.statusCode != 200 || response.data == null) {
+        throw Exception('No se pudo consultar el cliente');
+      }
 
+      return ClienteSiac.fromJson(Map<String, dynamic>.from(response.data));
+    } on DioException catch (e) {
+      final detalle =
+          e.response?.data?.toString() ??
+          e.message ??
+          'Error consultando cliente';
+      throw Exception(detalle);
+    } catch (e) {
+      throw Exception('Error consultando cliente: $e');
+    }
+  }
 
+  @override
+  Future<TurnoKiosco> generarTurnoKiosco({
+    required int agenciaId,
+    required double clCodigo,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '/turnos/kiosco/generar',
+        data: {'agenciaId': agenciaId, 'clCodigo': clCodigo},
+      );
+
+      if (response.statusCode != 200 || response.data == null) {
+        throw Exception('No se pudo generar el turno');
+      }
+
+      return TurnoKiosco.fromJson(Map<String, dynamic>.from(response.data));
+    } on DioException catch (e) {
+      final detalle =
+          e.response?.data?.toString() ?? e.message ?? 'Error generando turno';
+      throw Exception(detalle);
+    } catch (e) {
+      throw Exception('Error generando turno: $e');
+    }
+  }
 }

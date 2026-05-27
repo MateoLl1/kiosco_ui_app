@@ -66,16 +66,14 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
     });
 
     try {
-      await ref
-          .read(databookProvider.notifier)
-          .consultarPerfilDatabook(
+      await ref.read(clienteSiacProvider.notifier).consultarCliente(
             identificacion: identificacion,
             empresa: empresa,
           );
 
-      final databook = ref.read(databookProvider);
+      final cliente = ref.read(clienteSiacProvider);
 
-      if (databook == null) {
+      if (cliente == null) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -221,8 +219,8 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
                                         texto: 'Borrar',
                                         onTap:
                                             _digitos.isNotEmpty && !_consultando
-                                            ? _borrarTodo
-                                            : null,
+                                                ? _borrarTodo
+                                                : null,
                                         colorFondo: colores.errorContainer,
                                         colorTexto: colores.onErrorContainer,
                                       ),
@@ -244,8 +242,8 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
                                         texto: '',
                                         onTap:
                                             _digitos.isNotEmpty && !_consultando
-                                            ? _borrarUltimo
-                                            : null,
+                                                ? _borrarUltimo
+                                                : null,
                                         icono: Icons.backspace_outlined,
                                       ),
                                     ),
