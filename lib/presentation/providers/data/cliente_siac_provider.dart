@@ -1,4 +1,3 @@
-
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:kiosco_au/domain/domain.dart';
 import 'package:kiosco_au/presentation/providers/providers.dart';
@@ -19,13 +18,13 @@ class ClienteSiacNotifier extends StateNotifier<ClienteSiac?> {
     required this.repository,
   }) : super(null);
 
-  Future<ClienteSiac> consultarCliente({
+  Future<ClienteSiac?> consultarCliente({
     required String identificacion,
-    int empresa = 1,
   }) async {
+    limpiar();
+
     final cliente = await repository.obtenerClientePorIdentificacion(
       identificacion: identificacion,
-      empresa: empresa,
     );
 
     state = cliente;

@@ -2,7 +2,6 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kiosco_au/config/config.dart';
 import 'package:kiosco_au/presentation/providers/providers.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 import 'package:kiosco_au/presentation/screens/painters/painters.dart';
@@ -22,6 +21,7 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
 
   void _agregarDigito(String valor) {
     if (_digitos.length >= _maxLongitud || _consultando) return;
+
     setState(() {
       _digitos.add(valor);
     });
@@ -29,6 +29,7 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
 
   void _borrarUltimo() {
     if (_digitos.isEmpty || _consultando) return;
+
     setState(() {
       _digitos.removeLast();
     });
@@ -36,6 +37,7 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
 
   void _borrarTodo() {
     if (_digitos.isEmpty || _consultando) return;
+
     setState(() {
       _digitos.clear();
     });
@@ -59,7 +61,6 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
     if (!_cedulaORucValido || _consultando) return;
 
     final identificacion = _identificacionIngresada;
-    final empresa = int.tryParse(Env.empresaDefault) ?? 1;
 
     setState(() {
       _consultando = true;
@@ -68,32 +69,19 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
     try {
       await ref.read(clienteSiacProvider.notifier).consultarCliente(
             identificacion: identificacion,
-            empresa: empresa,
           );
-
-      final cliente = ref.read(clienteSiacProvider);
-
-      if (cliente == null) {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'No se encontró información para la identificación ingresada.',
-            ),
-          ),
-        );
-        return;
-      }
 
       _borrarTodo();
 
       if (!mounted) return;
       context.go('/bienvenida-usuario');
     } catch (e) {
+      ref.read(clienteSiacProvider.notifier).limpiar();
+
+      _borrarTodo();
+
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('No se pudo consultar la información. $e')),
-      );
+      context.go('/bienvenida-usuario');
     } finally {
       if (mounted) {
         setState(() {
@@ -262,7 +250,7 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
                                   : 'Continuar',
                               icono: _consultando
                                   ? Icons.hourglass_top_rounded
-                                  : Icons.search_rounded,
+                                  : Icons.arrow_forward_rounded,
                               onTap: _consultando ? null : _continuar,
                               colorFondo: colores.primary,
                             ),

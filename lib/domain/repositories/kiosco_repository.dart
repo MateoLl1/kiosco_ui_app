@@ -20,9 +20,8 @@ abstract class KioscoRepository {
     required int agenciaId,
   });
 
-  Future<ClienteSiac> obtenerClientePorIdentificacion({
+  Future<ClienteSiac?> obtenerClientePorIdentificacion({
     required String identificacion,
-    int empresa = 1,
   });
 
   Future<TurnoKiosco> generarTurnoKiosco({
