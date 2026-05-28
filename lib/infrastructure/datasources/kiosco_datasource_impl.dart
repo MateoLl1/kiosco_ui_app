@@ -117,5 +117,40 @@ class KioscoDatasourceImpl extends KioscoDatasource {
     }
   }
 
-  
+  @override
+  Future<TurnoClienteResponse?> obtenerTurnoPorIdentificacion({
+    required String identificacion,
+    required int agenciaId,
+  }) async {
+    try {
+      final response = await _dio.get(
+        '/turnos/por-identificacion',
+        queryParameters: {
+          'identificacion': identificacion,
+          'agenciaId': agenciaId,
+        },
+      );
+
+      if (response.statusCode != 200 || response.data == null) {
+        return null;
+      }
+
+      return TurnoClienteResponse.fromJson(
+        Map<String, dynamic>.from(response.data),
+      );
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        return null;
+      }
+
+      final detalle =
+          e.response?.data?.toString() ??
+          e.message ??
+          'Error consultando turno';
+
+      throw Exception(detalle);
+    } catch (e) {
+      throw Exception('Error consultando turno: $e');
+    }
+  }
 }

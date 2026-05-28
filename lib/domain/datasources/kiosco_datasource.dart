@@ -12,9 +12,7 @@ abstract class KioscoDatasource {
     required int citaId,
   });
 
-  Future<TurnoGeneradoResponse> generarTurnoSinCita({
-    required int agenciaId,
-  });
+  Future<TurnoGeneradoResponse> generarTurnoSinCita({required int agenciaId});
 
   Future<TurnoGeneradoResponse> generarTurnoSinCitaFlotas({
     required int agenciaId,
@@ -24,5 +22,8 @@ abstract class KioscoDatasource {
     required String identificacion,
   });
 
-  
+  Future<TurnoClienteResponse?> obtenerTurnoPorIdentificacion({
+    required String identificacion,
+    required int agenciaId,
+  });
 }

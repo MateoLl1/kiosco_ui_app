@@ -15,3 +15,4 @@ export './entities/cita.dart';
 export './response/registrar_llegada_response.dart';
 export './response/turno_generado_response.dart';
 export './entities/cliente_siac.dart';
+export './response/turno_cliente_response.dart';

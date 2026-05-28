@@ -49,5 +49,14 @@ class KioscoRepositoryImpl extends KioscoRepository {
     );
   }
 
-  
+  @override
+  Future<TurnoClienteResponse?> obtenerTurnoPorIdentificacion({
+    required String identificacion,
+    required int agenciaId,
+  }) {
+    return datasource.obtenerTurnoPorIdentificacion(
+      identificacion: identificacion,
+      agenciaId: agenciaId,
+    );
+  }
 }
