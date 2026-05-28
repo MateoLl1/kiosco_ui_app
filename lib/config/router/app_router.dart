@@ -45,10 +45,12 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/turno-asignado',
-      builder: (context, state) => withHiddenAdminAccess(
-        context,
-        TurnoAsignadoScreen(),
-      ),
+      builder: (context, state) {
+        return withHiddenAdminAccess(
+          context,
+          TurnoAsignadoScreen(extra: state.extra),
+        );
+      },
     ),
     GoRoute(
       path: '/config',

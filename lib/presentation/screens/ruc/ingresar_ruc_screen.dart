@@ -61,15 +61,33 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
     if (!_cedulaORucValido || _consultando) return;
 
     final identificacion = _identificacionIngresada;
+    const agenciaId = 1;
 
     setState(() {
       _consultando = true;
     });
 
     try {
-      await ref.read(clienteSiacProvider.notifier).consultarCliente(
-            identificacion: identificacion,
-          );
+      final cliente = await ref
+          .read(clienteSiacProvider.notifier)
+          .consultarCliente(identificacion: identificacion);
+
+      if (cliente != null && cliente.identificacion.trim().isNotEmpty) {
+        final turnoActual = await ref
+            .read(kioscoRepositoryProvider)
+            .obtenerTurnoPorIdentificacion(
+              identificacion: cliente.identificacion.trim(),
+              agenciaId: agenciaId,
+            );
+
+        if (turnoActual != null) {
+          _borrarTodo();
+
+          if (!mounted) return;
+          context.go('/turno-asignado', extra: turnoActual);
+          return;
+        }
+      }
 
       _borrarTodo();
 
@@ -207,8 +225,8 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
                                         texto: 'Borrar',
                                         onTap:
                                             _digitos.isNotEmpty && !_consultando
-                                                ? _borrarTodo
-                                                : null,
+                                            ? _borrarTodo
+                                            : null,
                                         colorFondo: colores.errorContainer,
                                         colorTexto: colores.onErrorContainer,
                                       ),
@@ -230,8 +248,8 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
                                         texto: '',
                                         onTap:
                                             _digitos.isNotEmpty && !_consultando
-                                                ? _borrarUltimo
-                                                : null,
+                                            ? _borrarUltimo
+                                            : null,
                                         icono: Icons.backspace_outlined,
                                       ),
                                     ),

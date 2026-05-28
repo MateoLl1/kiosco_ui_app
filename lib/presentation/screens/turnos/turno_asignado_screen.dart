@@ -7,38 +7,64 @@ import 'package:kiosco_au/presentation/widgets/widgets.dart';
 import 'package:kiosco_au/presentation/screens/painters/painters.dart';
 
 class TurnoAsignadoScreen extends ConsumerWidget {
-  final TurnoGeneradoResponse? turno;
+  final Object? extra;
 
   const TurnoAsignadoScreen({
     super.key,
-    this.turno,
+    this.extra,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).colorScheme;
     final textStyle = Theme.of(context).textTheme;
-    final cliente = ref.watch(clienteSiacProvider);
+    final clienteProvider = ref.watch(clienteSiacProvider);
 
-    final turnoTexto = turno?.turno.trim().isNotEmpty == true
-        ? turno!.turno.trim()
-        : '---';
+    final turnoCliente = extra is TurnoClienteResponse
+        ? extra as TurnoClienteResponse
+        : null;
 
-    final clienteTexto = cliente?.nombreCompleto.trim().isNotEmpty == true
-        ? cliente!.nombreCompleto.trim()
-        : 'Estimado Cliente';
+    final turnoGenerado = extra is TurnoGeneradoResponse
+        ? extra as TurnoGeneradoResponse
+        : null;
 
-    final tipoTexto = turno?.tipo.trim().isNotEmpty == true
-        ? turno!.tipo.trim()
-        : 'Sin cita';
+    final turnoTexto = turnoCliente?.turno.trim().isNotEmpty == true
+        ? turnoCliente!.turno.trim()
+        : turnoGenerado?.turno.trim().isNotEmpty == true
+            ? turnoGenerado!.turno.trim()
+            : '---';
 
-    final fechaTexto = turno?.fecha == null
-        ? ''
-        : '${turno!.fecha.day.toString().padLeft(2, '0')}/'
-            '${turno!.fecha.month.toString().padLeft(2, '0')}/'
-            '${turno!.fecha.year} '
-            '${turno!.fecha.hour.toString().padLeft(2, '0')}:'
-            '${turno!.fecha.minute.toString().padLeft(2, '0')}';
+    final clienteTexto = turnoCliente?.cliente.trim().isNotEmpty == true
+        ? turnoCliente!.cliente.trim()
+        : clienteProvider?.nombreCompleto.trim().isNotEmpty == true
+            ? clienteProvider!.nombreCompleto.trim()
+            : 'Estimado Cliente';
+
+    final areaTexto = turnoCliente?.area.trim().isNotEmpty == true
+        ? turnoCliente!.area.trim()
+        : turnoGenerado?.area.trim().isNotEmpty == true
+            ? turnoGenerado!.area.trim()
+            : 'Taller / Servicios';
+
+    final tipoTexto = turnoCliente?.tipo.trim().isNotEmpty == true
+        ? _formatearTipo(turnoCliente!.tipo)
+        : turnoGenerado?.tipo.trim().isNotEmpty == true
+            ? _formatearTipo(turnoGenerado!.tipo)
+            : 'Sin cita';
+
+    final tiempoEstimado = turnoCliente?.tiempoEstimadoMinutos ??
+        turnoGenerado?.tiempoEstimadoMinutos;
+
+    final personasPorDelante = turnoCliente?.personasPorDelante ??
+        turnoGenerado?.personasPorDelante;
+
+    final tiempoTexto = tiempoEstimado == null
+        ? '-- min'
+        : '~$tiempoEstimado min';
+
+    final colaTexto = personasPorDelante == null
+        ? '-- persona(s) antes'
+        : '$personasPorDelante persona(s) antes';
 
     return Scaffold(
       body: SafeArea(
@@ -113,7 +139,7 @@ class TurnoAsignadoScreen extends ConsumerWidget {
                                       ),
                                       DetalleTurno(
                                         label: 'Área',
-                                        descripcion: 'Taller - Servicios',
+                                        descripcion: areaTexto,
                                         icon: Icons.handyman_outlined,
                                       ),
                                       DetalleTurno(
@@ -121,12 +147,16 @@ class TurnoAsignadoScreen extends ConsumerWidget {
                                         descripcion: tipoTexto,
                                         icon: Icons.confirmation_number,
                                       ),
-                                      if (fechaTexto.isNotEmpty)
-                                        DetalleTurno(
-                                          label: 'Fecha',
-                                          descripcion: fechaTexto,
-                                          icon: Icons.schedule,
-                                        ),
+                                      DetalleTurno(
+                                        label: 'Tiempo est.',
+                                        descripcion: tiempoTexto,
+                                        icon: Icons.timelapse,
+                                      ),
+                                      DetalleTurno(
+                                        label: 'En cola',
+                                        descripcion: colaTexto,
+                                        icon: Icons.people,
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -139,7 +169,10 @@ class TurnoAsignadoScreen extends ConsumerWidget {
                                 icono: Icons.home,
                                 colorFondo: colors.primary,
                                 onTap: () {
-                                  ref.read(clienteSiacProvider.notifier).limpiar();
+                                  ref
+                                      .read(clienteSiacProvider.notifier)
+                                      .limpiar();
+
                                   context.go('/ingresar-ruc');
                                 },
                               ),
@@ -156,6 +189,17 @@ class TurnoAsignadoScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  static String _formatearTipo(String tipo) {
+    final valor = tipo.trim().toLowerCase();
+
+    if (valor == 'con_cita') return 'Con cita';
+    if (valor == 'sin_cita') return 'Sin cita';
+    if (valor == 'flota') return 'Flota';
+    if (valor == 'latoneria') return 'Latonería';
+
+    return tipo;
   }
 }
 

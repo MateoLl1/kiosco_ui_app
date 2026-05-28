@@ -48,12 +48,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  void _onGenerarTurnoTap() {
+  void _onMostradorRepuestosTap() {
     if (_generandoTurno) return;
     _generarTurnoSinCita();
   }
 
-  void _onTipoAtencionTap() {
+  void _onTallerServiciosTap() {
     if (_generandoTurno) return;
     context.push('/tipo-atencion');
   }
@@ -107,7 +107,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   icon: Icons.car_repair,
                                   backgroundColor: colors.primary,
                                   foregroundColor: colors.onPrimary,
-                                  onTap: _onTipoAtencionTap,
+                                  onTap: _onTallerServiciosTap,
                                 ),
                               ),
                               const SizedBox(width: 24),
@@ -122,7 +122,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   backgroundColor:
                                       colors.surfaceContainerHighest,
                                   foregroundColor: colors.onSurfaceVariant,
-                                  onTap: _onGenerarTurnoTap,
+                                  onTap: _onMostradorRepuestosTap,
                                 ),
                               ),
                             ],
@@ -135,7 +135,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 icon: Icons.car_repair,
                                 backgroundColor: colors.primary,
                                 foregroundColor: colors.onPrimary,
-                                onTap: _onTipoAtencionTap,
+                                onTap: _onTallerServiciosTap,
                               ),
                               const SizedBox(height: 24),
                               HomeOptionCard(
@@ -148,7 +148,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 backgroundColor:
                                     colors.surfaceContainerHighest,
                                 foregroundColor: colors.onSurfaceVariant,
-                                onTap: _onGenerarTurnoTap,
+                                onTap: _onMostradorRepuestosTap,
                               ),
                             ],
                           ),

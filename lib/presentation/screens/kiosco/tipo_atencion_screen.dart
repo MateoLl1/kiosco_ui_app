@@ -18,7 +18,7 @@ class _TipoAtencionScreenState extends ConsumerState<TipoAtencionScreen> {
 
   static const int _agenciaId = 1;
 
-  Future<void> _generarTurnoSinCita() async {
+  Future<void> _generarTurno({required bool esFlota}) async {
     if (_generandoTurno) return;
 
     setState(() {
@@ -26,9 +26,11 @@ class _TipoAtencionScreenState extends ConsumerState<TipoAtencionScreen> {
     });
 
     try {
-      final turno = await ref
-          .read(kioscoRepositoryProvider)
-          .generarTurnoSinCita(agenciaId: _agenciaId);
+      final repository = ref.read(kioscoRepositoryProvider);
+
+      final turno = esFlota
+          ? await repository.generarTurnoSinCitaFlotas(agenciaId: _agenciaId)
+          : await repository.generarTurnoSinCita(agenciaId: _agenciaId);
 
       if (!mounted) return;
       context.go('/turno-asignado', extra: turno);
@@ -49,9 +51,14 @@ class _TipoAtencionScreenState extends ConsumerState<TipoAtencionScreen> {
     }
   }
 
-  void _onGenerarTurnoTap() {
+  void _onServicioPersonalTap() {
     if (_generandoTurno) return;
-    _generarTurnoSinCita();
+    _generarTurno(esFlota: false);
+  }
+
+  void _onFlotaTap() {
+    if (_generandoTurno) return;
+    _generarTurno(esFlota: true);
   }
 
   @override
@@ -106,7 +113,7 @@ class _TipoAtencionScreenState extends ConsumerState<TipoAtencionScreen> {
                                       : Icons.person,
                                   backgroundColor: colors.primary,
                                   foregroundColor: colors.onPrimary,
-                                  onTap: _onGenerarTurnoTap,
+                                  onTap: _onServicioPersonalTap,
                                 ),
                               ),
                               const SizedBox(width: 24),
@@ -121,7 +128,7 @@ class _TipoAtencionScreenState extends ConsumerState<TipoAtencionScreen> {
                                   backgroundColor:
                                       colors.surfaceContainerHighest,
                                   foregroundColor: colors.onSurfaceVariant,
-                                  onTap: _onGenerarTurnoTap,
+                                  onTap: _onFlotaTap,
                                 ),
                               ),
                             ],
@@ -138,7 +145,7 @@ class _TipoAtencionScreenState extends ConsumerState<TipoAtencionScreen> {
                                     : Icons.person,
                                 backgroundColor: colors.primary,
                                 foregroundColor: colors.onPrimary,
-                                onTap: _onGenerarTurnoTap,
+                                onTap: _onServicioPersonalTap,
                               ),
                               const SizedBox(height: 20),
                               HomeOptionCard(
@@ -151,7 +158,7 @@ class _TipoAtencionScreenState extends ConsumerState<TipoAtencionScreen> {
                                 backgroundColor:
                                     colors.surfaceContainerHighest,
                                 foregroundColor: colors.onSurfaceVariant,
-                                onTap: _onGenerarTurnoTap,
+                                onTap: _onFlotaTap,
                               ),
                             ],
                           ),
