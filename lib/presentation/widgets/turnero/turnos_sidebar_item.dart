@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:kiosco_au/domain/domain.dart';
 
 class TurnosSidebarItem extends StatelessWidget {
@@ -10,33 +9,21 @@ class TurnosSidebarItem extends StatelessWidget {
     required this.turno,
   });
 
-  String _formatTipo(String tipo) {
-    switch (tipo) {
-      case 'con_cita':
-        return 'Con cita';
-      case 'sin_cita':
-        return 'Sin cita';
-      default:
-        return tipo;
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    final hour = turno.fechaReferencia != null
-        ? DateFormat('HH:mm').format(turno.fechaReferencia!)
-        : '--:--';
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+
         children: [
           Container(
-            width: 42,
-            height: 42,
+            width: 25,
+            height: 25,
             decoration: BoxDecoration(
               color: colors.primary.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(24),
@@ -76,14 +63,7 @@ class TurnosSidebarItem extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  '${_formatTipo(turno.tipo)}  •  $hour',
-                  style: TextStyle(
-                    color: colors.onSurface.withValues(alpha: 0.65),
-                    fontSize: 13,
-                  ),
-                ),
+                
               ],
             ),
           ),
