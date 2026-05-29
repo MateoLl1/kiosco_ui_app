@@ -14,7 +14,7 @@ class ConfigScreen extends ConsumerStatefulWidget {
 }
 
 class _ConfigScreenState extends ConsumerState<ConfigScreen> {
-  Agencia? agenciaSeleccionada;
+  int? agenciaSeleccionadaId;
   AppRole? rolSeleccionado;
   bool guardando = false;
 
@@ -29,24 +29,18 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
       await ref.read(appSessionProvider.notifier).loadSession();
 
       final session = ref.read(appSessionProvider);
-      final agencias = ref.read(agenciaProvider);
 
       if (!mounted || session == null) return;
 
-      final agencia = agencias.cast<Agencia?>().firstWhere(
-            (item) => item?.agCodigo == session.agenciaId,
-            orElse: () => null,
-          );
-
       setState(() {
-        agenciaSeleccionada = agencia;
+        agenciaSeleccionadaId = session.agenciaId;
         rolSeleccionado = session.role;
       });
     });
   }
 
   bool get puedeContinuar =>
-      !guardando && agenciaSeleccionada != null && rolSeleccionado != null;
+      !guardando && agenciaSeleccionadaId != null && rolSeleccionado != null;
 
   String _getRoleLabel(AppRole role) {
     switch (role) {
@@ -74,10 +68,46 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
     );
   }
 
+  Agencia? _obtenerAgenciaSeleccionada(List<Agencia> agencias) {
+    final id = agenciaSeleccionadaId;
+
+    if (id == null) return null;
+
+    final coincidencias = agencias.where((x) => x.agCodigo == id).toList();
+
+    if (coincidencias.length != 1) return null;
+
+    return coincidencias.first;
+  }
+
+  List<DropdownMenuItem<int>> _crearItemsAgencias(List<Agencia> agencias) {
+    final idsUsados = <int>{};
+    final items = <DropdownMenuItem<int>>[];
+
+    for (final agencia in agencias) {
+      if (idsUsados.contains(agencia.agCodigo)) continue;
+
+      idsUsados.add(agencia.agCodigo);
+
+      items.add(
+        DropdownMenuItem<int>(
+          value: agencia.agCodigo,
+          child: Text(
+            agencia.agNombre,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      );
+    }
+
+    return items;
+  }
+
   Future<void> _continuar() async {
     if (!puedeContinuar) return;
 
-    final agencia = agenciaSeleccionada;
+    final agencias = ref.read(agenciaProvider);
+    final agencia = _obtenerAgenciaSeleccionada(agencias);
     final rol = rolSeleccionado;
 
     if (agencia == null || rol == null) return;
@@ -90,7 +120,7 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
       await ref.read(appSessionProvider.notifier).saveSession(
             agenciaId: agencia.agCodigo,
             agenciaNombre: agencia.agNombre,
-            role: rol,  
+            role: rol,
           );
 
       if (!mounted) return;
@@ -106,7 +136,6 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
           context.go('/pantalla-turnos');
           break;
         case AppRole.admin:
-          // context.go('/admin');
           break;
       }
     } finally {
@@ -124,6 +153,9 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
     final isWide = MediaQuery.of(context).size.width >= 900;
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+
+    final agenciaSeleccionada = _obtenerAgenciaSeleccionada(agencias);
+    final agenciaItems = _crearItemsAgencias(agencias);
 
     return Scaffold(
       body: Stack(
@@ -185,26 +217,20 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
                                           style: textTheme.titleSmall,
                                         ),
                                         const SizedBox(height: 8),
-                                        DropdownButtonFormField<Agencia>(
-                                          initialValue: agenciaSeleccionada,
+                                        DropdownButtonFormField<int>(
+                                          initialValue:
+                                              agenciaSeleccionada?.agCodigo,
                                           isExpanded: true,
                                           decoration: _inputDecoration(
                                             'Selecciona una agencia',
                                           ),
-                                          items: agencias.map((agencia) {
-                                            return DropdownMenuItem<Agencia>(
-                                              value: agencia,
-                                              child: Text(
-                                                agencia.agNombre,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            );
-                                          }).toList(),
+                                          items: agenciaItems,
                                           onChanged: guardando
                                               ? null
                                               : (value) {
                                                   setState(() {
-                                                    agenciaSeleccionada = value;
+                                                    agenciaSeleccionadaId =
+                                                        value;
                                                   });
                                                 },
                                         ),
@@ -245,9 +271,8 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
                                 SizedBox(
                                   height: 54,
                                   child: FilledButton(
-                                    onPressed: puedeContinuar
-                                        ? _continuar
-                                        : null,
+                                    onPressed:
+                                        puedeContinuar ? _continuar : null,
                                     child: guardando
                                         ? const SizedBox(
                                             height: 22,

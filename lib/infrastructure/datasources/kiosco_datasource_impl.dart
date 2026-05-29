@@ -91,7 +91,7 @@ class KioscoDatasourceImpl extends KioscoDatasource {
   }
 
   @override
-  Future<ClienteSiac> obtenerClientePorIdentificacion({
+  Future<ClienteSiac?> obtenerClientePorIdentificacion({
     required String identificacion,
     int empresa = 1,
   }) async {

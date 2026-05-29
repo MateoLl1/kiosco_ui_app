@@ -17,6 +17,11 @@ class HiddenAdminAccess extends StatefulWidget {
 }
 
 class _HiddenAdminAccessState extends State<HiddenAdminAccess> {
+  static const int requiredPointerCount = 4;
+  static const int requiredCornerTapCount = 5;
+  static const Duration holdDuration = Duration(seconds: 3);
+  static const Duration tapResetDuration = Duration(seconds: 2);
+
   int pointerCount = 0;
   int cornerTapCount = 0;
   Timer? touchHoldTimer;
@@ -36,8 +41,43 @@ class _HiddenAdminAccessState extends State<HiddenAdminAccess> {
     widget.onTriggered();
 
     Future.delayed(const Duration(milliseconds: 800), () {
+      if (!mounted) return;
       triggered = false;
     });
+  }
+
+  void _startHoldTimerIfNeeded() {
+    if (pointerCount < requiredPointerCount || touchHoldTimer != null) return;
+
+    touchHoldTimer = Timer(holdDuration, () {
+      if (!mounted) return;
+
+      if (pointerCount >= requiredPointerCount) {
+        trigger();
+      }
+
+      touchHoldTimer = null;
+    });
+  }
+
+  void _cancelHoldTimerIfNeeded() {
+    if (pointerCount >= requiredPointerCount) return;
+
+    touchHoldTimer?.cancel();
+    touchHoldTimer = null;
+  }
+
+  void _handleCornerTap() {
+    cornerTapCount++;
+
+    cornerTapTimer?.cancel();
+    cornerTapTimer = Timer(tapResetDuration, () {
+      cornerTapCount = 0;
+    });
+
+    if (cornerTapCount >= requiredCornerTapCount) {
+      trigger();
+    }
   }
 
   @override
@@ -53,18 +93,7 @@ class _HiddenAdminAccessState extends State<HiddenAdminAccess> {
       behavior: HitTestBehavior.translucent,
       onPointerDown: (_) {
         pointerCount++;
-
-        if (pointerCount >= 3 && touchHoldTimer == null) {
-          touchHoldTimer = Timer(const Duration(seconds: 3), () {
-            if (!mounted) return;
-
-            if (pointerCount >= 3) {
-              trigger();
-            }
-
-            touchHoldTimer = null;
-          });
-        }
+        _startHoldTimerIfNeeded();
       },
       onPointerUp: (_) {
         pointerCount--;
@@ -73,10 +102,7 @@ class _HiddenAdminAccessState extends State<HiddenAdminAccess> {
           pointerCount = 0;
         }
 
-        if (pointerCount < 3) {
-          touchHoldTimer?.cancel();
-          touchHoldTimer = null;
-        }
+        _cancelHoldTimerIfNeeded();
       },
       onPointerCancel: (_) {
         pointerCount = 0;
@@ -88,21 +114,10 @@ class _HiddenAdminAccessState extends State<HiddenAdminAccess> {
           widget.child,
           Positioned(
             top: 0,
-            right: 0,
+            left: 0,
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
-              onTap: () {
-                cornerTapCount++;
-
-                cornerTapTimer?.cancel();
-                cornerTapTimer = Timer(const Duration(seconds: 2), () {
-                  cornerTapCount = 0;
-                });
-
-                if (cornerTapCount >= 5) {
-                  trigger();
-                }
-              },
+              onTap: _handleCornerTap,
               child: const SizedBox(
                 width: 100,
                 height: 100,
