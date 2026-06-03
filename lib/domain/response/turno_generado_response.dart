@@ -9,6 +9,7 @@ class TurnoGeneradoResponse {
   final int personasPorDelante;
   final int tiempoEstimadoMinutos;
   final DateTime fecha;
+  final String telefonoCliente;
 
   TurnoGeneradoResponse({
     required this.asgCodigo,
@@ -21,5 +22,6 @@ class TurnoGeneradoResponse {
     required this.personasPorDelante,
     required this.tiempoEstimadoMinutos,
     required this.fecha,
+    required this.telefonoCliente,
   });
 }

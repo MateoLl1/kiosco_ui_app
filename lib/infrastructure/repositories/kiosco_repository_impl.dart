@@ -59,4 +59,12 @@ class KioscoRepositoryImpl extends KioscoRepository {
       agenciaId: agenciaId,
     );
   }
+
+
+  @override
+  Future<bool> notificarTurnoWhatsapp({
+    required NotificarTurnoWhatsappRequest request,
+  }) {
+    return datasource.notificarTurnoWhatsapp(request: request);
+  }
 }

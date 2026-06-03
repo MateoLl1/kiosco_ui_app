@@ -9,10 +9,7 @@ import 'package:kiosco_au/presentation/screens/painters/painters.dart';
 class TurnoAsignadoScreen extends ConsumerWidget {
   final Object? extra;
 
-  const TurnoAsignadoScreen({
-    super.key,
-    this.extra,
-  });
+  const TurnoAsignadoScreen({super.key, this.extra});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,32 +28,33 @@ class TurnoAsignadoScreen extends ConsumerWidget {
     final turnoTexto = turnoCliente?.turno.trim().isNotEmpty == true
         ? turnoCliente!.turno.trim()
         : turnoGenerado?.turno.trim().isNotEmpty == true
-            ? turnoGenerado!.turno.trim()
-            : '---';
+        ? turnoGenerado!.turno.trim()
+        : '---';
 
     final clienteTexto = turnoCliente?.cliente.trim().isNotEmpty == true
         ? turnoCliente!.cliente.trim()
         : clienteProvider?.nombreCompleto.trim().isNotEmpty == true
-            ? clienteProvider!.nombreCompleto.trim()
-            : 'Estimado Cliente';
+        ? clienteProvider!.nombreCompleto.trim()
+        : 'Estimado Cliente';
 
     final areaTexto = turnoCliente?.area.trim().isNotEmpty == true
         ? turnoCliente!.area.trim()
         : turnoGenerado?.area.trim().isNotEmpty == true
-            ? turnoGenerado!.area.trim()
-            : 'Taller / Servicios';
+        ? turnoGenerado!.area.trim()
+        : 'Taller / Servicios';
 
     final tipoTexto = turnoCliente?.tipo.trim().isNotEmpty == true
         ? _formatearTipo(turnoCliente!.tipo)
         : turnoGenerado?.tipo.trim().isNotEmpty == true
-            ? _formatearTipo(turnoGenerado!.tipo)
-            : 'Sin cita';
+        ? _formatearTipo(turnoGenerado!.tipo)
+        : 'Sin cita';
 
-    final tiempoEstimado = turnoCliente?.tiempoEstimadoMinutos ??
+    final tiempoEstimado =
+        turnoCliente?.tiempoEstimadoMinutos ??
         turnoGenerado?.tiempoEstimadoMinutos;
 
-    final personasPorDelante = turnoCliente?.personasPorDelante ??
-        turnoGenerado?.personasPorDelante;
+    final personasPorDelante =
+        turnoCliente?.personasPorDelante ?? turnoGenerado?.personasPorDelante;
 
     final tiempoTexto = tiempoEstimado == null
         ? '-- min'
@@ -66,23 +64,24 @@ class TurnoAsignadoScreen extends ConsumerWidget {
         ? '-- persona(s) antes'
         : '$personasPorDelante persona(s) antes';
 
+    final telefonoInicial = _obtenerTelefonoInicial(
+      turnoCliente: turnoCliente,
+      cliente: clienteProvider,
+    );
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
           children: [
             Positioned.fill(
               child: CustomPaint(
-                painter: HomePainter(
-                  primaryColor: colors.primary,
-                ),
+                painter: HomePainter(primaryColor: colors.primary),
               ),
             ),
             Positioned(
               top: 16,
               left: 16,
-              child: ReturnPageButton(
-                ruta: '/ingresar-ruc',
-              ),
+              child: ReturnPageButton(ruta: '/ingresar-ruc'),
             ),
             Positioned.fill(
               child: Center(
@@ -125,9 +124,9 @@ class TurnoAsignadoScreen extends ConsumerWidget {
                                             turnoTexto,
                                             style: textStyle.displaySmall
                                                 ?.copyWith(
-                                              fontWeight: FontWeight.w900,
-                                              color: colors.primary,
-                                            ),
+                                                  fontWeight: FontWeight.w900,
+                                                  color: colors.primary,
+                                                ),
                                           ),
                                         ),
                                       ),
@@ -164,6 +163,13 @@ class TurnoAsignadoScreen extends ConsumerWidget {
                               const SizedBox(height: 10),
                               CustomTextCard(),
                               const SizedBox(height: 10),
+                              WhatsappTurnoNotificacion(
+                                numeroInicial: telefonoInicial,
+                                cliente: clienteTexto,
+                                turno: turnoTexto,
+                                area: areaTexto,
+                              ),
+                              const SizedBox(height: 10),
                               CustomIconTextButton(
                                 texto: 'Volver al inicio',
                                 icono: Icons.home,
@@ -189,6 +195,44 @@ class TurnoAsignadoScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  static String _obtenerTelefonoInicial({
+    TurnoClienteResponse? turnoCliente,
+    ClienteSiac? cliente,
+  }) {
+    if (turnoCliente != null &&
+        turnoCliente.telefonoCliente.trim().isNotEmpty) {
+      return _normalizarTelefono(turnoCliente.telefonoCliente);
+    }
+
+    if (cliente != null && cliente.telefono1.trim().isNotEmpty) {
+      return _normalizarTelefono(cliente.telefono1);
+    }
+
+    if (cliente != null && cliente.telefono2.trim().isNotEmpty) {
+      return _normalizarTelefono(cliente.telefono2);
+    }
+
+    return '';
+  }
+
+  static String _normalizarTelefono(String numero) {
+    final digitos = numero.replaceAll(RegExp(r'[^0-9]'), '');
+
+    if (digitos.startsWith('593') && digitos.length == 12) {
+      return '0${digitos.substring(3)}';
+    }
+
+    if (digitos.startsWith('0') && digitos.length == 10) {
+      return digitos;
+    }
+
+    if (digitos.startsWith('9') && digitos.length == 9) {
+      return digitos;
+    }
+
+    return '';
   }
 
   static String _formatearTipo(String tipo) {
@@ -227,10 +271,7 @@ class DetalleTurno extends StatelessWidget {
           const SizedBox(width: 8),
           SizedBox(
             width: 110,
-            child: Text(
-              label,
-              style: textStyle.titleMedium,
-            ),
+            child: Text(label, style: textStyle.titleMedium),
           ),
           const SizedBox(width: 10),
           Expanded(

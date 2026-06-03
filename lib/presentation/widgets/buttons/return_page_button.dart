@@ -19,12 +19,17 @@ class ReturnPageButton extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () {
-          if (ruta != null && ruta!.isNotEmpty) {
+          if (ruta != null && ruta!.trim().isNotEmpty) {
             context.go(ruta!);
             return;
           }
 
-          context.pop();
+          if (context.canPop()) {
+            context.pop();
+            return;
+          }
+
+          context.go('/ingresar-ruc');
         },
         child: const Padding(
           padding: EdgeInsets.all(12),

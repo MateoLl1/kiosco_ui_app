@@ -21,22 +21,37 @@ class _HiddenAdminAccessState extends State<HiddenAdminAccess> {
   static const int requiredCornerTapCount = 5;
   static const Duration holdDuration = Duration(seconds: 3);
   static const Duration tapResetDuration = Duration(seconds: 2);
+  static const double cornerSize = 100;
 
-  int pointerCount = 0;
+  final Set<int> activePointers = {};
+  final Set<int> activeCornerPointers = {};
+  final Set<int> cornerTapCandidates = {};
+
   int cornerTapCount = 0;
   Timer? touchHoldTimer;
   Timer? cornerTapTimer;
   bool triggered = false;
 
+  bool _isTopLeftCorner(Offset position) {
+    return position.dx >= 0 &&
+        position.dy >= 0 &&
+        position.dx <= cornerSize &&
+        position.dy <= cornerSize;
+  }
+
   void trigger() {
     if (triggered) return;
 
     triggered = true;
-    pointerCount = 0;
+    activePointers.clear();
+    activeCornerPointers.clear();
+    cornerTapCandidates.clear();
     cornerTapCount = 0;
 
     touchHoldTimer?.cancel();
     cornerTapTimer?.cancel();
+    touchHoldTimer = null;
+    cornerTapTimer = null;
 
     widget.onTriggered();
 
@@ -47,12 +62,13 @@ class _HiddenAdminAccessState extends State<HiddenAdminAccess> {
   }
 
   void _startHoldTimerIfNeeded() {
-    if (pointerCount < requiredPointerCount || touchHoldTimer != null) return;
+    if (activeCornerPointers.length < requiredPointerCount) return;
+    if (touchHoldTimer != null) return;
 
     touchHoldTimer = Timer(holdDuration, () {
       if (!mounted) return;
 
-      if (pointerCount >= requiredPointerCount) {
+      if (activeCornerPointers.length >= requiredPointerCount) {
         trigger();
       }
 
@@ -61,13 +77,13 @@ class _HiddenAdminAccessState extends State<HiddenAdminAccess> {
   }
 
   void _cancelHoldTimerIfNeeded() {
-    if (pointerCount >= requiredPointerCount) return;
+    if (activeCornerPointers.length >= requiredPointerCount) return;
 
     touchHoldTimer?.cancel();
     touchHoldTimer = null;
   }
 
-  void _handleCornerTap() {
+  void _registerCornerTap() {
     cornerTapCount++;
 
     cornerTapTimer?.cancel();
@@ -91,41 +107,37 @@ class _HiddenAdminAccessState extends State<HiddenAdminAccess> {
   Widget build(BuildContext context) {
     return Listener(
       behavior: HitTestBehavior.translucent,
-      onPointerDown: (_) {
-        pointerCount++;
+      onPointerDown: (event) {
+        activePointers.add(event.pointer);
+
+        if (_isTopLeftCorner(event.localPosition)) {
+          activeCornerPointers.add(event.pointer);
+          cornerTapCandidates.add(event.pointer);
+        }
+
         _startHoldTimerIfNeeded();
       },
-      onPointerUp: (_) {
-        pointerCount--;
+      onPointerUp: (event) {
+        final wasCornerTap = cornerTapCandidates.contains(event.pointer);
 
-        if (pointerCount < 0) {
-          pointerCount = 0;
+        activePointers.remove(event.pointer);
+        activeCornerPointers.remove(event.pointer);
+        cornerTapCandidates.remove(event.pointer);
+
+        if (wasCornerTap && activePointers.isEmpty && !triggered) {
+          _registerCornerTap();
         }
 
         _cancelHoldTimerIfNeeded();
       },
-      onPointerCancel: (_) {
-        pointerCount = 0;
-        touchHoldTimer?.cancel();
-        touchHoldTimer = null;
+      onPointerCancel: (event) {
+        activePointers.remove(event.pointer);
+        activeCornerPointers.remove(event.pointer);
+        cornerTapCandidates.remove(event.pointer);
+
+        _cancelHoldTimerIfNeeded();
       },
-      child: Stack(
-        children: [
-          widget.child,
-          Positioned(
-            top: 0,
-            left: 0,
-            child: GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: _handleCornerTap,
-              child: const SizedBox(
-                width: 100,
-                height: 100,
-              ),
-            ),
-          ),
-        ],
-      ),
+      child: widget.child,
     );
   }
 }

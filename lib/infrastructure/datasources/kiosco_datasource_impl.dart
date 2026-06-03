@@ -153,4 +153,22 @@ class KioscoDatasourceImpl extends KioscoDatasource {
       throw Exception('Error consultando turno: $e');
     }
   }
+
+  @override
+  Future<bool> notificarTurnoWhatsapp({
+    required NotificarTurnoWhatsappRequest request,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '/whatsapp/turno',
+        data: request.toJson(),
+      );
+
+      return response.statusCode == 200;
+    } on DioException {
+      return false;
+    } catch (_) {
+      return false;
+    }
+  }
 }

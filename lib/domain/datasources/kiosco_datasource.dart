@@ -26,4 +26,9 @@ abstract class KioscoDatasource {
     required String identificacion,
     required int agenciaId,
   });
+
+  Future<bool> notificarTurnoWhatsapp ({
+    required NotificarTurnoWhatsappRequest request
+  });
+  
 }

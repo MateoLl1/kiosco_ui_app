@@ -13,6 +13,7 @@ class TurnoGeneradoResponseMapper {
       personasPorDelante: _toInt(json['personasPorDelante']),
       tiempoEstimadoMinutos: _toInt(json['tiempoEstimadoMinutos']),
       fecha: _toDate(json['fecha']),
+      telefonoCliente: json['telefonoCliente']?.toString() ?? '',
     );
   }
 

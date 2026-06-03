@@ -16,6 +16,7 @@ class TurnoClienteResponse {
   final String horaCita;
   final String tipo;
   final String area;
+  final String telefonoCliente;
   final int personasPorDelante;
   final int tiempoEstimadoMinutos;
 
@@ -37,6 +38,7 @@ class TurnoClienteResponse {
     required this.horaCita,
     required this.tipo,
     required this.area,
+    required this.telefonoCliente,
     required this.personasPorDelante,
     required this.tiempoEstimadoMinutos,
   });
@@ -62,6 +64,7 @@ class TurnoClienteResponse {
       horaCita: json['horaCita']?.toString() ?? '',
       tipo: json['tipo']?.toString() ?? '',
       area: json['area']?.toString() ?? '',
+      telefonoCliente: json['telefonoCliente']?.toString() ?? '',
       personasPorDelante: _toInt(json['personasPorDelante']),
       tiempoEstimadoMinutos: _toInt(json['tiempoEstimadoMinutos']),
     );
