@@ -20,6 +20,7 @@ abstract class KioscoDatasource {
 
   Future<ClienteSiac?> obtenerClientePorIdentificacion({
     required String identificacion,
+    required int agenciaId,
   });
 
   Future<TurnoClienteResponse?> obtenerTurnoPorIdentificacion({

@@ -20,11 +20,13 @@ class ClienteSiacNotifier extends StateNotifier<ClienteSiac?> {
 
   Future<ClienteSiac?> consultarCliente({
     required String identificacion,
+    required int agenciaId,
   }) async {
     limpiar();
 
     final cliente = await repository.obtenerClientePorIdentificacion(
       identificacion: identificacion,
+      agenciaId: agenciaId,
     );
 
     state = cliente;

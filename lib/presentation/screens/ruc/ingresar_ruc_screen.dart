@@ -60,8 +60,18 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
   Future<void> _continuar() async {
     if (!_cedulaORucValido || _consultando) return;
 
+    final session = ref.read(appSessionProvider);
+    final agenciaId = session?.agenciaId ?? 0;
+
+    if (agenciaId <= 0) {
+      _borrarTodo();
+
+      if (!mounted) return;
+      context.go('/bienvenida-usuario');
+      return;
+    }
+
     final identificacion = _identificacionIngresada;
-    const agenciaId = 1;
 
     setState(() {
       _consultando = true;
@@ -70,7 +80,7 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
     try {
       final cliente = await ref
           .read(clienteSiacProvider.notifier)
-          .consultarCliente(identificacion: identificacion);
+          .consultarCliente(identificacion: identificacion, agenciaId: agenciaId);
 
       if (cliente != null && cliente.identificacion.trim().isNotEmpty) {
         final turnoActual = await ref

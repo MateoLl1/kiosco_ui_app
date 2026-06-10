@@ -93,12 +93,12 @@ class KioscoDatasourceImpl extends KioscoDatasource {
   @override
   Future<ClienteSiac?> obtenerClientePorIdentificacion({
     required String identificacion,
-    int empresa = 1,
+    required int agenciaId,
   }) async {
     try {
       final response = await _dio.get(
         '/cliente/por-identificacion',
-        queryParameters: {'identificacion': identificacion, 'empresa': empresa},
+        queryParameters: {'identificacion': identificacion, 'agenciaId': agenciaId},
       );
 
       if (response.statusCode != 200 || response.data == null) {
