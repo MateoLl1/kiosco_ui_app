@@ -233,9 +233,9 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
                         ],
                       ),
                     ),
-                    TurneroBottomModulesBar(
-                      activeModulo: data.turnoActual?.modulo,
-                    ),
+                    // TurneroBottomModulesBar(
+                    //   activeModulo: data.turnoActual?.modulo,
+                    // ),
                   ],
                 ),
                 ActiveCallOverlay(
