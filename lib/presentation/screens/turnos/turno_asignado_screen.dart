@@ -146,11 +146,11 @@ class TurnoAsignadoScreen extends ConsumerWidget {
                                         descripcion: tipoTexto,
                                         icon: Icons.confirmation_number,
                                       ),
-                                      DetalleTurno(
-                                        label: 'Tiempo est.',
-                                        descripcion: tiempoTexto,
-                                        icon: Icons.timelapse,
-                                      ),
+                                      // DetalleTurno(
+                                      //   label: 'Tiempo est.',
+                                      //   descripcion: tiempoTexto,
+                                      //   icon: Icons.timelapse,
+                                      // ),
                                       DetalleTurno(
                                         label: 'En cola',
                                         descripcion: colaTexto,
