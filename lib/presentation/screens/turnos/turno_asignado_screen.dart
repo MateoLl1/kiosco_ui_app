@@ -49,16 +49,16 @@ class TurnoAsignadoScreen extends ConsumerWidget {
         ? _formatearTipo(turnoGenerado!.tipo)
         : 'Sin cita';
 
-    final tiempoEstimado =
-        turnoCliente?.tiempoEstimadoMinutos ??
-        turnoGenerado?.tiempoEstimadoMinutos;
+    // final tiempoEstimado =
+    //     turnoCliente?.tiempoEstimadoMinutos ??
+    //     turnoGenerado?.tiempoEstimadoMinutos;
 
     final personasPorDelante =
         turnoCliente?.personasPorDelante ?? turnoGenerado?.personasPorDelante;
 
-    final tiempoTexto = tiempoEstimado == null
-        ? '-- min'
-        : '~$tiempoEstimado min';
+    // final tiempoTexto = tiempoEstimado == null
+    //     ? '-- min'
+    //     : '~$tiempoEstimado min';
 
     final colaTexto = personasPorDelante == null
         ? '-- persona(s) antes'
