@@ -171,4 +171,28 @@ class KioscoDatasourceImpl extends KioscoDatasource {
       return false;
     }
   }
+
+  @override
+  Future<List<TurneroMedia>> getTurneroMediaPorAgencia({
+    required int agenciaId,
+  }) async {
+    final response = await _dio.get(
+      '/TurneroMedia/agencia/$agenciaId',
+      queryParameters: {
+        'estado': 'A',
+      },
+    );
+
+    final data = response.data;
+
+    if (data is! List) return [];
+
+    return data
+        .map((item) => TurneroMedia.fromJson(item as Map<String, dynamic>))
+        .where((item) => item.url.trim().isNotEmpty)
+        .toList()
+      ..sort((a, b) => (a.orden ?? 0).compareTo(b.orden ?? 0));
+  }
+
+
 }

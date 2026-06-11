@@ -32,4 +32,8 @@ abstract class KioscoRepository {
   Future<bool> notificarTurnoWhatsapp ({
     required NotificarTurnoWhatsappRequest request
   });
+
+  Future<List<TurneroMedia>> getTurneroMediaPorAgencia({
+    required int agenciaId,
+  });
 }

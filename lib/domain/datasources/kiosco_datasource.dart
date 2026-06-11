@@ -28,8 +28,11 @@ abstract class KioscoDatasource {
     required int agenciaId,
   });
 
-  Future<bool> notificarTurnoWhatsapp ({
-    required NotificarTurnoWhatsappRequest request
+  Future<bool> notificarTurnoWhatsapp({
+    required NotificarTurnoWhatsappRequest request,
   });
-  
+
+  Future<List<TurneroMedia>> getTurneroMediaPorAgencia({
+    required int agenciaId,
+  });
 }

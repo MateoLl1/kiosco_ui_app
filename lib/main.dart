@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kiosco_au/config/config.dart';
 import 'package:kiosco_au/presentation/providers/providers.dart';
+import 'package:media_kit/media_kit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,6 +12,8 @@ Future<void> main() async {
   // await SystemChrome.setPreferredOrientations([
   //   DeviceOrientation.portraitUp,
   // ]);
+
+  MediaKit.ensureInitialized();
   
   await initializeDateFormatting('es');
   await dotenv.load(fileName: ".env");

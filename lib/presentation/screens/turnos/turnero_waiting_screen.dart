@@ -1,6 +1,5 @@
 import 'dart:async';
 
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -170,81 +169,98 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
     });
   }
 
+  Widget _buildContenido({
+    required int agenciaId,
+    required double sidebarWidth,
+    required List<Turno> recienLlamados,
+    required List<Turno> pendientes,
+    required Turno? turnoActual,
+  }) {
+    return Stack(
+      children: [
+        Column(
+          children: [
+            TurneroHeader(now: now),
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 16, 12, 12),
+                      child: TurneroAdPlaceholder(
+                        recienLlamados: recienLlamados,
+                        agenciaId: agenciaId,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: sidebarWidth,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 16, 0, 12),
+                      child: TurnosSidebar(
+                        turnoActual: turnoActual,
+                        pendientes: pendientes,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        ActiveCallOverlay(
+          turno: activeOverlayTurno,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(pantallaTurnosProvider);
+    final session = ref.watch(appSessionProvider);
+    final agenciaId = session?.agenciaId ?? 0;
     final colors = Theme.of(context).colorScheme;
     final width = MediaQuery.of(context).size.width;
     final sidebarWidth = width < 900 ? 280.0 : 340.0;
+    final dataAnterior = state.asData?.value;
+
+    if (dataAnterior != null) {
+      _handleOverlayTurno(dataAnterior.turnoActual);
+    }
 
     return Scaffold(
       backgroundColor: colors.surface,
       body: SafeArea(
-        child: state.when(
-          loading: () => Center(
-            child: CircularProgressIndicator(
-              color: colors.primary,
-            ),
-          ),
-          error: (error, _) => Center(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Text(
-                error.toString(),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: colors.onSurface,
-                ),
-              ),
-            ),
-          ),
-          data: (data) {
-            _handleOverlayTurno(data.turnoActual);
-
-            return Stack(
-              children: [
-                Column(
-                  children: [
-                    TurneroHeader(now: now),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 5,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(20, 16, 12, 12),
-                              child: TurneroAdPlaceholder(
-                                recienLlamados: data.turnosRecienLlamados,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: sidebarWidth,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(12, 16, 0, 12),
-                              child: TurnosSidebar(
-                                turnoActual: data.turnoActual,
-                                pendientes: data.turnosPendientes,
-                              ),
-                            ),
-                          ),
-                        ],
+        child: dataAnterior != null
+            ? _buildContenido(
+                agenciaId: agenciaId,
+                sidebarWidth: sidebarWidth,
+                recienLlamados: dataAnterior.turnosRecienLlamados,
+                pendientes: dataAnterior.turnosPendientes,
+                turnoActual: dataAnterior.turnoActual,
+              )
+            : state.hasError
+                ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Text(
+                        state.error.toString(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: colors.onSurface,
+                        ),
                       ),
                     ),
-                    // TurneroBottomModulesBar(
-                    //   activeModulo: data.turnoActual?.modulo,
-                    // ),
-                  ],
-                ),
-                ActiveCallOverlay(
-                  turno: activeOverlayTurno,
-                ),
-              ],
-            );
-          },
-        ),
+                  )
+                : _buildContenido(
+                    agenciaId: agenciaId,
+                    sidebarWidth: sidebarWidth,
+                    recienLlamados: const <Turno>[],
+                    pendientes: const <Turno>[],
+                    turnoActual: null,
+                  ),
       ),
     );
   }

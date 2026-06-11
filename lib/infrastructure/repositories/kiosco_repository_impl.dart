@@ -69,4 +69,11 @@ class KioscoRepositoryImpl extends KioscoRepository {
   }) {
     return datasource.notificarTurnoWhatsapp(request: request);
   }
+
+  @override
+  Future<List<TurneroMedia>> getTurneroMediaPorAgencia({
+    required int agenciaId,
+  }){
+    return datasource.getTurneroMediaPorAgencia(agenciaId: agenciaId);
+  }
 }

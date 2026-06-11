@@ -17,3 +17,4 @@ export './response/turno_generado_response.dart';
 export './entities/cliente_siac.dart';
 export './response/turno_cliente_response.dart';
 export './requests/notificar_turno_whatsapp_request.dart';
+export './entities/turnero_media.dart';
