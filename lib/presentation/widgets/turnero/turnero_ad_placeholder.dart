@@ -198,7 +198,7 @@ class _TurneroAdPlaceholderState extends ConsumerState<TurneroAdPlaceholder> {
               ? Image.network(
                   imagenFallbackUrl!,
                   fit: BoxFit.fill,
-                  errorBuilder: (_, __, ___) {
+                  errorBuilder: (_, _, _) {
                     return Center(
                       child: CircularProgressIndicator(
                         color: colors.primary,
@@ -463,7 +463,7 @@ class _TurneroVideoSlideState extends State<_TurneroVideoSlide> {
         return Image.network(
           fallback,
           fit: BoxFit.fill,
-          errorBuilder: (_, __, ___) {
+          errorBuilder: (_, _, _) {
             return _TurneroAdLoadingVideo(
               colors: colors,
               url: widget.url,
