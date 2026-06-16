@@ -1,0 +1,94 @@
+import 'package:flutter/material.dart';
+
+class QueueItem extends StatelessWidget {
+  final String code;
+  final String name;
+  final String time;
+  final bool isNext;
+
+  const QueueItem({super.key, 
+    required this.code,
+    required this.name,
+    required this.time,
+    this.isNext = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
+    return Container(
+      height: 62,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: isNext
+            ? colors.primaryContainer.withValues(alpha: .35)
+            : colors.surfaceContainerHighest.withValues(alpha: .35),
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(
+          color: isNext
+              ? colors.primary.withValues(alpha: .65)
+              : colors.outlineVariant.withValues(alpha: .45),
+        ),
+      ),
+      child: Row(
+        children: [
+          Text(
+            code,
+            style: TextStyle(
+              color: colors.onSurface,
+              fontSize: 19,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(width: 18),
+
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: TextStyle(
+                    color: colors.onSurface,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.access_time_rounded,
+                      size: 13,
+                      color: colors.onSurfaceVariant,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      time,
+                      style: TextStyle(
+                        color: colors.onSurfaceVariant,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          if (isNext)
+            Text(
+              'SIGUIENTE',
+              style: TextStyle(
+                color: colors.primary,
+                fontSize: 10,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
