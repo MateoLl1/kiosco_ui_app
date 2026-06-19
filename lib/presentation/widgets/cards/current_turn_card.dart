@@ -1,12 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:kiosco_au/domain/domain.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 
 class CurrentTurnCard extends StatelessWidget {
-  const CurrentTurnCard({super.key});
+  final Turno? turnoActual;
+  final VoidCallback onLlamarSiguiente;
+  final VoidCallback onRellamar;
+  final VoidCallback onAtender;
+
+  const CurrentTurnCard({
+    super.key,
+    required this.turnoActual,
+    required this.onLlamarSiguiente,
+    required this.onRellamar,
+    required this.onAtender,
+  });
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final tieneTurno = turnoActual != null;
+    final turnoTexto = turnoActual?.turno.trim().isNotEmpty == true
+        ? turnoActual!.turno.trim()
+        : '-';
+    final cliente = turnoActual?.nombreCliente.trim().isNotEmpty == true
+        ? turnoActual!.nombreCliente.trim()
+        : 'Sin turno en atención';
 
     return Panel(
       child: Column(
@@ -21,7 +40,6 @@ class CurrentTurnCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 14),
-
           Container(
             width: 150,
             height: 100,
@@ -34,27 +52,21 @@ class CurrentTurnCard extends StatelessWidget {
               ),
             ),
             child: Text(
-              '-',
+              turnoTexto,
               style: TextStyle(
-                color: colors.onSurfaceVariant,
+                color: tieneTurno ? colors.primary : colors.onSurfaceVariant,
                 fontSize: 48,
                 fontWeight: FontWeight.w800,
               ),
             ),
           ),
-
           const SizedBox(height: 22),
-
           Text(
-            'Sin turno en atención',
-            style: TextStyle(
-              color: colors.onSurfaceVariant,
-              fontSize: 16,
-            ),
+            cliente,
+            style: TextStyle(color: colors.onSurfaceVariant, fontSize: 16),
+            textAlign: TextAlign.center,
           ),
-
           const SizedBox(height: 32),
-
           SizedBox(
             width: 448,
             child: Column(
@@ -67,6 +79,7 @@ class CurrentTurnCard extends StatelessWidget {
                         icon: Icons.phone_in_talk_rounded,
                         background: colors.primary,
                         foreground: colors.onPrimary,
+                        onPressed: tieneTurno ? null : onLlamarSiguiente,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -76,6 +89,7 @@ class CurrentTurnCard extends StatelessWidget {
                         icon: Icons.replay_rounded,
                         background: colors.surfaceContainerHighest,
                         foreground: colors.onSurfaceVariant,
+                        onPressed: tieneTurno ? onRellamar : null,
                       ),
                     ),
                   ],
@@ -85,10 +99,11 @@ class CurrentTurnCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: ActionButton(
-                        text: 'Atendido',
+                        text: 'Atender',
                         icon: Icons.check_circle_outline_rounded,
                         background: colors.tertiaryContainer,
                         foreground: colors.onTertiaryContainer,
+                        onPressed: tieneTurno ? onAtender : null,
                       ),
                     ),
                     const SizedBox(width: 12),

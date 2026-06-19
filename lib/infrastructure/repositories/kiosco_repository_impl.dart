@@ -76,4 +76,21 @@ class KioscoRepositoryImpl extends KioscoRepository {
   }){
     return datasource.getTurneroMediaPorAgencia(agenciaId: agenciaId);
   }
+  
+  @override
+  Future<TurnoAtencionResponse?> llamarSiguienteTurno({required int agenciaId}) {
+    return datasource.llamarSiguienteTurno(agenciaId: agenciaId);
+  }
+  
+  @override
+  Future<TurnoAtencionResponse?> rellamarTurno({required int asgCodigo}) {
+    return datasource.rellamarTurno(asgCodigo: asgCodigo);
+  }
+  
+  @override
+  Future<TurnoAtencionResponse?> atenderTurno({required int asgCodigo}) {
+    return datasource.atenderTurno(asgCodigo: asgCodigo);
+  }
+
+  
 }

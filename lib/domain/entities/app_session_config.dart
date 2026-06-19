@@ -6,7 +6,7 @@ enum AppRole {
   guardia,
   kiosco,
   turnero,
-  admin,
+  mostrador,
 }
 
 @collection
@@ -21,7 +21,7 @@ class AppSessionConfig {
 
   AppSessionConfig({
     this.agenciaId = 0,
-    this.role = AppRole.admin,
+    this.role = AppRole.mostrador,
     this.agenciaNombre 
   });
 }

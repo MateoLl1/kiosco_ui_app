@@ -36,4 +36,16 @@ abstract class KioscoRepository {
   Future<List<TurneroMedia>> getTurneroMediaPorAgencia({
     required int agenciaId,
   });
+
+  Future<TurnoAtencionResponse?> llamarSiguienteTurno({
+    required int agenciaId,
+  });
+
+  Future<TurnoAtencionResponse?> rellamarTurno({
+    required int asgCodigo,
+  });
+
+  Future<TurnoAtencionResponse?> atenderTurno({
+    required int asgCodigo,
+  });
 }

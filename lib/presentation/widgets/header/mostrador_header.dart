@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class MostradorHeader extends StatelessWidget {
-  const MostradorHeader({super.key});
+  final int totalEnEspera;
+
+  const MostradorHeader({
+    super.key,
+    required this.totalEnEspera,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +15,6 @@ class MostradorHeader extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-
         Text(
           'MOSTRADOR • REPUESTOS',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -19,7 +23,6 @@ class MostradorHeader extends StatelessWidget {
                 letterSpacing: .5,
               ),
         ),
-
         Align(
           alignment: Alignment.centerRight,
           child: Container(
@@ -37,7 +40,7 @@ class MostradorHeader extends StatelessWidget {
                 Icon(Icons.groups_rounded, size: 18, color: colors.primary),
                 const SizedBox(width: 8),
                 Text(
-                  '2',
+                  totalEnEspera.toString(),
                   style: TextStyle(
                     color: colors.onSurface,
                     fontWeight: FontWeight.w800,

@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 class QueueItem extends StatelessWidget {
   final String code;
   final String name;
-  final String time;
   final bool isNext;
 
   const QueueItem({super.key, 
     required this.code,
     required this.name,
-    required this.time,
     this.isNext = false,
   });
 
@@ -55,24 +53,6 @@ class QueueItem extends StatelessWidget {
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                   ),
-                ),
-                const SizedBox(height: 3),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.access_time_rounded,
-                      size: 13,
-                      color: colors.onSurfaceVariant,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      time,
-                      style: TextStyle(
-                        color: colors.onSurfaceVariant,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),

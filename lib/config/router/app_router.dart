@@ -13,8 +13,8 @@ Widget withHiddenAdminAccess(BuildContext context, Widget child) {
 }
 
 final appRouter = GoRouter(
-  initialLocation: '/mostrador',
-  // initialLocation: '/loading',
+  // initialLocation: '/mostrador',
+  initialLocation: '/loading',
   routes: [
     GoRoute(
       path: '/home',

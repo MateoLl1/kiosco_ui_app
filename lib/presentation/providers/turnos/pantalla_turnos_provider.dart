@@ -26,6 +26,7 @@ class PantallaTurnosNotifier
   final KioscoRepository repository;
   final int? agenciaId;
   Timer? _timer;
+  bool _procesando = false;
 
   PantallaTurnosNotifier({
     required this.repository,
@@ -46,6 +47,78 @@ class PantallaTurnosNotifier
       state = AsyncData(response);
     } catch (e, s) {
       state = AsyncError(e, s);
+    }
+  }
+
+  Future<void> llamarSiguiente() async {
+    if (_procesando) return;
+
+    if (agenciaId == null) {
+      state = AsyncError('No hay agencia configurada', StackTrace.current);
+      return;
+    }
+
+    _procesando = true;
+
+    try {
+      await repository.llamarSiguienteTurno(agenciaId: agenciaId!);
+      await loadPantalla();
+    } catch (e, s) {
+      state = AsyncError(e, s);
+    } finally {
+      _procesando = false;
+    }
+  }
+
+  Future<void> rellamarActual() async {
+    if (_procesando) return;
+
+    final valorActual = state.asData?.value;
+    final turnoActual = valorActual?.turnoActual;
+
+    if (turnoActual == null || turnoActual.asgCodigo <= 0) {
+      state = AsyncError(
+        'No existe un turno actual para rellamar',
+        StackTrace.current,
+      );
+      return;
+    }
+
+    _procesando = true;
+
+    try {
+      await repository.rellamarTurno(asgCodigo: turnoActual.asgCodigo);
+      await loadPantalla();
+    } catch (e, s) {
+      state = AsyncError(e, s);
+    } finally {
+      _procesando = false;
+    }
+  }
+
+  Future<void> atenderActual() async {
+    if (_procesando) return;
+
+    final valorActual = state.asData?.value;
+    final turnoActual = valorActual?.turnoActual;
+
+    if (turnoActual == null || turnoActual.asgCodigo <= 0) {
+      state = AsyncError(
+        'No existe un turno actual para atender',
+        StackTrace.current,
+      );
+      return;
+    }
+
+    _procesando = true;
+
+    try {
+      await repository.atenderTurno(asgCodigo: turnoActual.asgCodigo);
+      await loadPantalla();
+    } catch (e, s) {
+      state = AsyncError(e, s);
+    } finally {
+      _procesando = false;
     }
   }
 

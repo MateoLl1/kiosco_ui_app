@@ -98,7 +98,10 @@ class KioscoDatasourceImpl extends KioscoDatasource {
     try {
       final response = await _dio.get(
         '/cliente/por-identificacion',
-        queryParameters: {'identificacion': identificacion, 'agenciaId': agenciaId},
+        queryParameters: {
+          'identificacion': identificacion,
+          'agenciaId': agenciaId,
+        },
       );
 
       if (response.statusCode != 200 || response.data == null) {
@@ -178,9 +181,7 @@ class KioscoDatasourceImpl extends KioscoDatasource {
   }) async {
     final response = await _dio.get(
       '/TurneroMedia/agencia/$agenciaId',
-      queryParameters: {
-        'estado': 'A',
-      },
+      queryParameters: {'estado': 'A'},
     );
 
     final data = response.data;
@@ -194,5 +195,88 @@ class KioscoDatasourceImpl extends KioscoDatasource {
       ..sort((a, b) => (a.orden ?? 0).compareTo(b.orden ?? 0));
   }
 
+  @override
+  Future<TurnoAtencionResponse?> llamarSiguienteTurno({
+    required int agenciaId,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '/turnos/llamar-siguiente',
+        queryParameters: {'agenciaId': agenciaId},
+      );
 
+      if (response.statusCode != 200 || response.data == null) {
+        return null;
+      }
+
+      return TurnoAtencionResponse.fromJson(
+        Map<String, dynamic>.from(response.data),
+      );
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        return null;
+      }
+
+      final detalle =
+          e.response?.data?.toString() ??
+          e.message ??
+          'Error llamando siguiente turno';
+
+      throw Exception(detalle);
+    } catch (e) {
+      throw Exception('Error llamando siguiente turno: $e');
+    }
+  }
+
+  @override
+  Future<TurnoAtencionResponse?> rellamarTurno({required int asgCodigo}) async {
+    try {
+      final response = await _dio.post('/turnos/$asgCodigo/rellamar');
+
+      if (response.statusCode != 200 || response.data == null) {
+        return null;
+      }
+
+      return TurnoAtencionResponse.fromJson(
+        Map<String, dynamic>.from(response.data),
+      );
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        return null;
+      }
+
+      final detalle =
+          e.response?.data?.toString() ?? e.message ?? 'Error rellamando turno';
+
+      throw Exception(detalle);
+    } catch (e) {
+      throw Exception('Error rellamando turno: $e');
+    }
+  }
+
+  @override
+  Future<TurnoAtencionResponse?> atenderTurno({required int asgCodigo}) async {
+    try {
+      final response = await _dio.post('/turnos/$asgCodigo/atender');
+
+      if (response.statusCode != 200 || response.data == null) {
+        return null;
+      }
+
+      return TurnoAtencionResponse.fromJson(
+        Map<String, dynamic>.from(response.data),
+      );
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        return null;
+      }
+
+      final detalle =
+          e.response?.data?.toString() ?? e.message ?? 'Error atendiendo turno';
+
+      throw Exception(detalle);
+    } catch (e) {
+      throw Exception('Error atendiendo turno: $e');
+    }
+  }
 }

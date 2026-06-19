@@ -5,12 +5,14 @@ class ActionButton extends StatelessWidget {
   final IconData icon;
   final Color background;
   final Color foreground;
+  final VoidCallback? onPressed;
 
   const ActionButton({super.key, 
     required this.text,
     required this.icon,
     required this.background,
     required this.foreground,
+    this.onPressed,
   });
 
   @override
@@ -18,7 +20,7 @@ class ActionButton extends StatelessWidget {
     return SizedBox(
       height: 56,
       child: ElevatedButton.icon(
-        onPressed: () {},
+        onPressed: onPressed,
         icon: Icon(icon, size: 21),
         label: Text(text),
         style: ElevatedButton.styleFrom(

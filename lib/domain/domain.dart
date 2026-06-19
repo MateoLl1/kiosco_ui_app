@@ -18,3 +18,4 @@ export './entities/cliente_siac.dart';
 export './response/turno_cliente_response.dart';
 export './requests/notificar_turno_whatsapp_request.dart';
 export './entities/turnero_media.dart';
+export './response/turno_atencion_response.dart';

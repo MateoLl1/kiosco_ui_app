@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:kiosco_au/domain/domain.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 
 class QueueCard extends StatelessWidget {
-  const QueueCard({super.key});
+  final List<Turno> pendientes;
+
+  const QueueCard({
+    super.key,
+    required this.pendientes,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +32,7 @@ class QueueCard extends StatelessWidget {
                 ),
               ),
               Text(
-                '2 turno(s)',
+                '${pendientes.length} turno(s)',
                 style: TextStyle(
                   color: colors.onSurfaceVariant,
                   fontSize: 13,
@@ -34,44 +40,33 @@ class QueueCard extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 18),
+          Expanded(
+            child: pendientes.isEmpty
+                ? Center(
+                    child: Text(
+                      'Sin turnos en espera',
+                      style: TextStyle(
+                        color: colors.onSurfaceVariant,
+                        fontSize: 14,
+                      ),
+                    ),
+                  )
+                : ListView.separated(
+                    itemCount: pendientes.length,
+                    separatorBuilder: (_, _) => const SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      final item = pendientes[index];
 
-          const QueueItem(
-            code: 'T-040',
-            name: 'Luis Andrade',
-            time: 'espera 1485 min',
-            isNext: true,
-          ),
-
-          const SizedBox(height: 10),
-
-          const QueueItem(
-            code: 'T-041',
-            name: 'Ana Suárez',
-            time: 'espera 1482 min',
-          ),
-
-          const SizedBox(height: 26),
-
-          Text(
-            'RECIENTES',
-            style: TextStyle(
-              color: colors.onSurfaceVariant,
-              fontSize: 13,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 1.5,
-            ),
-          ),
-
-          const SizedBox(height: 10),
-
-          Text(
-            'Sin historial',
-            style: TextStyle(
-              color: colors.onSurfaceVariant,
-              fontSize: 13,
-            ),
+                      return QueueItem(
+                        code: item.turno,
+                        name: item.nombreCliente.trim().isEmpty
+                            ? 'Cliente sin nombre'
+                            : item.nombreCliente.trim(),
+                        isNext: index == 0,
+                      );
+                    },
+                  ),
           ),
         ],
       ),
