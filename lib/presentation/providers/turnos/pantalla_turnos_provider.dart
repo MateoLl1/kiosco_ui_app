@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:kiosco_au/config/config.dart';
 import 'package:kiosco_au/domain/domain.dart';
 import 'package:kiosco_au/presentation/providers/providers.dart';
 
@@ -124,7 +125,7 @@ class PantallaTurnosNotifier
 
   void _startAutoRefresh() {
     _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 10), (_) {
+    _timer = Timer.periodic(AppDurations.screenRefresh, (_) {
       loadPantalla();
     });
   }

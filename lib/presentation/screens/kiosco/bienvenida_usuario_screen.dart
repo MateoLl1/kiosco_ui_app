@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kiosco_au/config/config.dart';
 import 'package:kiosco_au/presentation/providers/providers.dart';
 import 'package:kiosco_au/presentation/screens/painters/painters.dart';
 
@@ -22,7 +23,7 @@ class _BienvenidaClienteScreenState
   void initState() {
     super.initState();
 
-    _timer = Timer(const Duration(seconds: 3), () {
+    _timer = Timer(AppDurations.welcomeRedirect, () {
       if (!mounted) return;
       context.go('/home');
     });

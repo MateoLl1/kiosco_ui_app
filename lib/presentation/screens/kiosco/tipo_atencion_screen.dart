@@ -16,10 +16,10 @@ class TipoAtencionScreen extends ConsumerStatefulWidget {
 class _TipoAtencionScreenState extends ConsumerState<TipoAtencionScreen> {
   bool _generandoTurno = false;
 
-  static const int _agenciaId = 1;
-
   Future<void> _generarTurno({required bool esFlota}) async {
     if (_generandoTurno) return;
+
+    final agenciaId = ref.read(appSessionProvider)?.agenciaId ?? 0;
 
     setState(() {
       _generandoTurno = true;
@@ -29,8 +29,8 @@ class _TipoAtencionScreenState extends ConsumerState<TipoAtencionScreen> {
       final repository = ref.read(kioscoRepositoryProvider);
 
       final turno = esFlota
-          ? await repository.generarTurnoSinCitaFlotas(agenciaId: _agenciaId)
-          : await repository.generarTurnoSinCita(agenciaId: _agenciaId);
+          ? await repository.generarTurnoSinCitaFlotas(agenciaId: agenciaId)
+          : await repository.generarTurnoSinCita(agenciaId: agenciaId);
 
       if (!mounted) return;
       context.go('/turno-asignado', extra: turno);

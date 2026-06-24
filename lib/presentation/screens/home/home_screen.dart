@@ -15,10 +15,10 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool _generandoTurno = false;
 
-  static const int _agenciaId = 1;
-
   Future<void> _generarTurnoSinCita() async {
     if (_generandoTurno) return;
+
+    final agenciaId = ref.read(appSessionProvider)?.agenciaId ?? 0;
 
     setState(() {
       _generandoTurno = true;
@@ -27,7 +27,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     try {
       final turno = await ref
           .read(kioscoRepositoryProvider)
-          .generarTurnoSinCita(agenciaId: _agenciaId);
+          .generarTurnoSinCita(agenciaId: agenciaId);
 
       if (!mounted) return;
       context.go('/turno-asignado', extra: turno);

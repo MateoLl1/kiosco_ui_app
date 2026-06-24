@@ -216,6 +216,7 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
                                         DropdownButtonFormField<int>(
                                           initialValue:
                                               agenciaSeleccionada?.agCodigo,
+                                          autofocus: true,
                                           isExpanded: true,
                                           decoration: _inputDecoration(
                                             'Selecciona una agencia',

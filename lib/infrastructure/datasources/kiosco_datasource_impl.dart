@@ -7,9 +7,9 @@ class KioscoDatasourceImpl extends KioscoDatasource {
   final Dio _dio = Dio(
     BaseOptions(
       baseUrl: Env.apiBaseUrl,
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 20),
-      sendTimeout: const Duration(seconds: 10),
+      connectTimeout: AppDurations.connectTimeout,
+      receiveTimeout: AppDurations.receiveTimeout,
+      sendTimeout: AppDurations.sendTimeout,
     ),
   );
 

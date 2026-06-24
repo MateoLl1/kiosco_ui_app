@@ -23,6 +23,7 @@ class GuardiaAcciones extends StatelessWidget {
               Expanded(
                 child: AccionGuardiaButton(
                   titulo: 'Sin cita',
+                  autofocus: true,
                   onPressed: onSinCita,
                 ),
               ),
@@ -45,6 +46,7 @@ class GuardiaAcciones extends StatelessWidget {
           width: double.infinity,
           child: AccionGuardiaButton(
             titulo: 'Sin cita',
+            autofocus: true,
             onPressed: onSinCita,
           ),
         ),
@@ -64,11 +66,13 @@ class GuardiaAcciones extends StatelessWidget {
 class AccionGuardiaButton extends StatelessWidget {
   final String titulo;
   final VoidCallback onPressed;
+  final bool autofocus;
 
   const AccionGuardiaButton({
     super.key,
     required this.titulo,
     required this.onPressed,
+    this.autofocus = false,
   });
 
   @override
@@ -77,6 +81,7 @@ class AccionGuardiaButton extends StatelessWidget {
 
     return FilledButton(
       onPressed: onPressed,
+      autofocus: autofocus,
       style: FilledButton.styleFrom(
         minimumSize: Size.fromHeight(isWide ? 64 : 58),
         shape: RoundedRectangleBorder(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kiosco_au/config/config.dart';
 import 'package:kiosco_au/domain/domain.dart';
 import 'package:kiosco_au/presentation/providers/providers.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
@@ -44,9 +45,9 @@ class TurnoAsignadoScreen extends ConsumerWidget {
         : 'Taller / Servicios';
 
     final tipoTexto = turnoCliente?.tipo.trim().isNotEmpty == true
-        ? _formatearTipo(turnoCliente!.tipo)
+        ? AppValidators.formatearTipoTurno(turnoCliente!.tipo)
         : turnoGenerado?.tipo.trim().isNotEmpty == true
-        ? _formatearTipo(turnoGenerado!.tipo)
+        ? AppValidators.formatearTipoTurno(turnoGenerado!.tipo)
         : 'Sin cita';
 
     // final tiempoEstimado =
@@ -203,47 +204,18 @@ class TurnoAsignadoScreen extends ConsumerWidget {
   }) {
     if (turnoCliente != null &&
         turnoCliente.telefonoCliente.trim().isNotEmpty) {
-      return _normalizarTelefono(turnoCliente.telefonoCliente);
+      return AppValidators.normalizarTelefono(turnoCliente.telefonoCliente);
     }
 
     if (cliente != null && cliente.telefono1.trim().isNotEmpty) {
-      return _normalizarTelefono(cliente.telefono1);
+      return AppValidators.normalizarTelefono(cliente.telefono1);
     }
 
     if (cliente != null && cliente.telefono2.trim().isNotEmpty) {
-      return _normalizarTelefono(cliente.telefono2);
+      return AppValidators.normalizarTelefono(cliente.telefono2);
     }
 
     return '';
-  }
-
-  static String _normalizarTelefono(String numero) {
-    final digitos = numero.replaceAll(RegExp(r'[^0-9]'), '');
-
-    if (digitos.startsWith('593') && digitos.length == 12) {
-      return '0${digitos.substring(3)}';
-    }
-
-    if (digitos.startsWith('0') && digitos.length == 10) {
-      return digitos;
-    }
-
-    if (digitos.startsWith('9') && digitos.length == 9) {
-      return digitos;
-    }
-
-    return '';
-  }
-
-  static String _formatearTipo(String tipo) {
-    final valor = tipo.trim().toLowerCase();
-
-    if (valor == 'con_cita') return 'Con cita';
-    if (valor == 'sin_cita') return 'Sin cita';
-    if (valor == 'flota') return 'Flota';
-    if (valor == 'latoneria') return 'Latonería';
-
-    return tipo;
   }
 }
 

@@ -3,7 +3,7 @@ import 'package:kiosco_au/config/theme/guardia_theme.dart';
 import 'package:kiosco_au/domain/domain.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 
-class CitaTitle extends StatelessWidget {
+class CitaTitle extends StatefulWidget {
   final Cita cita;
   final VoidCallback onTap;
 
@@ -14,23 +14,37 @@ class CitaTitle extends StatelessWidget {
   });
 
   @override
+  State<CitaTitle> createState() => _CitaTitleState();
+}
+
+class _CitaTitleState extends State<CitaTitle> {
+  bool _isFocused = false;
+
+  @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final guardia = Theme.of(context).extension<GuardiaTheme>()!;
     final width = MediaQuery.of(context).size.width;
     final isWide = width >= 900;
     final esMovil = width < 600;
-    final fondo = resolverColorCita(guardia, cita.claveVisual);
+    final fondo = resolverColorCita(guardia, widget.cita.claveVisual);
 
     return Material(
       color: Colors.transparent,
+      borderRadius: BorderRadius.circular(16),
       child: InkWell(
-        onTap: onTap,
+        onTap: widget.onTap,
         borderRadius: BorderRadius.circular(16),
-        child: Ink(
+        onFocusChange: (focused) => setState(() => _isFocused = focused),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 120),
           decoration: BoxDecoration(
             color: fondo,
             borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: _isFocused ? colors.primary : Colors.transparent,
+              width: 3,
+            ),
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(
@@ -39,11 +53,11 @@ class CitaTitle extends StatelessWidget {
             ),
             child: esMovil
                 ? _CitaTitleMovil(
-                    cita: cita,
+                    cita: widget.cita,
                     colors: colors,
                   )
                 : _CitaTileDesktop(
-                    cita: cita,
+                    cita: widget.cita,
                     colors: colors,
                     isWide: isWide,
                   ),

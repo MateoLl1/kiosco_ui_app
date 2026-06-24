@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kiosco_au/config/config.dart';
 import 'package:kiosco_au/domain/domain.dart';
 import 'package:kiosco_au/presentation/providers/providers.dart';
 
@@ -40,7 +41,7 @@ class _WhatsappTurnoNotificacionState
     super.initState();
 
     _numeroController = TextEditingController(
-      text: _normalizarParaFormulario(widget.numeroInicial),
+      text: AppValidators.normalizarTelefono(widget.numeroInicial),
     );
   }
 
@@ -50,32 +51,8 @@ class _WhatsappTurnoNotificacionState
     super.dispose();
   }
 
-  String _normalizarParaFormulario(String numero) {
-    final digitos = numero.replaceAll(RegExp(r'[^0-9]'), '');
-
-    if (digitos.startsWith('593') && digitos.length == 12) {
-      return '0${digitos.substring(3)}';
-    }
-
-    if (digitos.startsWith('0') && digitos.length == 10) {
-      return digitos;
-    }
-
-    if (digitos.startsWith('9') && digitos.length == 9) {
-      return digitos;
-    }
-
-    return digitos;
-  }
-
-  bool _numeroValido(String numero) {
-    final digitos = numero.replaceAll(RegExp(r'[^0-9]'), '');
-
-    final formatoConCero = RegExp(r'^09[0-9]{8}$').hasMatch(digitos);
-    final formatoSinCero = RegExp(r'^9[0-9]{8}$').hasMatch(digitos);
-
-    return formatoConCero || formatoSinCero;
-  }
+  bool _numeroValido(String numero) =>
+      AppValidators.telefonoEcuatoriano(numero);
 
   Future<void> _enviarWhatsapp() async {
     if (_enviando || _enviado) return;

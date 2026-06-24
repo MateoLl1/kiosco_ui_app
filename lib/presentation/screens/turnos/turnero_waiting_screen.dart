@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kiosco_au/config/config.dart';
 import 'package:kiosco_au/domain/domain.dart';
 import 'package:kiosco_au/presentation/providers/providers.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
@@ -18,13 +19,11 @@ class TurneroWaitingScreen extends ConsumerStatefulWidget {
 }
 
 class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
-  static const String ttsUrl = 'http://192.168.0.194:8000/tts/';
-
-  final Dio dio = Dio(
+  final Dio _ttsDio = Dio(
     BaseOptions(
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 30),
-      sendTimeout: const Duration(seconds: 10),
+      connectTimeout: AppDurations.connectTimeout,
+      receiveTimeout: AppDurations.ttsReceiveTimeout,
+      sendTimeout: AppDurations.sendTimeout,
     ),
   );
 
@@ -115,13 +114,13 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
 
     final mensaje = _crearMensajeAudio(turno);
 
-    final response = await dio.post<List<int>>(
-      ttsUrl,
+    final response = await _ttsDio.post<List<int>>(
+      Env.ttsUrl,
       data: {
         'text': mensaje,
-        'voice': 'es-EC-AndreaNeural',
-        'rate': '+0%',
-        'pitch': '+0Hz',
+        'voice': Env.ttsVoice,
+        'rate': Env.ttsRate,
+        'pitch': Env.ttsPitch,
       },
       options: Options(
         responseType: ResponseType.bytes,
