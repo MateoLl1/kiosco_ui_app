@@ -67,17 +67,18 @@ class _TipoAtencionScreenState extends ConsumerState<TipoAtencionScreen> {
     final isWide = width >= 900;
     final colors = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: CustomPaint(
-                painter: HomePainter(
-                  primaryColor: colors.primary,
+    return KioskIdleDetector(
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: CustomPaint(
+                  painter: HomePainter(
+                    primaryColor: colors.primary,
+                  ),
                 ),
               ),
-            ),
             Positioned(
               top: 16,
               left: 16,
@@ -172,6 +173,7 @@ class _TipoAtencionScreenState extends ConsumerState<TipoAtencionScreen> {
           ],
         ),
       ),
+    ),
     );
   }
 }

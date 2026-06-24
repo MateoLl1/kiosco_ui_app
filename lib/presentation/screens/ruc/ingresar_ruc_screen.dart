@@ -125,16 +125,17 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
     final ancho = MediaQuery.of(context).size.width;
     final esAncho = ancho >= 900;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: CustomPaint(
-                painter: Home2Painter(primaryColor: colores.primary),
+    return KioskIdleDetector(
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: CustomPaint(
+                  painter: Home2Painter(primaryColor: colores.primary),
+                ),
               ),
-            ),
-            Positioned.fill(
+              Positioned.fill(
               child: Center(
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: esAncho ? 720 : 560),
@@ -293,6 +294,7 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
           ],
         ),
       ),
+    ),
     );
   }
 }

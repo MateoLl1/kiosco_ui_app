@@ -9,4 +9,7 @@ class Env {
   static String ttsVoice = dotenv.env['TTS_VOICE'] ?? 'es-EC-AndreaNeural';
   static String ttsRate = dotenv.env['TTS_RATE'] ?? '+0%';
   static String ttsPitch = dotenv.env['TTS_PITCH'] ?? '+0Hz';
+
+  static bool kioskIdleEnabled =
+      dotenv.env['KIOSK_IDLE_ENABLED']?.toLowerCase() == 'true';
 }

@@ -70,8 +70,10 @@ class TurnoAsignadoScreen extends ConsumerWidget {
       cliente: clienteProvider,
     );
 
-    return Scaffold(
-      body: SafeArea(
+    return KioskIdleDetector(
+      timeout: AppDurations.kioskIdleTurno,
+      child: Scaffold(
+        body: SafeArea(
         child: Stack(
           children: [
             Positioned.fill(
@@ -195,6 +197,7 @@ class TurnoAsignadoScreen extends ConsumerWidget {
           ],
         ),
       ),
+    ),
     );
   }
 

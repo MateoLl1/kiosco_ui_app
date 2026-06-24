@@ -33,3 +33,4 @@ export './hidden_admin_access/hidden_admin_access.dart';
 export './whatsapp/whatsapp_turno_notificacion.dart';
 export 'panel/panel.dart';
 export './buttons/action_button.dart';
+export './kiosk/kiosk_idle_detector.dart';
