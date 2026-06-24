@@ -42,8 +42,6 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
         return '/ingresar-ruc';
       case AppRole.guardia:
         return '/guardia';
-      case AppRole.mostrador:
-        return '/config';
     }
   }
 

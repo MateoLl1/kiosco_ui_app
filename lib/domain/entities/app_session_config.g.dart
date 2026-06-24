@@ -90,7 +90,7 @@ AppSessionConfig _appSessionConfigDeserialize(
         _AppSessionConfigroleValueEnumMap[reader.readStringOrNull(
           offsets[2],
         )] ??
-        AppRole.mostrador,
+        AppRole.guardia,
   );
   object.id = id;
   return object;
@@ -111,7 +111,7 @@ P _appSessionConfigDeserializeProp<P>(
       return (_AppSessionConfigroleValueEnumMap[reader.readStringOrNull(
                 offset,
               )] ??
-              AppRole.mostrador)
+              AppRole.guardia)
           as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -122,13 +122,11 @@ const _AppSessionConfigroleEnumValueMap = {
   r'guardia': r'guardia',
   r'kiosco': r'kiosco',
   r'turnero': r'turnero',
-  r'admin': r'admin',
 };
 const _AppSessionConfigroleValueEnumMap = {
   r'guardia': AppRole.guardia,
   r'kiosco': AppRole.kiosco,
   r'turnero': AppRole.turnero,
-  r'admin': AppRole.mostrador,
 };
 
 Id _appSessionConfigGetId(AppSessionConfig object) {

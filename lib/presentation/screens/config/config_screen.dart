@@ -50,8 +50,6 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
         return 'Kiosco';
       case AppRole.turnero:
         return 'Turnero';
-      case AppRole.mostrador:
-        return 'Mostrador';
     }
   }
 
@@ -134,9 +132,6 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
           break;
         case AppRole.turnero:
           context.go('/pantalla-turnos');
-          break;
-        case AppRole.mostrador:
-          context.go('/mostrador');
           break;
       }
     } finally {

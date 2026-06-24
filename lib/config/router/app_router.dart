@@ -13,7 +13,6 @@ Widget withHiddenAdminAccess(BuildContext context, Widget child) {
 }
 
 final appRouter = GoRouter(
-  // initialLocation: '/mostrador',
   initialLocation: '/loading',
   routes: [
     GoRoute(
@@ -90,13 +89,6 @@ final appRouter = GoRouter(
       builder: (context, state) => withHiddenAdminAccess(
         context,
         GuardiaScreen(),
-      ),
-    ),
-    GoRoute(
-      path: '/mostrador',
-      builder: (context, state) => withHiddenAdminAccess(
-        context,
-        MostradorScreen(),
       ),
     ),
   ],
