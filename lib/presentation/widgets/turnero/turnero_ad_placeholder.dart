@@ -50,42 +50,26 @@ class _TurneroAdPlaceholderState extends ConsumerState<TurneroAdPlaceholder> {
   Future<void> _cargarPublicidadUnaSolaVez() async {
     if (widget.agenciaId <= 0) {
       if (!mounted) return;
-
       setState(() {
         cargando = false;
         publicidad = [];
         imagenFallbackUrl = null;
       });
-
       return;
     }
 
     try {
-      final lista = await ref
-          .read(kioscoRepositoryProvider)
-          .getTurneroMediaPorAgencia(agenciaId: widget.agenciaId);
+      // El provider cachea el resultado — si ya fue llamado, devuelve el
+      // valor sin tocar la API aunque el widget se haya recreado.
+      final lista = await ref.read(
+        turneroMediaProvider(widget.agenciaId).future,
+      );
 
-      final filtrada = lista.where((item) {
-        final tipo = item.tipo.trim().toLowerCase();
-        final url = item.url.trim();
+      final filtrada = List<TurneroMedia>.from(lista);
 
-        return url.isNotEmpty && (tipo == 'imagen' || tipo == 'video');
-      }).toList();
-
-      filtrada.sort((a, b) {
-        final ordenA = a.orden ?? 0;
-        final ordenB = b.orden ?? 0;
-
-        final compararOrden = ordenA.compareTo(ordenB);
-        if (compararOrden != 0) return compararOrden;
-
-        return a.codigo.compareTo(b.codigo);
-      });
-
-      final imagenes = filtrada.where((item) {
-        return item.tipo.trim().toLowerCase() == 'imagen' &&
-            item.url.trim().isNotEmpty;
-      }).toList();
+      final imagenes = filtrada
+          .where((item) => item.tipo.trim().toLowerCase() == 'imagen')
+          .toList();
 
       final imagenFallback = imagenes.isNotEmpty ? imagenes.first.url : null;
 
@@ -93,25 +77,16 @@ class _TurneroAdPlaceholderState extends ConsumerState<TurneroAdPlaceholder> {
           filtrada.isNotEmpty &&
           filtrada.first.tipo.trim().toLowerCase() == 'video') {
         final primeraImagen = imagenes.first;
-        filtrada.remove(primeraImagen);
-        filtrada.insert(0, primeraImagen);
+        filtrada
+          ..remove(primeraImagen)
+          ..insert(0, primeraImagen);
       }
 
       if (imagenFallback != null && mounted) {
         try {
-          await precacheImage(
-            NetworkImage(imagenFallback),
-            context,
-          ).timeout(const Duration(seconds: 3));
+          await precacheImage(NetworkImage(imagenFallback), context)
+              .timeout(const Duration(seconds: 3));
         } catch (_) {}
-      }
-
-      debugPrint(
-        'PUBLICIDAD AGENCIA ${widget.agenciaId}: ${filtrada.length} objetos',
-      );
-
-      for (final item in filtrada) {
-        debugPrint('MEDIA ${item.codigo} | ${item.tipo} | ${item.url}');
       }
 
       if (!mounted) return;
@@ -126,12 +101,8 @@ class _TurneroAdPlaceholderState extends ConsumerState<TurneroAdPlaceholder> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _programarPaginaActual();
       });
-    } catch (e, st) {
-      debugPrint('ERROR CARGANDO PUBLICIDAD: $e');
-      debugPrint(st.toString());
-
+    } catch (e) {
       if (!mounted) return;
-
       setState(() {
         publicidad = [];
         imagenFallbackUrl = null;

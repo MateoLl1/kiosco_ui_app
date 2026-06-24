@@ -10,6 +10,6 @@ class Env {
   static String ttsRate = dotenv.env['TTS_RATE'] ?? '+0%';
   static String ttsPitch = dotenv.env['TTS_PITCH'] ?? '+0Hz';
 
-  static bool kioskIdleEnabled =
-      dotenv.env['KIOSK_IDLE_ENABLED']?.toLowerCase() == 'true';
+  static bool retornoAutomatico =
+      dotenv.env['RETORNO_AUTOMATICO']?.toLowerCase() == 'true';
 }

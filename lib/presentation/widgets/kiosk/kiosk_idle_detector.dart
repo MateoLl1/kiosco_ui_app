@@ -34,7 +34,7 @@ class _KioskIdleDetectorState extends State<KioskIdleDetector> {
   }
 
   void _resetTimer() {
-    if (!Env.kioskIdleEnabled) return;
+    if (!Env.retornoAutomatico) return;
     _timer?.cancel();
     _timer = Timer(widget.timeout, _onIdle);
   }
@@ -46,7 +46,7 @@ class _KioskIdleDetectorState extends State<KioskIdleDetector> {
 
   @override
   Widget build(BuildContext context) {
-    if (!Env.kioskIdleEnabled) return widget.child;
+    if (!Env.retornoAutomatico) return widget.child;
 
     return Listener(
       onPointerDown: (_) => _resetTimer(),
