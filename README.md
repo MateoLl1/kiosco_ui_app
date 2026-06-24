@@ -145,34 +145,36 @@ El APK queda en:
 build\app\outputs\flutter-apk\app-debug.apk
 ```
 
-**2. Instalar en el emulador TV (con el emulador ya iniciado)**
+**2. Ver dispositivos conectados**
 
 ```bash
+adb devices
+```
+
+Si hay más de un dispositivo (ej. celular + emulador TV), usar `-s <id>` para apuntar al correcto. El emulador aparece como `emulator-5554`.
+
+**3. Instalar y lanzar**
+
+```bash
+# Si solo hay un dispositivo/emulador:
 adb install -r build\app\outputs\flutter-apk\app-debug.apk
-```
-
-Si `adb` no está en el PATH, usar la ruta completa:
-
-```bash
-C:\Users\mllerena\AppData\Local\Android\Sdk\platform-tools\adb.exe install -r build\app\outputs\flutter-apk\app-debug.apk
-```
-
-**3. Lanzar la app**
-
-```bash
 adb shell am start -n com.example.kiosco_au/com.example.kiosco_au.MainActivity
+
+# Si hay celular y emulador TV al mismo tiempo (usar -s con el ID de adb devices):
+adb -s emulator-5554 install -r build\app\outputs\flutter-apk\app-debug.apk
+adb -s emulator-5554 shell am start -n com.example.kiosco_au/com.example.kiosco_au.MainActivity
 ```
 
-Con ruta completa:
-
-```bash
-C:\Users\mllerena\AppData\Local\Android\Sdk\platform-tools\adb.exe shell am start -n com.example.kiosco_au/com.example.kiosco_au.MainActivity
-```
-
-**4. Flujo completo en un solo bloque (copiar y pegar)**
+**4. Flujo completo — un solo dispositivo (copiar y pegar)**
 
 ```bash
 flutter build apk --debug && adb install -r build\app\outputs\flutter-apk\app-debug.apk && adb shell am start -n com.example.kiosco_au/com.example.kiosco_au.MainActivity
+```
+
+**4b. Flujo completo — TV emulador con celular también conectado**
+
+```bash
+flutter build apk --debug && adb -s emulator-5554 install -r build\app\outputs\flutter-apk\app-debug.apk && adb -s emulator-5554 shell am start -n com.example.kiosco_au/com.example.kiosco_au.MainActivity
 ```
 
 > El emulador de Android TV recomendado es **API 33** (Android 13). Las versiones API 34+ pueden dar problemas de compatibilidad con algunas librerías nativas (media_kit).
@@ -180,7 +182,7 @@ flutter build apk --debug && adb install -r build\app\outputs\flutter-apk\app-de
 **5. Ver logs en tiempo real**
 
 ```bash
-adb logcat -s flutter
+adb -s emulator-5554 logcat -s flutter
 ```
 
 ---
