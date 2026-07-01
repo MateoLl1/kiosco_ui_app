@@ -25,8 +25,27 @@ class _BienvenidaClienteScreenState
 
     _timer = Timer(AppDurations.welcomeRedirect, () {
       if (!mounted) return;
-      context.go('/home');
+      _redirigir();
     });
+  }
+
+  Future<void> _redirigir() async {
+    final agenciaId = ref.read(appSessionProvider)?.agenciaId ?? 0;
+
+    bool mostradorActivo = false;
+    try {
+      mostradorActivo = await ref
+          .read(kioscoRepositoryProvider)
+          .verificarMostradorHabilitado(agenciaId: agenciaId);
+    } catch (_) {}
+
+    if (!mounted) return;
+
+    if (mostradorActivo) {
+      context.go('/home');
+    } else {
+      context.go('/tipo-atencion');
+    }
   }
 
   @override

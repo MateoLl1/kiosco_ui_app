@@ -279,4 +279,35 @@ class KioscoDatasourceImpl extends KioscoDatasource {
       throw Exception('Error atendiendo turno: $e');
     }
   }
+
+  @override
+  Future<bool> verificarMostradorHabilitado({required int agenciaId}) async {
+    try {
+      final response = await _dio.get(
+        '/mostrador/habilitado',
+        queryParameters: {'agenciaId': agenciaId},
+      );
+      return (response.data as Map<String, dynamic>?)?['mostradorActivo'] == true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  @override
+  Future<TurnoGeneradoResponse> generarTurnoMostrador({
+    required int agenciaId,
+    String? identificacion,
+  }) async {
+    final response = await _dio.post(
+      '/mostrador/turno',
+      data: {
+        'agenciaId': agenciaId,
+        'identificacion': ?identificacion,
+      },
+    );
+
+    return TurnoGeneradoResponseMapper.fromJson(
+      response.data as Map<String, dynamic>,
+    );
+  }
 }

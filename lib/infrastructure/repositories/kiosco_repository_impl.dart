@@ -92,5 +92,19 @@ class KioscoRepositoryImpl extends KioscoRepository {
     return datasource.atenderTurno(asgCodigo: asgCodigo);
   }
 
-  
+  @override
+  Future<bool> verificarMostradorHabilitado({required int agenciaId}) {
+    return datasource.verificarMostradorHabilitado(agenciaId: agenciaId);
+  }
+
+  @override
+  Future<TurnoGeneradoResponse> generarTurnoMostrador({
+    required int agenciaId,
+    String? identificacion,
+  }) {
+    return datasource.generarTurnoMostrador(
+      agenciaId: agenciaId,
+      identificacion: identificacion,
+    );
+  }
 }

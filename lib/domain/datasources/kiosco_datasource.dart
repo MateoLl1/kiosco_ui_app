@@ -48,4 +48,11 @@ abstract class KioscoDatasource {
   Future<TurnoAtencionResponse?> atenderTurno({
     required int asgCodigo,
   });
+
+  Future<bool> verificarMostradorHabilitado({required int agenciaId});
+
+  Future<TurnoGeneradoResponse> generarTurnoMostrador({
+    required int agenciaId,
+    String? identificacion,
+  });
 }

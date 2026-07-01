@@ -30,7 +30,7 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
   final AudioPlayer audioPlayer = AudioPlayer();
 
   DateTime now = DateTime.now();
-  String? ultimaLlaveMostrada;
+  final Set<String> _llavesAnunciadas = {};
   String? ultimaLlaveAudio;
   Turno? activeOverlayTurno;
   Timer? overlayTimer;
@@ -144,9 +144,9 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
 
     final llaveActual = _buildLlaveTurno(turnoActual);
 
-    if (ultimaLlaveMostrada == llaveActual) return;
+    if (_llavesAnunciadas.contains(llaveActual)) return;
 
-    ultimaLlaveMostrada = llaveActual;
+    _llavesAnunciadas.add(llaveActual);
     activeOverlayTurno = turnoActual;
 
     overlayTimer?.cancel();
