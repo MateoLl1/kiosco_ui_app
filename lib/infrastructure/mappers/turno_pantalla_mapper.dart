@@ -37,6 +37,9 @@ class PantallaTurnosMapper {
       turnosPendientes: (json['turnosPendientes'] as List<dynamic>? ?? [])
           .map((item) => TurnoPantallaMapper.fromJson(item as Map<String, dynamic>))
           .toList(),
+      modulosActivos: (json['modulosActivos'] as List<dynamic>? ?? [])
+          .map((e) => (e as num).toInt())
+          .toList(),
     );
   }
 }

@@ -174,6 +174,7 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
     required List<Turno> recienLlamados,
     required List<Turno> pendientes,
     required Turno? turnoActual,
+    required List<int> modulosActivos,
   }) {
     return Stack(
       children: [
@@ -205,6 +206,10 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
                   ),
                 ],
               ),
+            ),
+            TurneroBottomModulesBar(
+              modulosActivos: modulosActivos,
+              activeModulo: turnoActual?.modulo,
             ),
           ],
         ),
@@ -239,6 +244,7 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
                 recienLlamados: dataAnterior.turnosRecienLlamados,
                 pendientes: dataAnterior.turnosPendientes,
                 turnoActual: dataAnterior.turnoActual,
+                modulosActivos: dataAnterior.modulosActivos,
               )
             : state.hasError
                 ? Center(
@@ -259,6 +265,7 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
                     recienLlamados: const <Turno>[],
                     pendientes: const <Turno>[],
                     turnoActual: null,
+                    modulosActivos: const [],
                   ),
       ),
     );

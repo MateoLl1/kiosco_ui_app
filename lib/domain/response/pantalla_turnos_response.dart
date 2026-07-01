@@ -5,11 +5,13 @@ class PantallaTurnosResponse {
   final Turno? turnoActual;
   final List<Turno> turnosRecienLlamados;
   final List<Turno> turnosPendientes;
+  final List<int> modulosActivos;
 
   PantallaTurnosResponse({
     required this.turnos,
     required this.turnoActual,
     required this.turnosRecienLlamados,
     required this.turnosPendientes,
+    this.modulosActivos = const [],
   });
 }

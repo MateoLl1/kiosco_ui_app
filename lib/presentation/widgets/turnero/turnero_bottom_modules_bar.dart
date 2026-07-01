@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 
 class TurneroBottomModulesBar extends StatelessWidget {
   final String? activeModulo;
+  final List<int> modulosActivos;
 
   const TurneroBottomModulesBar({
     super.key,
     this.activeModulo,
+    this.modulosActivos = const [],
   });
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final modules = ['1', '2', '3', '4', '5'];
+
+    if (modulosActivos.isEmpty) return const SizedBox.shrink();
 
     return Container(
       height: 36,
@@ -25,8 +28,8 @@ class TurneroBottomModulesBar extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: modules.map((module) {
-          final isActive = activeModulo?.trim() == module.trim();
+        children: modulosActivos.map((module) {
+          final isActive = activeModulo?.trim() == module.toString();
 
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14),
