@@ -3,6 +3,7 @@ import 'package:kiosco_au/domain/domain.dart';
 class PantallaTurnosResponse {
   final List<Turno> turnos;
   final Turno? turnoActual;
+  final List<Turno> turnosActivos;
   final List<Turno> turnosRecienLlamados;
   final List<Turno> turnosPendientes;
   final List<int> modulosActivos;
@@ -10,6 +11,7 @@ class PantallaTurnosResponse {
   PantallaTurnosResponse({
     required this.turnos,
     required this.turnoActual,
+    this.turnosActivos = const [],
     required this.turnosRecienLlamados,
     required this.turnosPendientes,
     this.modulosActivos = const [],

@@ -14,70 +14,77 @@ class TurneroCurrentSidebarCard extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
 
     return Container(
-      margin: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: colors.primary.withValues(alpha: 0.10),
+        color: colors.primaryContainer.withValues(alpha: 0.30),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: colors.primary.withValues(alpha: 0.45),
-          width: 1.6,
+          color: colors.primary.withValues(alpha: 0.40),
+          width: 1.5,
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            'TURNO ACTUAL',
-            style: TextStyle(
-              color: colors.primary,
-              fontSize: 12,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 0.8,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            turno.turno,
-            style: TextStyle(
-              color: colors.onSurface,
-              fontSize: 34,
-              fontWeight: FontWeight.w900,
-              height: 1,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            turno.nombreCliente,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: colors.onSurface.withValues(alpha: 0.9),
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              height: 1.2,
-            ),
-          ),
-          const SizedBox(height: 10),
           Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 8,
-            ),
+            width: 70,
+            height: 62,
+            alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: colors.surface,
-              borderRadius: BorderRadius.circular(999),
+              borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: colors.outline.withValues(alpha: 0.2),
+                color: colors.primary.withValues(alpha: 0.55),
+                width: 1.5,
               ),
             ),
             child: Text(
-              'Módulo ${turno.modulo}',
+              turno.turno,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: colors.primary,
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
+                fontSize: 20,
+                fontWeight: FontWeight.w900,
+                height: 1.1,
               ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: colors.primary,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Text(
+                    'MÓDULO ${turno.modulo}',
+                    style: TextStyle(
+                      color: colors.onPrimary,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  turno.nombreCliente.trim().isNotEmpty
+                      ? turno.nombreCliente.trim()
+                      : '—',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: colors.onSurface.withValues(alpha: 0.85),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    height: 1.3,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

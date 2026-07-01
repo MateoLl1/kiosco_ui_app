@@ -31,6 +31,9 @@ class PantallaTurnosMapper {
       turnoActual: json['turnoActual'] != null
           ? TurnoPantallaMapper.fromJson(json['turnoActual'] as Map<String, dynamic>)
           : null,
+      turnosActivos: (json['turnosActivos'] as List<dynamic>? ?? [])
+          .map((item) => TurnoPantallaMapper.fromJson(item as Map<String, dynamic>))
+          .toList(),
       turnosRecienLlamados: (json['turnosRecienLlamados'] as List<dynamic>? ?? [])
           .map((item) => TurnoPantallaMapper.fromJson(item as Map<String, dynamic>))
           .toList(),

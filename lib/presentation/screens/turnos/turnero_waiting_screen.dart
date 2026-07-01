@@ -173,9 +173,12 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
     required double sidebarWidth,
     required List<Turno> recienLlamados,
     required List<Turno> pendientes,
-    required Turno? turnoActual,
+    required List<Turno> turnosActivos,
     required List<int> modulosActivos,
   }) {
+    final activeModulos =
+        turnosActivos.map((t) => t.modulo.trim()).toSet();
+
     return Stack(
       children: [
         Column(
@@ -196,12 +199,9 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
                   ),
                   SizedBox(
                     width: sidebarWidth,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 16, 0, 12),
-                      child: TurnosSidebar(
-                        turnoActual: turnoActual,
-                        pendientes: pendientes,
-                      ),
+                    child: TurnosSidebar(
+                      turnosActivos: turnosActivos,
+                      pendientes: pendientes,
                     ),
                   ),
                 ],
@@ -209,7 +209,7 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
             ),
             TurneroBottomModulesBar(
               modulosActivos: modulosActivos,
-              activeModulo: turnoActual?.modulo,
+              activeModulos: activeModulos,
             ),
           ],
         ),
@@ -243,7 +243,7 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
                 sidebarWidth: sidebarWidth,
                 recienLlamados: dataAnterior.turnosRecienLlamados,
                 pendientes: dataAnterior.turnosPendientes,
-                turnoActual: dataAnterior.turnoActual,
+                turnosActivos: dataAnterior.turnosActivos,
                 modulosActivos: dataAnterior.modulosActivos,
               )
             : state.hasError
@@ -264,7 +264,7 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
                     sidebarWidth: sidebarWidth,
                     recienLlamados: const <Turno>[],
                     pendientes: const <Turno>[],
-                    turnoActual: null,
+                    turnosActivos: const [],
                     modulosActivos: const [],
                   ),
       ),

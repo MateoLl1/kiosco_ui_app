@@ -4,12 +4,12 @@ import 'package:kiosco_au/domain/domain.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 
 class TurnosSidebar extends StatelessWidget {
-  final Turno? turnoActual;
+  final List<Turno> turnosActivos;
   final List<Turno> pendientes;
 
   const TurnosSidebar({
     super.key,
-    required this.turnoActual,
+    required this.turnosActivos,
     required this.pendientes,
   });
 
@@ -29,6 +29,85 @@ class TurnosSidebar extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // ── EN ATENCIÓN ──
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  height: 56,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: colors.outline.withValues(alpha: 0.2),
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.headset_mic_rounded,
+                        color: colors.primary,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          'EN ATENCIÓN',
+                          style: TextStyle(
+                            color: colors.primary,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                      if (turnosActivos.isNotEmpty)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: colors.primary.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            '${turnosActivos.length}',
+                            style: TextStyle(
+                              color: colors.primary,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                if (turnosActivos.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    child: Text(
+                      'Ningún módulo en atención',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: colors.onSurface.withValues(alpha: 0.5),
+                        fontSize: 13,
+                      ),
+                    ),
+                  )
+                else
+                  ...turnosActivos.map(
+                    (t) => FadeIn(child: TurneroCurrentSidebarCard(turno: t)),
+                  ),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+
+          // ── Divider ──
+          Divider(height: 1, color: colors.outline.withValues(alpha: 0.2)),
+
+          // ── EN ESPERA ──
           Container(
             height: 56,
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -77,8 +156,6 @@ class TurnosSidebar extends StatelessWidget {
               ],
             ),
           ),
-          if (turnoActual != null)
-            TurneroCurrentSidebarCard(turno: turnoActual!),
           Expanded(
             child: pendientes.isEmpty
                 ? Center(
@@ -99,11 +176,15 @@ class TurnosSidebar extends StatelessWidget {
                     itemCount: pendientes.length,
                     separatorBuilder: (_, _) => Divider(
                       height: 1,
-                      color: colors.outline.withValues(alpha: 0.2),
+                      indent: 12,
+                      endIndent: 12,
+                      color: colors.outline.withValues(alpha: 0.12),
                     ),
                     itemBuilder: (context, index) {
                       final turno = pendientes[index];
-                      return FadeInRight(child: TurnosSidebarItem(turno: turno));
+                      return FadeInRight(
+                        child: TurnosSidebarItem(turno: turno, index: index),
+                      );
                     },
                   ),
           ),
