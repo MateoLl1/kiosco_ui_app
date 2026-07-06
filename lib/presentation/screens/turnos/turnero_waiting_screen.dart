@@ -19,8 +19,9 @@ class TurneroWaitingScreen extends ConsumerStatefulWidget {
 }
 
 class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
-  final Dio _ttsDio = Dio(
+  late final Dio _audioDio = Dio(
     BaseOptions(
+      baseUrl: Env.apiBaseUrl,
       connectTimeout: AppDurations.connectTimeout,
       receiveTimeout: AppDurations.ttsReceiveTimeout,
       sendTimeout: AppDurations.sendTimeout,
@@ -85,58 +86,26 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
     return '${turno.asgCodigo}_$referencia';
   }
 
-  String _limpiarTexto(String valor) {
-    return valor.replaceAll(RegExp(r'\s+'), ' ').trim();
-  }
-
-  String _normalizarTurnoParaAudio(String turno) {
-    return turno
-        .replaceAll('-', ' ')
-        .replaceAll('/', ' ')
-        .replaceAll(RegExp(r'\s+'), ' ')
-        .trim();
-  }
-
-  String _crearMensajeAudio(Turno turno) {
-    final turnoTexto = _normalizarTurnoParaAudio(turno.turno);
-    final nombreCliente = _limpiarTexto(turno.nombreCliente);
-    final modulo = _limpiarTexto(turno.modulo);
-
-    return 'Turno $turnoTexto, $nombreCliente, acercarse al módulo $modulo';
-  }
-
   Future<void> _reproducirAudio(Turno turno) async {
     final llaveAudio = _buildLlaveTurno(turno);
-
     if (ultimaLlaveAudio == llaveAudio) return;
-
     ultimaLlaveAudio = llaveAudio;
 
-    final mensaje = _crearMensajeAudio(turno);
-
-    final response = await _ttsDio.post<List<int>>(
-      Env.ttsUrl,
+    final response = await _audioDio.post<List<int>>(
+      '/audio/tts',
       data: {
-        'text': mensaje,
-        'voice': Env.ttsVoice,
-        'rate': Env.ttsRate,
-        'pitch': Env.ttsPitch,
+        'turno': turno.turno,
+        'nombreCliente': turno.nombreCliente,
+        'modulo': turno.modulo,
       },
-      options: Options(
-        responseType: ResponseType.bytes,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      ),
+      options: Options(responseType: ResponseType.bytes),
     );
 
     final data = response.data;
     if (data == null || data.isEmpty) return;
 
-    final bytes = Uint8List.fromList(data);
-
     await audioPlayer.stop();
-    await audioPlayer.play(BytesSource(bytes));
+    await audioPlayer.play(BytesSource(Uint8List.fromList(data)));
   }
 
   void _handleOverlayTurno(Turno? turnoActual) {
