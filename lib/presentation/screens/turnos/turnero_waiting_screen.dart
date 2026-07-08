@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiosco_au/config/config.dart';
 import 'package:kiosco_au/domain/domain.dart';
+import 'package:kiosco_au/infrastructure/http/dio_factory.dart';
 import 'package:kiosco_au/presentation/providers/providers.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 
@@ -19,13 +20,10 @@ class TurneroWaitingScreen extends ConsumerStatefulWidget {
 }
 
 class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
-  late final Dio _audioDio = Dio(
-    BaseOptions(
-      baseUrl: Env.apiBaseUrl,
-      connectTimeout: AppDurations.connectTimeout,
-      receiveTimeout: AppDurations.ttsReceiveTimeout,
-      sendTimeout: AppDurations.sendTimeout,
-    ),
+  late final Dio _audioDio = DioFactory.create(
+    connectTimeout: AppDurations.connectTimeout,
+    receiveTimeout: AppDurations.ttsReceiveTimeout,
+    sendTimeout: AppDurations.sendTimeout,
   );
 
   final AudioPlayer audioPlayer = AudioPlayer();

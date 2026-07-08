@@ -36,7 +36,7 @@ class TurneroAdEmpty extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              'Aquí puedes mostrar campañas,\nimágenes o videos mientras\nlos clientes esperan.',
+              'No hay archivos configurados para esta agencia.',
               style: TextStyle(
                 color: colors.onSurface,
                 fontSize: 30,
@@ -44,14 +44,7 @@ class TurneroAdEmpty extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(height: 18),
-            Text(
-              'No hay archivos configurados para esta agencia.',
-              style: TextStyle(
-                color: colors.onSurface.withValues(alpha: 0.7),
-                fontSize: 16,
-              ),
-            ),
+            
             const Spacer(),
           ],
         ),

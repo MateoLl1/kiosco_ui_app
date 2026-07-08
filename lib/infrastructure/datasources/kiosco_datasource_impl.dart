@@ -2,15 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:kiosco_au/config/config.dart';
 import 'package:kiosco_au/domain/domain.dart';
 import 'package:kiosco_au/infrastructure/infrastructure.dart';
+import 'package:kiosco_au/infrastructure/http/dio_factory.dart';
 
 class KioscoDatasourceImpl extends KioscoDatasource {
-  final Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: Env.apiBaseUrl,
-      connectTimeout: AppDurations.connectTimeout,
-      receiveTimeout: AppDurations.receiveTimeout,
-      sendTimeout: AppDurations.sendTimeout,
-    ),
+  final Dio _dio = DioFactory.create(
+    connectTimeout: AppDurations.connectTimeout,
+    receiveTimeout: AppDurations.receiveTimeout,
+    sendTimeout: AppDurations.sendTimeout,
   );
 
   @override
