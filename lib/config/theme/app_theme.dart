@@ -25,6 +25,7 @@ class AppTheme {
 
         extensions: <ThemeExtension<dynamic>>[
           const GuardiaTheme(),
+          AppSeedColorTheme(seed: colorsAppTheme[selectedColor]),
         ],
       );
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kiosco_au/config/config.dart';
 import 'package:kiosco_au/presentation/providers/providers.dart';
 import 'package:kiosco_au/presentation/screens/painters/painters.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
@@ -79,7 +80,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               Positioned.fill(
                 child: CustomPaint(
                   painter: HomePainter(
-                    primaryColor: colors.primary,
+                    primaryColor: Theme.of(context)
+                            .extension<AppSeedColorTheme>()
+                            ?.seed ??
+                        colors.primary,
                   ),
                 ),
               ),

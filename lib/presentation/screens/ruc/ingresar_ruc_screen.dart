@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kiosco_au/config/config.dart';
 import 'package:kiosco_au/presentation/providers/providers.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 import 'package:kiosco_au/presentation/screens/painters/painters.dart';
@@ -215,7 +216,12 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
             children: [
               Positioned.fill(
                 child: CustomPaint(
-                  painter: Home2Painter(primaryColor: colores.primary),
+                  painter: Home2Painter(
+                    primaryColor: Theme.of(context)
+                            .extension<AppSeedColorTheme>()
+                            ?.seed ??
+                        colores.primary,
+                  ),
                 ),
               ),
               Positioned.fill(

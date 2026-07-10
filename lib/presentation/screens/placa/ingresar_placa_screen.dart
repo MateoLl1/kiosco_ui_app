@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kiosco_au/config/config.dart';
 import 'package:kiosco_au/presentation/screens/painters/painters.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 
@@ -126,7 +127,12 @@ class _IngresarPlacaScreenState extends State<IngresarPlacaScreen> {
 
             Positioned.fill(
               child: CustomPaint(
-                painter: Home2Painter(primaryColor: colores.primary),
+                painter: Home2Painter(
+                  primaryColor: Theme.of(context)
+                          .extension<AppSeedColorTheme>()
+                          ?.seed ??
+                      colores.primary,
+                ),
               )    
             ),
 

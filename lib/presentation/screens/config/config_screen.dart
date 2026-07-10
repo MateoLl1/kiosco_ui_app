@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kiosco_au/config/config.dart';
 import 'package:kiosco_au/domain/domain.dart';
 import 'package:kiosco_au/presentation/providers/providers.dart';
 import 'package:kiosco_au/presentation/screens/painters/painters.dart';
@@ -153,6 +154,10 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
     final agenciaSeleccionada = _obtenerAgenciaSeleccionada(agencias);
     final agenciaItems = _crearItemsAgencias(agencias);
 
+    final colorSeleccionado =
+        Theme.of(context).extension<AppSeedColorTheme>()?.seed ??
+            colors.primary;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -160,8 +165,8 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
             child: CustomPaint(
               painter: ConfigBackgroundPainter(
                 colorFondo: colors.surface,
-                colorCirculoInferior: colors.primary,
-                colorCirculoSuperior: colors.secondary,
+                colorCirculoInferior: colorSeleccionado,
+                colorCirculoSuperior: colorSeleccionado,
               ),
             ),
           ),

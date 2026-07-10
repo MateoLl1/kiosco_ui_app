@@ -67,7 +67,12 @@ class _BienvenidaClienteScreenState
           children: [
             Positioned.fill(
               child: CustomPaint(
-                painter: Home2Painter(primaryColor: colores.primary),
+                painter: Home2Painter(
+                  primaryColor: Theme.of(context)
+                          .extension<AppSeedColorTheme>()
+                          ?.seed ??
+                      colores.primary,
+                ),
               ),
             ),
             Positioned.fill(

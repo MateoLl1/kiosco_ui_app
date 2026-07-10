@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kiosco_au/presentation/screens/painters/brand_colors.dart';
 
 class HomePainter extends CustomPainter {
   final Color primaryColor;
@@ -10,61 +11,126 @@ class HomePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final fillPaint = Paint()..style = PaintingStyle.fill;
-
-    final strokePaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
-
-    fillPaint.color = primaryColor.withValues(alpha: 0.08);
-    canvas.drawCircle(
-      Offset(size.width * 0.12, size.height * 0.18),
-      size.width * 0.18,
-      fillPaint,
+    // Panel sólido azul, arriba a la izquierda.
+    canvas.drawRRect(
+      RRect.fromRectAndCorners(
+        Rect.fromLTWH(
+          -size.width * 0.14,
+          -size.height * 0.10,
+          size.width * 0.46,
+          size.height * 0.34,
+        ),
+        bottomRight: Radius.circular(size.width * 0.30),
+      ),
+      Paint()..color = primaryColor.withValues(alpha: 0.16),
     );
 
-    
-    fillPaint.color = primaryColor.withValues(alpha: 0.06);
-    canvas.drawCircle(
-      Offset(size.width * 0.88, size.height * 0.20),
-      size.width * 0.22,
-      fillPaint,
+    // Panel sólido gris, abajo a la derecha.
+    canvas.drawRRect(
+      RRect.fromRectAndCorners(
+        Rect.fromLTWH(
+          size.width * 0.70,
+          size.height * 0.76,
+          size.width * 0.44,
+          size.height * 0.34,
+        ),
+        topLeft: Radius.circular(size.width * 0.30),
+      ),
+      Paint()..color = chevroletGray.withValues(alpha: 0.18),
     );
 
-    fillPaint.color = primaryColor.withValues(alpha: 0.05);
-    canvas.drawCircle(
-      Offset(size.width * 0.78, size.height * 0.82),
-      size.width * 0.28,
-      fillPaint,
+    // Panel sólido azul, más chico, arriba a la derecha.
+    canvas.drawRRect(
+      RRect.fromRectAndCorners(
+        Rect.fromLTWH(
+          size.width * 0.80,
+          -size.height * 0.06,
+          size.width * 0.26,
+          size.height * 0.18,
+        ),
+        bottomLeft: Radius.circular(size.width * 0.14),
+      ),
+      Paint()..color = primaryColor.withValues(alpha: 0.14),
     );
 
-    fillPaint.color = primaryColor.withValues(alpha: 0.04);
+    // Anillo sólido gris, arriba a la derecha.
     canvas.drawCircle(
-      Offset(size.width * 0.20, size.height * 0.78),
-      size.width * 0.14,
-      fillPaint,
+      Offset(size.width * 0.82, size.height * 0.16),
+      size.width * 0.05,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 3
+        ..color = chevroletGray,
     );
 
-    strokePaint.color = primaryColor.withValues(alpha: 0.14);
+    // Anillo sólido azul, abajo a la izquierda.
     canvas.drawCircle(
-      Offset(size.width * 0.52, size.height * 0.14),
-      size.width * 0.08,
-      strokePaint,
+      Offset(size.width * 0.10, size.height * 0.86),
+      size.width * 0.035,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.5
+        ..color = primaryColor,
     );
 
-    strokePaint.color = primaryColor.withValues(alpha: 0.12);
-    canvas.drawCircle(
-      Offset(size.width * 0.30, size.height * 0.55),
-      size.width * 0.10,
-      strokePaint,
+    // Barra sólida azul, abajo a la izquierda.
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(
+          size.width * 0.10,
+          size.height * 0.72,
+          size.width * 0.10,
+          size.width * 0.025,
+        ),
+        Radius.circular(size.width * 0.02),
+      ),
+      Paint()..color = primaryColor,
     );
 
-    strokePaint.color = primaryColor.withValues(alpha: 0.10);
-    canvas.drawCircle(
-      Offset(size.width * 0.72, size.height * 0.48),
-      size.width * 0.12,
-      strokePaint,
+    // Barra sólida gris, al centro.
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(
+          size.width * 0.44,
+          size.height * 0.08,
+          size.width * 0.07,
+          size.width * 0.02,
+        ),
+        Radius.circular(size.width * 0.015),
+      ),
+      Paint()..color = chevroletGray,
     );
+
+    // Punto sólido azul, al centro.
+    canvas.drawCircle(
+      Offset(size.width * 0.58, size.height * 0.46),
+      size.width * 0.018,
+      Paint()..color = primaryColor,
+    );
+
+    // Punto sólido gris, a la izquierda.
+    canvas.drawCircle(
+      Offset(size.width * 0.24, size.height * 0.40),
+      size.width * 0.014,
+      Paint()..color = chevroletGray,
+    );
+
+    // Cuadro sólido azul, rotado, pequeño detalle.
+    canvas.save();
+    canvas.translate(size.width * 0.70, size.height * 0.42);
+    canvas.rotate(0.5);
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromCenter(
+          center: Offset.zero,
+          width: size.width * 0.045,
+          height: size.width * 0.045,
+        ),
+        Radius.circular(size.width * 0.008),
+      ),
+      Paint()..color = chevroletGray.withValues(alpha: 0.85),
+    );
+    canvas.restore();
   }
 
   @override

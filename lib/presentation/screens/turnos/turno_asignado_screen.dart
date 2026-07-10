@@ -78,7 +78,12 @@ class TurnoAsignadoScreen extends ConsumerWidget {
           children: [
             Positioned.fill(
               child: CustomPaint(
-                painter: HomePainter(primaryColor: colors.primary),
+                painter: HomePainter(
+                  primaryColor: Theme.of(context)
+                          .extension<AppSeedColorTheme>()
+                          ?.seed ??
+                      colors.primary,
+                ),
               ),
             ),
             Positioned(
