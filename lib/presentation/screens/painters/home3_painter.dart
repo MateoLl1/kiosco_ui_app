@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kiosco_au/presentation/screens/painters/brand_colors.dart';
 
 class Home3Painter extends CustomPainter {
   final Color primaryColor;
@@ -8,131 +9,103 @@ class Home3Painter extends CustomPainter {
     required this.primaryColor,
   });
 
+  Path _triangulo(Offset p1, Offset p2, Offset p3) {
+    return Path()
+      ..moveTo(p1.dx, p1.dy)
+      ..lineTo(p2.dx, p2.dy)
+      ..lineTo(p3.dx, p3.dy)
+      ..close();
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
-    final fillPaint = Paint()..style = PaintingStyle.fill;
-
-    final strokePaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
-
-    Path triangle({
-      required Offset p1,
-      required Offset p2,
-      required Offset p3,
-    }) {
-      return Path()
-        ..moveTo(p1.dx, p1.dy)
-        ..lineTo(p2.dx, p2.dy)
-        ..lineTo(p3.dx, p3.dy)
-        ..close();
-    }
-
-    // Triángulo grande superior izquierdo
-    fillPaint.color = primaryColor.withValues(alpha: 0.08);
+    // --- Grupo 1: esquina superior izquierda ---
     canvas.drawPath(
-      triangle(
-        p1: Offset(size.width * 0.05, size.height * 0.10),
-        p2: Offset(size.width * 0.32, size.height * 0.04),
-        p3: Offset(size.width * 0.18, size.height * 0.34),
+      _triangulo(
+        Offset(0, 0),
+        Offset(size.width * 0.30, 0),
+        Offset(0, size.height * 0.24),
       ),
-      fillPaint,
+      Paint()..color = primaryColor.withValues(alpha: 0.16),
     );
 
-    // Triángulo grande superior derecho
-    fillPaint.color = primaryColor.withValues(alpha: 0.06);
     canvas.drawPath(
-      triangle(
-        p1: Offset(size.width * 0.78, size.height * 0.06),
-        p2: Offset(size.width * 1.05, size.height * 0.22),
-        p3: Offset(size.width * 0.72, size.height * 0.36),
+      _triangulo(
+        Offset(size.width * 0.06, size.height * 0.02),
+        Offset(size.width * 0.16, size.height * 0.09),
+        Offset(size.width * 0.02, size.height * 0.14),
       ),
-      fillPaint,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.5
+        ..color = chevroletGray,
     );
 
-    // Triángulo inferior derecho
-    fillPaint.color = primaryColor.withValues(alpha: 0.05);
+    // --- Grupo 2: esquina superior derecha ---
     canvas.drawPath(
-      triangle(
-        p1: Offset(size.width * 0.68, size.height * 0.72),
-        p2: Offset(size.width * 1.02, size.height * 0.88),
-        p3: Offset(size.width * 0.80, size.height * 1.08),
+      _triangulo(
+        Offset(size.width, 0),
+        Offset(size.width * 0.72, 0),
+        Offset(size.width, size.height * 0.20),
       ),
-      fillPaint,
+      Paint()..color = chevroletGray.withValues(alpha: 0.18),
     );
 
-    // Triángulo inferior izquierdo
-    fillPaint.color = primaryColor.withValues(alpha: 0.045);
-    canvas.drawPath(
-      triangle(
-        p1: Offset(size.width * -0.05, size.height * 0.82),
-        p2: Offset(size.width * 0.25, size.height * 0.68),
-        p3: Offset(size.width * 0.16, size.height * 1.02),
-      ),
-      fillPaint,
+    canvas.drawCircle(
+      Offset(size.width * 0.86, size.height * 0.10),
+      size.width * 0.018,
+      Paint()..color = primaryColor,
     );
 
-    // Triángulo abstracto central
-    fillPaint.color = primaryColor.withValues(alpha: 0.035);
+    // --- Grupo 3: esquina inferior derecha ---
     canvas.drawPath(
-      triangle(
-        p1: Offset(size.width * 0.42, size.height * 0.38),
-        p2: Offset(size.width * 0.62, size.height * 0.48),
-        p3: Offset(size.width * 0.36, size.height * 0.62),
+      _triangulo(
+        Offset(size.width, size.height),
+        Offset(size.width * 0.66, size.height),
+        Offset(size.width, size.height * 0.74),
       ),
-      fillPaint,
+      Paint()..color = primaryColor.withValues(alpha: 0.16),
     );
 
-    // Triángulos con borde
-    strokePaint.color = primaryColor.withValues(alpha: 0.14);
     canvas.drawPath(
-      triangle(
-        p1: Offset(size.width * 0.45, size.height * 0.12),
-        p2: Offset(size.width * 0.58, size.height * 0.18),
-        p3: Offset(size.width * 0.48, size.height * 0.28),
+      _triangulo(
+        Offset(size.width * 0.92, size.height * 0.90),
+        Offset(size.width * 0.82, size.height * 0.84),
+        Offset(size.width * 0.96, size.height * 0.78),
       ),
-      strokePaint,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.5
+        ..color = chevroletGray,
     );
 
-    strokePaint.color = primaryColor.withValues(alpha: 0.12);
+    // --- Grupo 4: esquina inferior izquierda ---
     canvas.drawPath(
-      triangle(
-        p1: Offset(size.width * 0.18, size.height * 0.48),
-        p2: Offset(size.width * 0.36, size.height * 0.54),
-        p3: Offset(size.width * 0.22, size.height * 0.66),
+      _triangulo(
+        Offset(0, size.height),
+        Offset(size.width * 0.24, size.height),
+        Offset(0, size.height * 0.78),
       ),
-      strokePaint,
+      Paint()..color = chevroletGray.withValues(alpha: 0.16),
     );
 
-    strokePaint.color = primaryColor.withValues(alpha: 0.10);
-    canvas.drawPath(
-      triangle(
-        p1: Offset(size.width * 0.70, size.height * 0.46),
-        p2: Offset(size.width * 0.88, size.height * 0.56),
-        p3: Offset(size.width * 0.72, size.height * 0.66),
-      ),
-      strokePaint,
+    canvas.drawCircle(
+      Offset(size.width * 0.10, size.height * 0.90),
+      size.width * 0.016,
+      Paint()..color = primaryColor,
     );
 
-    // Detalles pequeños para hacerlo más abstracto
-    fillPaint.color = primaryColor.withValues(alpha: 0.07);
-    canvas.drawPath(
-      triangle(
-        p1: Offset(size.width * 0.52, size.height * 0.78),
-        p2: Offset(size.width * 0.62, size.height * 0.82),
-        p3: Offset(size.width * 0.54, size.height * 0.91),
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(
+          size.width * 0.02,
+          size.height * 0.68,
+          size.width * 0.08,
+          size.width * 0.018,
+        ),
+        Radius.circular(size.width * 0.012),
       ),
-      fillPaint,
-    );
-
-    strokePaint.color = primaryColor.withValues(alpha: 0.09);
-    canvas.drawPath(
-      triangle(
-        p1: Offset(size.width * 0.08, size.height * 0.32),
-        p2: Offset(size.width * 0.18, size.height * 0.38),
-        p3: Offset(size.width * 0.08, size.height * 0.45),
-      ),
-      strokePaint,
+      Paint()..color = primaryColor,
     );
   }
 

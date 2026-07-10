@@ -216,7 +216,7 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
             children: [
               Positioned.fill(
                 child: CustomPaint(
-                  painter: Home2Painter(
+                  painter: Home3Painter(
                     primaryColor: Theme.of(context)
                             .extension<AppSeedColorTheme>()
                             ?.seed ??
