@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:kiosco_au/config/config.dart';
+import 'package:kiosco_au/infrastructure/http/keycloak_service.dart';
 import 'package:kiosco_au/presentation/widgets/turnero/turnero_ad_states.dart';
 import 'package:kiosco_au/presentation/widgets/turnero/turnero_media_cache.dart';
 import 'package:media_kit/media_kit.dart';
@@ -61,7 +63,7 @@ class _TurneroVideoSlideState extends State<TurneroVideoSlide> {
   }
 
   Future<void> _iniciarVideo() async {
-    _timeoutTimer = Timer(const Duration(seconds: 20), _onTimeout);
+    _timeoutTimer = Timer(const Duration(seconds: 60), _onTimeout);
 
     _completedSub = _player.stream.completed.listen((done) {
       if (done) widget.onFinalizado();
@@ -80,10 +82,23 @@ class _TurneroVideoSlideState extends State<TurneroVideoSlide> {
 
       await _player.setVolume(0);
 
+      // Obtiene token para httpHeaders (streaming fallback con auth).
+      final token = await KeycloakService.instance(Env.apiBaseUrl).getToken();
+
       final localPath = await TurneroMediaCache.get(widget.url);
-      final media = localPath != null
-          ? Media('file://$localPath')
-          : Media(widget.url);
+
+      final Media media;
+      if (localPath != null) {
+        media = Media('file://$localPath');
+      } else if (token != null) {
+        // Descarga falló — intentar streaming directo con auth.
+        media = Media(widget.url, httpHeaders: {'Authorization': 'Bearer $token'});
+      } else {
+        _timeoutTimer?.cancel();
+        _mostrarError('No se pudo autenticar para cargar el video.');
+        return;
+      }
+
       await _player.open(media, play: true);
 
       await Future.delayed(const Duration(milliseconds: 800));
@@ -140,11 +155,16 @@ class _TurneroVideoSlideState extends State<TurneroVideoSlide> {
         if (localFallback != null) {
           return Image.file(File(localFallback), fit: BoxFit.fill);
         }
-        return Image.network(
-          fallback,
-          fit: BoxFit.fill,
-          errorBuilder: (_, _, _) => TurneroAdLoadingVideo(url: widget.url),
-        );
+        // Token ya cacheado a esta altura (se usó antes para cargar la lista).
+        final token = KeycloakService.instance(Env.apiBaseUrl).syncToken;
+        if (token != null) {
+          return Image.network(
+            fallback,
+            headers: {'Authorization': 'Bearer $token'},
+            fit: BoxFit.fill,
+            errorBuilder: (_, _, _) => TurneroAdLoadingVideo(url: widget.url),
+          );
+        }
       }
       return TurneroAdLoadingVideo(url: widget.url);
     }

@@ -35,16 +35,19 @@ class TurneroHeader extends StatelessWidget {
             width: 100,
           ),
           const SizedBox(width: 12),
-          Text(
-            'AUTOMOTORES CONTINENTAL',
-            style: TextStyle(
-              color: colors.primary,
-              fontSize: 20,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 0.4,
+          Expanded(
+            child: Text(
+              'AUTOMOTORES CONTINENTAL',
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style: TextStyle(
+                color: colors.primary,
+                fontSize: 20,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.4,
+              ),
             ),
           ),
-          const Spacer(),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,

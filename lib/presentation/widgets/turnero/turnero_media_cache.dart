@@ -1,13 +1,16 @@
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:kiosco_au/infrastructure/http/dio_factory.dart';
 
 /// Cache de sesión para archivos de media descargados al directorio temporal.
 /// Compartida entre todas las instancias — la primera descarga, el resto lee de disco.
 class TurneroMediaCache {
   TurneroMediaCache._();
 
+  static final _dio = DioFactory.create(
+    receiveTimeout: const Duration(minutes: 5),
+  );
   static final Map<String, String> _paths = {};
   static final Map<String, Future<String?>> _pending = {};
 
@@ -28,7 +31,7 @@ class TurneroMediaCache {
       final ext = url.toLowerCase().contains('.mp4') ? 'mp4' : 'jpg';
       final file = File('${dir.path}/turnero_${url.hashCode.abs()}.$ext');
       if (!await file.exists()) {
-        await Dio().download(url, file.path);
+        await _dio.download(url, file.path);
       }
       _paths[url] = file.path;
       return file.path;

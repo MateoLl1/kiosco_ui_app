@@ -205,17 +205,23 @@ class TurnoAsignadoScreen extends ConsumerWidget {
     TurnoClienteResponse? turnoCliente,
     ClienteSiac? cliente,
   }) {
-    if (turnoCliente != null &&
-        turnoCliente.telefonoCliente.trim().isNotEmpty) {
-      return AppValidators.normalizarTelefono(turnoCliente.telefonoCliente);
+    if (turnoCliente != null) {
+      final normalizado = AppValidators.normalizarTelefono(
+        turnoCliente.telefonoCliente,
+      );
+      if (normalizado.isNotEmpty) return normalizado;
     }
 
-    if (cliente != null && cliente.telefono1.trim().isNotEmpty) {
-      return AppValidators.normalizarTelefono(cliente.telefono1);
-    }
+    if (cliente != null) {
+      final normalizado1 = AppValidators.normalizarTelefono(
+        cliente.telefono1,
+      );
+      if (normalizado1.isNotEmpty) return normalizado1;
 
-    if (cliente != null && cliente.telefono2.trim().isNotEmpty) {
-      return AppValidators.normalizarTelefono(cliente.telefono2);
+      final normalizado2 = AppValidators.normalizarTelefono(
+        cliente.telefono2,
+      );
+      if (normalizado2.isNotEmpty) return normalizado2;
     }
 
     return '';

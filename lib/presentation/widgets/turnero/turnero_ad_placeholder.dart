@@ -30,13 +30,29 @@ class _TurneroAdPlaceholderState extends ConsumerState<TurneroAdPlaceholder> {
   Timer? _timer;
   int _paginaActual = 0;
   bool _cargando = true;
-  String? _imagenFallbackUrl;
+  String? _imagenFallbackUrl; // URL de la primera imagen, usada como fallback en videos
   List<TurneroMedia> _publicidad = [];
 
   @override
   void initState() {
     super.initState();
     _cargar();
+  }
+
+  @override
+  void didUpdateWidget(covariant TurneroAdPlaceholder oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Cuando agenciaId llega válido después de que la sesión cargó desde storage
+    if (oldWidget.agenciaId != widget.agenciaId && widget.agenciaId > 0) {
+      _timer?.cancel();
+      setState(() {
+        _publicidad = [];
+        _imagenFallbackUrl = null;
+        _cargando = true;
+        _paginaActual = 0;
+      });
+      _cargar();
+    }
   }
 
   @override
@@ -72,12 +88,6 @@ class _TurneroAdPlaceholderState extends ConsumerState<TurneroAdPlaceholder> {
           ..insert(0, primera);
       }
 
-      if (fallback != null && mounted) {
-        try {
-          await precacheImage(NetworkImage(fallback), context)
-              .timeout(const Duration(seconds: 3));
-        } catch (_) {}
-      }
 
       if (!mounted) return;
 
@@ -147,15 +157,6 @@ class _TurneroAdPlaceholderState extends ConsumerState<TurneroAdPlaceholder> {
   }
 
   Widget _buildCargando(ColorScheme colors) {
-    final fallback = _imagenFallbackUrl;
-    if (fallback != null) {
-      return Image.network(
-        fallback,
-        fit: BoxFit.fill,
-        errorBuilder: (_, _, _) =>
-            Center(child: CircularProgressIndicator(color: colors.primary)),
-      );
-    }
     return Center(child: CircularProgressIndicator(color: colors.primary));
   }
 

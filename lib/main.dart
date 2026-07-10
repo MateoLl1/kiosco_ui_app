@@ -14,7 +14,7 @@ Future<void> main() async {
   // ]);
 
   MediaKit.ensureInitialized();
-  
+
   await initializeDateFormatting('es');
   await dotenv.load(fileName: ".env");
 

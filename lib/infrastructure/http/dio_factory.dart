@@ -17,6 +17,15 @@ class DioFactory {
     ));
     dio.interceptors
         .add(AuthInterceptor(KeycloakService.instance(Env.apiBaseUrl)));
+
     return dio;
+  }
+
+  /// Headers de autenticación para usar en NetworkImage / precacheImage.
+  /// Requiere que el token ya esté cacheado (posterior a la primera llamada API).
+  static Map<String, String> authHeaders() {
+    final token = KeycloakService.instance(Env.apiBaseUrl).syncToken;
+    if (token == null) return {};
+    return {'Authorization': 'Bearer $token'};
   }
 }

@@ -28,6 +28,14 @@ class KeycloakService {
     return _refresh();
   }
 
+  /// Token actual si está en caché y no expiró; null si requiere refresh async.
+  String? get syncToken =>
+      _token != null &&
+              _expiry != null &&
+              DateTime.now().isBefore(_expiry!)
+          ? _token
+          : null;
+
   void invalidate() {
     _token = null;
     _expiry = null;
