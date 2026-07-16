@@ -32,7 +32,7 @@ class TurneroHeader extends StatelessWidget {
         children: [
           Image.asset(
             'assets/img/chevrolet-logo.png',
-            width: 100,
+            width: 130,
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -42,7 +42,7 @@ class TurneroHeader extends StatelessWidget {
               maxLines: 1,
               style: TextStyle(
                 color: colors.primary,
-                fontSize: 20,
+                fontSize: 30,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 0.4,
               ),
@@ -66,6 +66,7 @@ class TurneroHeader extends StatelessWidget {
                 style: TextStyle(
                   color: colors.onSurface.withValues(alpha: 0.7),
                   fontSize: 13,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
             ],

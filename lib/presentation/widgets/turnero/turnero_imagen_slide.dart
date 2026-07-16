@@ -39,7 +39,7 @@ class _TurneroImagenSlideState extends State<TurneroImagenSlide> {
     if (_localPath != null) {
       return Image.file(
         File(_localPath!),
-        fit: BoxFit.fill,
+        fit: BoxFit.cover,
         errorBuilder: (_, _, _) => _buildDesdeRed(),
       );
     }

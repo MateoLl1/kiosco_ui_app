@@ -14,8 +14,8 @@ class TurneroCurrentSidebarCard extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
 
     return Container(
-      margin: const EdgeInsets.fromLTRB(12, 8, 12, 0),
-      padding: const EdgeInsets.all(14),
+      margin: const EdgeInsets.fromLTRB(4, 8, 4, 0),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
       decoration: BoxDecoration(
         color: colors.primaryContainer.withValues(alpha: 0.30),
         borderRadius: BorderRadius.circular(16),

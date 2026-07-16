@@ -155,9 +155,9 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    flex: 5,
+                    flex: 8,
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 16, 12, 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
                       child: TurneroAdPlaceholder(
                         recienLlamados: recienLlamados,
                         agenciaId: agenciaId,
@@ -194,7 +194,7 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
     final agenciaId = session?.agenciaId ?? 0;
     final colors = Theme.of(context).colorScheme;
     final width = MediaQuery.of(context).size.width;
-    final sidebarWidth = width < 900 ? 280.0 : 340.0;
+    final sidebarWidth = width < 900 ? 280.0 : 270.0;
     final dataAnterior = state.asData?.value;
 
     if (dataAnterior != null) {

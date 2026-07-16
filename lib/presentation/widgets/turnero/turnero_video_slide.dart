@@ -161,7 +161,7 @@ class _TurneroVideoSlideState extends State<TurneroVideoSlide> {
           return Image.network(
             fallback,
             headers: {'Authorization': 'Bearer $token'},
-            fit: BoxFit.fill,
+            fit: BoxFit.cover,
             errorBuilder: (_, _, _) => TurneroAdLoadingVideo(url: widget.url),
           );
         }

@@ -30,78 +30,76 @@ class TurnosSidebar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // ── EN ATENCIÓN ──
-          Container(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  height: 56,
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: colors.outline.withValues(alpha: 0.2),
-                      ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                height: 56,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: colors.outline.withValues(alpha: 0.2),
                     ),
                   ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.headset_mic_rounded,
-                        color: colors.primary,
-                        size: 20,
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.headset_mic_rounded,
+                      color: colors.primary,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        'EN ATENCIÓN',
+                        style: TextStyle(
+                          color: colors.primary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
+                    ),
+                    if (turnosActivos.isNotEmpty)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: colors.primary.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                         child: Text(
-                          'EN ATENCIÓN',
+                          '${turnosActivos.length}',
                           style: TextStyle(
                             color: colors.primary,
-                            fontSize: 16,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
                       ),
-                      if (turnosActivos.isNotEmpty)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            color: colors.primary.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            '${turnosActivos.length}',
-                            style: TextStyle(
-                              color: colors.primary,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
+                  ],
                 ),
-                if (turnosActivos.isEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    child: Text(
-                      'Ningún módulo en atención',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: colors.onSurface.withValues(alpha: 0.5),
-                        fontSize: 13,
-                      ),
+              ),
+              if (turnosActivos.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  child: Text(
+                    'Ningún módulo en atención',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: colors.onSurface.withValues(alpha: 0.5),
+                      fontSize: 13,
                     ),
-                  )
-                else
-                  ...turnosActivos.map(
-                    (t) => FadeIn(child: TurneroCurrentSidebarCard(turno: t)),
                   ),
-                const SizedBox(height: 8),
-              ],
-            ),
+                )
+              else
+                ...turnosActivos.map(
+                  (t) => FadeIn(child: TurneroCurrentSidebarCard(turno: t)),
+                ),
+              const SizedBox(height: 8),
+            ],
           ),
 
           // ── Divider ──
