@@ -63,10 +63,15 @@ class KioscoDatasourceImpl extends KioscoDatasource {
   @override
   Future<TurnoGeneradoResponse> generarTurnoSinCita({
     required int agenciaId,
+    String? identificacion,
   }) async {
     final response = await _dio.post(
       '/turnos/sin-cita',
-      queryParameters: {'agenciaId': agenciaId},
+      queryParameters: {
+        'agenciaId': agenciaId,
+        if (identificacion != null && identificacion.isNotEmpty)
+          'identificacion': identificacion,
+      },
     );
 
     return TurnoGeneradoResponseMapper.fromJson(
@@ -77,10 +82,15 @@ class KioscoDatasourceImpl extends KioscoDatasource {
   @override
   Future<TurnoGeneradoResponse> generarTurnoSinCitaFlotas({
     required int agenciaId,
+    String? identificacion,
   }) async {
     final response = await _dio.post(
       '/turnos/sin-cita-flotas',
-      queryParameters: {'agenciaId': agenciaId},
+      queryParameters: {
+        'agenciaId': agenciaId,
+        if (identificacion != null && identificacion.isNotEmpty)
+          'identificacion': identificacion,
+      },
     );
 
     return TurnoGeneradoResponseMapper.fromJson(

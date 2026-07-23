@@ -12,10 +12,14 @@ abstract class KioscoRepository {
     required int citaId,
   });
 
-  Future<TurnoGeneradoResponse> generarTurnoSinCita({required int agenciaId});
+  Future<TurnoGeneradoResponse> generarTurnoSinCita({
+    required int agenciaId,
+    String? identificacion,
+  });
 
   Future<TurnoGeneradoResponse> generarTurnoSinCitaFlotas({
     required int agenciaId,
+    String? identificacion,
   });
 
   Future<ClienteSiac?> obtenerClientePorIdentificacion({

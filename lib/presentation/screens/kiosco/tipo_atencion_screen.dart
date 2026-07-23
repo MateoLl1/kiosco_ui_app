@@ -28,10 +28,17 @@ class _TipoAtencionScreenState extends ConsumerState<TipoAtencionScreen> {
 
     try {
       final repository = ref.read(kioscoRepositoryProvider);
+      final identificacion = ref.read(clienteSiacProvider)?.identificacion;
 
       final turno = esFlota
-          ? await repository.generarTurnoSinCitaFlotas(agenciaId: agenciaId)
-          : await repository.generarTurnoSinCita(agenciaId: agenciaId);
+          ? await repository.generarTurnoSinCitaFlotas(
+              agenciaId: agenciaId,
+              identificacion: identificacion,
+            )
+          : await repository.generarTurnoSinCita(
+              agenciaId: agenciaId,
+              identificacion: identificacion,
+            );
 
       if (!mounted) return;
       context.go('/turno-asignado', extra: turno);
@@ -69,6 +76,7 @@ class _TipoAtencionScreenState extends ConsumerState<TipoAtencionScreen> {
     final colors = Theme.of(context).colorScheme;
 
     return KioskIdleDetector(
+      paused: _generandoTurno,
       child: Scaffold(
         body: SafeArea(
           child: Stack(
