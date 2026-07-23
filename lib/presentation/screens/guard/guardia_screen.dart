@@ -53,7 +53,10 @@ class _GuardiaScreenState extends ConsumerState<GuardiaScreen> {
               padding: EdgeInsets.only(bottom: isWide ? 12 : 8),
               child: Column(
                 children: [
-                  GuardiaHeader(agenciaNombre: session?.agenciaNombre),
+                  GuardiaHeader(
+                    agenciaNombre: session?.agenciaNombre,
+                    onRefresh: _cargarCitas,
+                  ),
                   const SizedBox(height: 10),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: isWide ? 24 : 16),
