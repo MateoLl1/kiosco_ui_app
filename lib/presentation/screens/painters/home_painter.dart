@@ -88,18 +88,7 @@ class HomePainter extends CustomPainter {
     );
 
     // Barra sólida gris, al centro.
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        Rect.fromLTWH(
-          size.width * 0.44,
-          size.height * 0.08,
-          size.width * 0.07,
-          size.width * 0.02,
-        ),
-        Radius.circular(size.width * 0.015),
-      ),
-      Paint()..color = chevroletGray,
-    );
+    
 
     // Punto sólido azul, al centro.
     canvas.drawCircle(
