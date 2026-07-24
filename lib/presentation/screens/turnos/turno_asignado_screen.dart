@@ -17,6 +17,7 @@ class TurnoAsignadoScreen extends ConsumerWidget {
     final colors = Theme.of(context).colorScheme;
     final textStyle = Theme.of(context).textTheme;
     final clienteProvider = ref.watch(clienteSiacProvider);
+    final isWide = MediaQuery.of(context).size.width >= 900;
 
     final turnoCliente = extra is TurnoClienteResponse
         ? extra as TurnoClienteResponse
@@ -50,16 +51,8 @@ class TurnoAsignadoScreen extends ConsumerWidget {
         ? AppValidators.formatearTipoTurno(turnoGenerado!.tipo)
         : 'Sin cita';
 
-    // final tiempoEstimado =
-    //     turnoCliente?.tiempoEstimadoMinutos ??
-    //     turnoGenerado?.tiempoEstimadoMinutos;
-
     final personasPorDelante =
         turnoCliente?.personasPorDelante ?? turnoGenerado?.personasPorDelante;
-
-    // final tiempoTexto = tiempoEstimado == null
-    //     ? '-- min'
-    //     : '~$tiempoEstimado min';
 
     final colaTexto = personasPorDelante == null
         ? '-- persona(s) antes'
@@ -70,139 +63,139 @@ class TurnoAsignadoScreen extends ConsumerWidget {
       cliente: clienteProvider,
     );
 
-    return KioskIdleDetector(
-      timeout: AppDurations.kioskIdleTurno,
-      child: Scaffold(
-        body: SafeArea(
-        child: Stack(
+    final turnoCard = Card(
+      color: colors.onSecondary,
+      elevation: 2,
+      shadowColor: colors.onSurface,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: isWide ? 20 : 12,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Positioned.fill(
-              child: CustomPaint(
-                painter: HomePainter(
-                  primaryColor: Theme.of(context)
-                          .extension<AppSeedColorTheme>()
-                          ?.seed ??
-                      colors.primary,
-                ),
-              ),
-            ),
-            Positioned(
-              top: 16,
-              left: 16,
-              child: ReturnPageButton(ruta: '/seleccionar-metodo'),
-            ),
-            Positioned.fill(
-              child: Center(
-                child: SingleChildScrollView(
-                  child: SizedBox(
-                    width: 430,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        HomeHeader(
-                          title: 'Turno asignado',
-                          subtitle: 'Su turno ha sido generado exitosamente',
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 30,
-                            vertical: 20,
-                          ),
-                          child: Column(
-                            children: [
-                              Card(
-                                color: colors.onSecondary,
-                                elevation: 2,
-                                shadowColor: colors.onSurface,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 30,
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Card(
-                                        color: colors.surface,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 28,
-                                            vertical: 18,
-                                          ),
-                                          child: Text(
-                                            turnoTexto,
-                                            style: textStyle.displaySmall
-                                                ?.copyWith(
-                                                  fontWeight: FontWeight.w900,
-                                                  color: colors.primary,
-                                                ),
-                                          ),
-                                        ),
-                                      ),
-                                      const Divider(),
-                                      DetalleTurno(
-                                        label: 'Cliente',
-                                        descripcion: clienteTexto,
-                                        icon: Icons.person,
-                                      ),
-                                      DetalleTurno(
-                                        label: 'Área',
-                                        descripcion: areaTexto,
-                                        icon: Icons.handyman_outlined,
-                                      ),
-                                      DetalleTurno(
-                                        label: 'Tipo',
-                                        descripcion: tipoTexto,
-                                        icon: Icons.confirmation_number,
-                                      ),
-                                      // DetalleTurno(
-                                      //   label: 'Tiempo est.',
-                                      //   descripcion: tiempoTexto,
-                                      //   icon: Icons.timelapse,
-                                      // ),
-                                      DetalleTurno(
-                                        label: 'En cola',
-                                        descripcion: colaTexto,
-                                        icon: Icons.people,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              CustomTextCard(),
-                              const SizedBox(height: 10),
-                              WhatsappTurnoNotificacion(
-                                numeroInicial: telefonoInicial,
-                                cliente: clienteTexto,
-                                turno: turnoTexto,
-                                area: areaTexto,
-                              ),
-                              const SizedBox(height: 10),
-                              CustomIconTextButton(
-                                texto: 'Volver al inicio',
-                                icono: Icons.home,
-                                colorFondo: colors.primary,
-                                onTap: () {
-                                  ref
-                                      .read(clienteSiacProvider.notifier)
-                                      .limpiar();
-
-                                  context.go('/seleccionar-metodo');
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+            Card(
+              color: colors.surface,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+                child: Text(
+                  turnoTexto,
+                  style: textStyle.displaySmall?.copyWith(
+                    fontWeight: FontWeight.w900,
+                    color: colors.primary,
                   ),
                 ),
               ),
             ),
+            const Divider(),
+            DetalleTurno(label: 'Cliente', descripcion: clienteTexto, icon: Icons.person),
+            DetalleTurno(label: 'Área', descripcion: areaTexto, icon: Icons.handyman_outlined),
+            DetalleTurno(label: 'Tipo', descripcion: tipoTexto, icon: Icons.confirmation_number),
+            DetalleTurno(label: 'En cola', descripcion: colaTexto, icon: Icons.people),
           ],
         ),
       ),
-    ),
+    );
+
+    final acciones = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        CustomTextCard(),
+        const SizedBox(height: 10),
+        WhatsappTurnoNotificacion(
+          numeroInicial: telefonoInicial,
+          cliente: clienteTexto,
+          turno: turnoTexto,
+          area: areaTexto,
+        ),
+        const SizedBox(height: 10),
+        CustomIconTextButton(
+          texto: 'Volver al inicio',
+          icono: Icons.home,
+          colorFondo: colors.primary,
+          onTap: () {
+            ref.read(clienteSiacProvider.notifier).limpiar();
+            context.go('/seleccionar-metodo');
+          },
+        ),
+      ],
+    );
+
+    return KioskIdleDetector(
+      timeout: AppDurations.kioskIdleTurno,
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: CustomPaint(
+                  painter: HomePainter(
+                    primaryColor: Theme.of(context)
+                            .extension<AppSeedColorTheme>()
+                            ?.seed ??
+                        colors.primary,
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 16,
+                left: 16,
+                child: ReturnPageButton(ruta: '/seleccionar-metodo'),
+              ),
+              Positioned.fill(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    isWide ? 40 : 20,
+                    52,
+                    isWide ? 40 : 20,
+                    16,
+                  ),
+                  child: isWide
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  HomeHeader(
+                                    title: 'Turno asignado',
+                                    subtitle: 'Su turno ha sido generado exitosamente',
+                                  ),
+                                  const SizedBox(height: 20),
+                                  turnoCard,
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 32),
+                            SizedBox(
+                              width: 380,
+                              child: acciones,
+                            ),
+                          ],
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            HomeHeader(
+                              title: 'Turno asignado',
+                              subtitle: 'Su turno ha sido generado exitosamente',
+                            ),
+                            const SizedBox(height: 12),
+                            turnoCard,
+                            const SizedBox(height: 10),
+                            acciones,
+                          ],
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
