@@ -86,14 +86,11 @@ class _IngresarPlacaScreenState extends ConsumerState<IngresarPlacaScreen> {
 
     final key = event.logicalKey;
 
-    // Letras A-Z
-    final label = key.keyLabel;
-    if (label.length == 1) {
-      final upper = label.toUpperCase();
-      if (RegExp(r'^[A-Z0-9]$').hasMatch(upper)) {
-        _agregarCaracter(upper);
-        return KeyEventResult.handled;
-      }
+    // Ctrl+V antes que cualquier otra tecla para que V no se intercepte como letra
+    if (key == LogicalKeyboardKey.keyV &&
+        HardwareKeyboard.instance.isControlPressed) {
+      _pegarDesdePortapapeles();
+      return KeyEventResult.handled;
     }
 
     if (key == LogicalKeyboardKey.backspace) {
@@ -109,10 +106,18 @@ class _IngresarPlacaScreenState extends ConsumerState<IngresarPlacaScreen> {
       _buscarCita();
       return KeyEventResult.handled;
     }
-    if (key == LogicalKeyboardKey.keyV &&
-        HardwareKeyboard.instance.isControlPressed) {
-      _pegarDesdePortapapeles();
-      return KeyEventResult.handled;
+
+    // Letras y números (sin modificadores activos)
+    if (!HardwareKeyboard.instance.isControlPressed &&
+        !HardwareKeyboard.instance.isAltPressed) {
+      final label = key.keyLabel;
+      if (label.length == 1) {
+        final upper = label.toUpperCase();
+        if (RegExp(r'^[A-Z0-9]$').hasMatch(upper)) {
+          _agregarCaracter(upper);
+          return KeyEventResult.handled;
+        }
+      }
     }
 
     return KeyEventResult.ignored;
