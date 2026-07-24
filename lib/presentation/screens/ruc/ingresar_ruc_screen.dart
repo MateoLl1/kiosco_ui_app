@@ -224,6 +224,14 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
                   ),
                 ),
               ),
+
+
+              Positioned(
+                top: 20,
+                left: 20,
+                child: ReturnPageButton(
+                )
+              ),
               Positioned.fill(
                 child: Center(
                   child: ConstrainedBox(
