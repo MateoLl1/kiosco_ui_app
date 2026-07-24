@@ -146,50 +146,44 @@ class TurnoAsignadoScreen extends ConsumerWidget {
               ),
               Positioned.fill(
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(
-                    isWide ? 40 : 20,
-                    52,
-                    isWide ? 40 : 20,
-                    16,
+                  padding: EdgeInsets.fromLTRB(24, 52, 24, 16),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 980),
+                      child: isWide
+                          ? Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                HomeHeader(
+                                  title: 'Turno asignado',
+                                  subtitle: 'Su turno ha sido generado exitosamente',
+                                ),
+                                const SizedBox(height: 20),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(child: turnoCard),
+                                    const SizedBox(width: 24),
+                                    SizedBox(width: 340, child: acciones),
+                                  ],
+                                ),
+                              ],
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                HomeHeader(
+                                  title: 'Turno asignado',
+                                  subtitle: 'Su turno ha sido generado exitosamente',
+                                ),
+                                const SizedBox(height: 12),
+                                turnoCard,
+                                const SizedBox(height: 10),
+                                acciones,
+                              ],
+                            ),
+                    ),
                   ),
-                  child: isWide
-                      ? Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  HomeHeader(
-                                    title: 'Turno asignado',
-                                    subtitle: 'Su turno ha sido generado exitosamente',
-                                  ),
-                                  const SizedBox(height: 20),
-                                  turnoCard,
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 32),
-                            SizedBox(
-                              width: 380,
-                              child: acciones,
-                            ),
-                          ],
-                        )
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            HomeHeader(
-                              title: 'Turno asignado',
-                              subtitle: 'Su turno ha sido generado exitosamente',
-                            ),
-                            const SizedBox(height: 12),
-                            turnoCard,
-                            const SizedBox(height: 10),
-                            acciones,
-                          ],
-                        ),
                 ),
               ),
             ],
