@@ -17,7 +17,6 @@ class TurnoAsignadoScreen extends ConsumerWidget {
     final colors = Theme.of(context).colorScheme;
     final textStyle = Theme.of(context).textTheme;
     final clienteProvider = ref.watch(clienteSiacProvider);
-    final isWide = MediaQuery.of(context).size.width >= 900;
 
     final turnoCliente = extra is TurnoClienteResponse
         ? extra as TurnoClienteResponse
@@ -63,66 +62,6 @@ class TurnoAsignadoScreen extends ConsumerWidget {
       cliente: clienteProvider,
     );
 
-    final turnoCard = Card(
-      color: colors.onSecondary,
-      elevation: 2,
-      shadowColor: colors.onSurface,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: isWide ? 20 : 12,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Card(
-              color: colors.surface,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-                child: Text(
-                  turnoTexto,
-                  style: textStyle.displaySmall?.copyWith(
-                    fontWeight: FontWeight.w900,
-                    color: colors.primary,
-                  ),
-                ),
-              ),
-            ),
-            const Divider(),
-            DetalleTurno(label: 'Cliente', descripcion: clienteTexto, icon: Icons.person),
-            DetalleTurno(label: 'Área', descripcion: areaTexto, icon: Icons.handyman_outlined),
-            DetalleTurno(label: 'Tipo', descripcion: tipoTexto, icon: Icons.confirmation_number),
-            DetalleTurno(label: 'En cola', descripcion: colaTexto, icon: Icons.people),
-          ],
-        ),
-      ),
-    );
-
-    final acciones = Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        CustomTextCard(),
-        const SizedBox(height: 10),
-        WhatsappTurnoNotificacion(
-          numeroInicial: telefonoInicial,
-          cliente: clienteTexto,
-          turno: turnoTexto,
-          area: areaTexto,
-        ),
-        const SizedBox(height: 10),
-        CustomIconTextButton(
-          texto: 'Volver al inicio',
-          icono: Icons.home,
-          colorFondo: colors.primary,
-          onTap: () {
-            ref.read(clienteSiacProvider.notifier).limpiar();
-            context.go('/seleccionar-metodo');
-          },
-        ),
-      ],
-    );
-
     return KioskIdleDetector(
       timeout: AppDurations.kioskIdleTurno,
       child: Scaffold(
@@ -145,43 +84,103 @@ class TurnoAsignadoScreen extends ConsumerWidget {
                 child: ReturnPageButton(ruta: '/seleccionar-metodo'),
               ),
               Positioned.fill(
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(24, 52, 24, 16),
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 980),
-                      child: isWide
-                          ? Column(
-                              mainAxisSize: MainAxisSize.min,
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: SizedBox(
+                      width: 430,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          HomeHeader(
+                            title: 'Turno asignado',
+                            subtitle: 'Su turno ha sido generado exitosamente',
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 16,
+                            ),
+                            child: Column(
                               children: [
-                                HomeHeader(
-                                  title: 'Turno asignado',
-                                  subtitle: 'Su turno ha sido generado exitosamente',
+                                Card(
+                                  color: colors.onSecondary,
+                                  elevation: 2,
+                                  shadowColor: colors.onSurface,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 14,
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Card(
+                                          color: colors.surface,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 28,
+                                              vertical: 12,
+                                            ),
+                                            child: Text(
+                                              turnoTexto,
+                                              style: textStyle.displaySmall
+                                                  ?.copyWith(
+                                                    fontWeight: FontWeight.w900,
+                                                    color: colors.primary,
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                        const Divider(),
+                                        DetalleTurno(
+                                          label: 'Cliente',
+                                          descripcion: clienteTexto,
+                                          icon: Icons.person,
+                                        ),
+                                        DetalleTurno(
+                                          label: 'Área',
+                                          descripcion: areaTexto,
+                                          icon: Icons.handyman_outlined,
+                                        ),
+                                        DetalleTurno(
+                                          label: 'Tipo',
+                                          descripcion: tipoTexto,
+                                          icon: Icons.confirmation_number,
+                                        ),
+                                        DetalleTurno(
+                                          label: 'En cola',
+                                          descripcion: colaTexto,
+                                          icon: Icons.people,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                                const SizedBox(height: 20),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(child: turnoCard),
-                                    const SizedBox(width: 24),
-                                    SizedBox(width: 340, child: acciones),
-                                  ],
-                                ),
-                              ],
-                            )
-                          : Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                HomeHeader(
-                                  title: 'Turno asignado',
-                                  subtitle: 'Su turno ha sido generado exitosamente',
-                                ),
-                                const SizedBox(height: 12),
-                                turnoCard,
                                 const SizedBox(height: 10),
-                                acciones,
+                                CustomTextCard(),
+                                const SizedBox(height: 10),
+                                WhatsappTurnoNotificacion(
+                                  numeroInicial: telefonoInicial,
+                                  cliente: clienteTexto,
+                                  turno: turnoTexto,
+                                  area: areaTexto,
+                                ),
+                                const SizedBox(height: 10),
+                                CustomIconTextButton(
+                                  texto: 'Volver al inicio',
+                                  icono: Icons.home,
+                                  colorFondo: colors.primary,
+                                  onTap: () {
+                                    ref
+                                        .read(clienteSiacProvider.notifier)
+                                        .limpiar();
+                                    context.go('/seleccionar-metodo');
+                                  },
+                                ),
                               ],
                             ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
