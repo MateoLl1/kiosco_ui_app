@@ -27,6 +27,8 @@ abstract class KioscoRepository {
     required int agenciaId,
   });
 
+  Future<ClienteSiac?> obtenerClientePorPlaca({required String placa});
+
   Future<TurnoClienteResponse?> obtenerTurnoPorIdentificacion({
     required String identificacion,
     required int agenciaId,

@@ -51,6 +51,11 @@ class KioscoRepositoryImpl extends KioscoRepository {
   }
 
   @override
+  Future<ClienteSiac?> obtenerClientePorPlaca({required String placa}) {
+    return datasource.obtenerClientePorPlaca(placa: placa);
+  }
+
+  @override
   Future<ClienteSiac?> obtenerClientePorIdentificacion({
     required String identificacion,
     required int agenciaId,

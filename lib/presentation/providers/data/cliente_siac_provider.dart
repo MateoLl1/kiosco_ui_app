@@ -33,6 +33,17 @@ class ClienteSiacNotifier extends StateNotifier<ClienteSiac?> {
     return cliente;
   }
 
+  Future<ClienteSiac?> consultarClientePorPlaca({
+    required String placa,
+  }) async {
+    limpiar();
+
+    final cliente = await repository.obtenerClientePorPlaca(placa: placa);
+
+    state = cliente;
+    return cliente;
+  }
+
   void limpiar() {
     state = null;
   }

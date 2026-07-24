@@ -99,6 +99,26 @@ class KioscoDatasourceImpl extends KioscoDatasource {
   }
 
   @override
+  Future<ClienteSiac?> obtenerClientePorPlaca({required String placa}) async {
+    try {
+      final response = await _dio.get(
+        '/cliente/por-placa',
+        queryParameters: {'placa': placa},
+      );
+
+      if (response.statusCode != 200 || response.data == null) return null;
+
+      return ClienteSiac.fromJson(Map<String, dynamic>.from(response.data));
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) return null;
+      final detalle = e.response?.data?.toString() ?? e.message ?? 'Error consultando placa';
+      throw Exception(detalle);
+    } catch (e) {
+      throw Exception('Error consultando placa: $e');
+    }
+  }
+
+  @override
   Future<ClienteSiac?> obtenerClientePorIdentificacion({
     required String identificacion,
     required int agenciaId,
