@@ -109,8 +109,29 @@ class _IngresarPlacaScreenState extends ConsumerState<IngresarPlacaScreen> {
       _buscarCita();
       return KeyEventResult.handled;
     }
+    if (key == LogicalKeyboardKey.keyV &&
+        HardwareKeyboard.instance.isControlPressed) {
+      _pegarDesdePortapapeles();
+      return KeyEventResult.handled;
+    }
 
     return KeyEventResult.ignored;
+  }
+
+  Future<void> _pegarDesdePortapapeles() async {
+    if (_consultando) return;
+    final data = await Clipboard.getData(Clipboard.kTextPlain);
+    final texto = (data?.text ?? '').toUpperCase().replaceAll(RegExp(r'[^A-Z0-9]'), '');
+    if (texto.isEmpty) return;
+    // Validar formato: primeros 3 letras, resto números
+    final letras = texto.substring(0, texto.length.clamp(0, 3));
+    final numeros = texto.length > 3 ? texto.substring(3) : '';
+    if (!RegExp(r'^[A-Z]*$').hasMatch(letras)) return;
+    if (numeros.isNotEmpty && !RegExp(r'^[0-9]*$').hasMatch(numeros)) return;
+    setState(() {
+      _caracteres.clear();
+      _caracteres.addAll((letras + numeros).split('').take(_maxLongitud));
+    });
   }
 
   Future<void> _buscarCita() async {
