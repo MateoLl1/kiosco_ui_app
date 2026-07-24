@@ -16,8 +16,6 @@ class TurneroBottomModulesBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    if (modulosActivos.isEmpty) return const SizedBox.shrink();
-
     return Container(
       height: 38,
       decoration: BoxDecoration(
