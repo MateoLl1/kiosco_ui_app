@@ -381,15 +381,6 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
                               ),
                             ),
                           ],
-                          const SizedBox(height: 12),
-                          TextButton.icon(
-                            onPressed: _consultando
-                                ? null
-                                : () => context.go('/ingresar-placa'),
-                            icon: const Icon(Icons.directions_car_outlined,
-                                size: 18),
-                            label: const Text('Buscar por Placa'),
-                          ),
                         ],
                       ),
                     ),

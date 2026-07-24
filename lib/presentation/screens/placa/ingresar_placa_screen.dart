@@ -368,14 +368,6 @@ class _IngresarPlacaScreenState extends ConsumerState<IngresarPlacaScreen> {
                               ),
                             ),
                           ],
-                          const SizedBox(height: 12),
-                          TextButton.icon(
-                            onPressed: _consultando
-                                ? null
-                                : () => context.go('/ingresar-ruc'),
-                            icon: const Icon(Icons.badge_outlined, size: 18),
-                            label: const Text('Buscar por Cédula / RUC'),
-                          ),
                         ],
                       ),
                     ),

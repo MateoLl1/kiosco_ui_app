@@ -89,7 +89,7 @@ class TurnoAsignadoScreen extends ConsumerWidget {
             Positioned(
               top: 16,
               left: 16,
-              child: ReturnPageButton(ruta: '/ingresar-ruc'),
+              child: ReturnPageButton(ruta: '/seleccionar-metodo'),
             ),
             Positioned.fill(
               child: Center(
@@ -187,7 +187,7 @@ class TurnoAsignadoScreen extends ConsumerWidget {
                                       .read(clienteSiacProvider.notifier)
                                       .limpiar();
 
-                                  context.go('/ingresar-ruc');
+                                  context.go('/seleccionar-metodo');
                                 },
                               ),
                             ],

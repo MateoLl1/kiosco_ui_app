@@ -30,6 +30,13 @@ final appRouter = GoRouter(
       ),
     ),
     GoRoute(
+      path: '/seleccionar-metodo',
+      builder: (context, state) => withHiddenAdminAccess(
+        context,
+        SeleccionarMetodoScreen(),
+      ),
+    ),
+    GoRoute(
       path: '/ingresar-placa',
       builder: (context, state) => withHiddenAdminAccess(
         context,

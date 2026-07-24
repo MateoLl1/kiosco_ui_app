@@ -91,7 +91,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               top: 16,
               left: 16,
               child: ReturnPageButton(
-                ruta: '/ingresar-ruc',
+                ruta: '/seleccionar-metodo',
               ),
             ),
             Column(

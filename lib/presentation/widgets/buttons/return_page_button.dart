@@ -29,7 +29,7 @@ class ReturnPageButton extends StatelessWidget {
             return;
           }
 
-          context.go('/ingresar-ruc');
+          context.go('/seleccionar-metodo');
         },
         child: const Padding(
           padding: EdgeInsets.all(12),

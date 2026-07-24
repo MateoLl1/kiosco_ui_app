@@ -55,7 +55,7 @@ class _KioskIdleDetectorState extends State<KioskIdleDetector> {
 
   void _onIdle() {
     if (!mounted) return;
-    context.go('/ingresar-ruc');
+    context.go('/seleccionar-metodo');
   }
 
   @override
