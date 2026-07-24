@@ -87,7 +87,7 @@ class _ActiveCallOverlayState extends State<ActiveCallOverlay>
   Widget _radarRing(Color color, double offset) {
     return AnimatedBuilder(
       animation: _radarCtrl,
-      builder: (_, __) {
+      builder: (_, _) {
         final t = (_radarCtrl.value + offset) % 1.0;
         final size = 160.0 + 100.0 * t;
         final opacity = (1.0 - t) * 0.55;
