@@ -89,7 +89,7 @@ class _ActiveCallOverlayState extends State<ActiveCallOverlay>
       animation: _radarCtrl,
       builder: (_, _) {
         final t = (_radarCtrl.value + offset) % 1.0;
-        final size = 160.0 + 100.0 * t;
+        final size = 110.0 + 75.0 * t;
         final opacity = (1.0 - t) * 0.55;
         return SizedBox(
           width: size,
@@ -224,8 +224,8 @@ class _ActiveCallOverlayState extends State<ActiveCallOverlay>
 
                               // ── Anillos radar + número ────────────
                               SizedBox(
-                                width: 260,
-                                height: 260,
+                                width: 200,
+                                height: 200,
                                 child: Stack(
                                   alignment: Alignment.center,
                                   children: [
@@ -234,8 +234,8 @@ class _ActiveCallOverlayState extends State<ActiveCallOverlay>
 
                                     // Círculo de fondo con glow
                                     Container(
-                                      width: 160,
-                                      height: 160,
+                                      width: 110,
+                                      height: 110,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         gradient: RadialGradient(
@@ -256,15 +256,15 @@ class _ActiveCallOverlayState extends State<ActiveCallOverlay>
 
                                     // Número de turno
                                     SizedBox(
-                                      width: 150,
-                                      height: 150,
+                                      width: 100,
+                                      height: 100,
                                       child: FittedBox(
                                         fit: BoxFit.scaleDown,
                                         child: Text(
                                           turno.turno,
                                           style: TextStyle(
                                             color: colors.primary,
-                                            fontSize: 82,
+                                            fontSize: 62,
                                             fontWeight: FontWeight.w900,
                                             height: 1,
                                             letterSpacing: -1,

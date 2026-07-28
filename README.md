@@ -4,6 +4,19 @@ Sistema de autoatención y turnero para Autoconsa. Permite a los clientes regist
 
 ---
 
+## App ID — Producción vs Desarrollo
+
+> **⚠️ No cambiar el App ID de producción** — cambiarlo rompe las instalaciones existentes en las TVs y kioscos desplegados.
+
+| Entorno | App ID | Build type |
+|---|---|---|
+| **Producción** | `com.example.kiosco_au` | `release` |
+| **Desarrollo** | `com.example.kiosco_au.dev` | `debug` |
+
+Ambos IDs pueden coexistir en el mismo dispositivo simultáneamente. El sufijo `.dev` se aplica automáticamente al compilar en modo debug (`flutter run` o `flutter build apk --debug`).
+
+---
+
 ## Plataformas objetivo
 
 | Plataforma | Rol principal |
@@ -158,23 +171,32 @@ Si hay más de un dispositivo (ej. celular + emulador TV), usar `-s <id>` para a
 ```bash
 # Si solo hay un dispositivo/emulador:
 adb install -r build\app\outputs\flutter-apk\app-debug.apk
-adb shell am start -n com.example.kiosco_au/com.example.kiosco_au.MainActivity
+adb shell am start -n com.example.kiosco_au.dev/com.example.kiosco_au.MainActivity
 
 # Si hay celular y emulador TV al mismo tiempo (usar -s con el ID de adb devices):
 adb -s emulator-5554 install -r build\app\outputs\flutter-apk\app-debug.apk
-adb -s emulator-5554 shell am start -n com.example.kiosco_au/com.example.kiosco_au.MainActivity
+adb -s emulator-5554 shell am start -n com.example.kiosco_au.dev/com.example.kiosco_au.MainActivity
 ```
 
 **4. Flujo completo — un solo dispositivo (copiar y pegar)**
 
 ```bash
-flutter build apk --debug && adb install -r build\app\outputs\flutter-apk\app-debug.apk && adb shell am start -n com.example.kiosco_au/com.example.kiosco_au.MainActivity
+flutter build apk --debug && adb install -r build\app\outputs\flutter-apk\app-debug.apk && adb shell am start -n com.example.kiosco_au.dev/com.example.kiosco_au.MainActivity
 ```
 
-**4b. Flujo completo — TV emulador con celular también conectado**
+**4b. Flujo completo — TV física vía ADB TCP (IP: 192.168.28.12)**
 
 ```bash
-flutter build apk --debug && adb -s emulator-5554 install -r build\app\outputs\flutter-apk\app-debug.apk && adb -s emulator-5554 shell am start -n com.example.kiosco_au/com.example.kiosco_au.MainActivity
+adb connect 192.168.28.12:5555
+flutter build apk --debug --target-platform android-arm64
+adb -s 192.168.28.12:5555 install -r --fastdeploy build\app\outputs\flutter-apk\app-release.apk
+adb -s 192.168.28.12:5555 shell am start -n com.example.kiosco_au.dev/com.example.kiosco_au.MainActivity
+```
+
+**4c. Flujo completo — TV emulador con celular también conectado**
+
+```bash
+flutter build apk --debug && adb -s emulator-5554 install -r build\app\outputs\flutter-apk\app-debug.apk && adb -s emulator-5554 shell am start -n com.example.kiosco_au.dev/com.example.kiosco_au.MainActivity
 ```
 
 > El emulador de Android TV recomendado es **API 33** (Android 13). Las versiones API 34+ pueden dar problemas de compatibilidad con algunas librerías nativas (media_kit).
