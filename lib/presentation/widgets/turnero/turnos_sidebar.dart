@@ -95,9 +95,11 @@ class TurnosSidebar extends StatelessWidget {
                   ),
                 )
               else
-                ...turnosActivos.map(
-                  (t) => FadeIn(child: TurneroCurrentSidebarCard(turno: t)),
-                ),
+                ...(List<Turno>.from(turnosActivos)
+                        ..sort((a, b) => (b.fechaReferencia ?? DateTime(0))
+                            .compareTo(a.fechaReferencia ?? DateTime(0))))
+                    .take(2)
+                    .map((t) => FadeIn(child: TurneroCurrentSidebarCard(turno: t))),
               const SizedBox(height: 8),
             ],
           ),
