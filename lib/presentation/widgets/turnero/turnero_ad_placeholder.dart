@@ -175,6 +175,7 @@ class _TurneroAdPlaceholderState extends ConsumerState<TurneroAdPlaceholder> {
                   key: ValueKey(item.url),
                   url: item.url,
                   imagenFallbackUrl: _imagenFallbackUrl,
+                  activo: index == _paginaActual,
                   onFinalizado: _irSiguiente,
                 );
               }

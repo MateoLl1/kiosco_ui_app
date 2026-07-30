@@ -33,6 +33,10 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!-- NO desactivar Impeller: media_kit depende del camino SurfaceProducer
+             que trae Impeller. Con `EnableImpeller=false` en este TV Amlogic
+             nunca dispara onSurfaceAvailable, mpv no obtiene surface y el video
+             no se renderiza en absoluto (probado 2026-07-30). -->
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

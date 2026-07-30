@@ -12,12 +12,19 @@ import 'package:media_kit_video/media_kit_video.dart';
 class TurneroVideoSlide extends StatefulWidget {
   final String url;
   final String? imagenFallbackUrl;
+
+  /// True solo cuando este slide es la página visible del PageView.
+  /// PageView construye las páginas vecinas, así que sin esto el video
+  /// arrancaría fuera de pantalla y se reproduciría dos veces.
+  final bool activo;
+
   final VoidCallback onFinalizado;
 
   const TurneroVideoSlide({
     super.key,
     required this.url,
     required this.imagenFallbackUrl,
+    required this.activo,
     required this.onFinalizado,
   });
 
@@ -39,6 +46,13 @@ class _TurneroVideoSlideState extends State<TurneroVideoSlide> {
   bool _error = false;
   String _errorTexto = '';
 
+  /// Media abierta y primer frame decodificado, listo para reproducir.
+  bool _preparado = false;
+
+  /// Reproducción en curso — evita arrancar dos veces y filtra el evento
+  /// `completed` de un slide que no está al aire.
+  bool _reproduciendo = false;
+
   @override
   void initState() {
     super.initState();
@@ -49,7 +63,17 @@ class _TurneroVideoSlideState extends State<TurneroVideoSlide> {
         enableHardwareAcceleration: false,
       ),
     );
-    _iniciarVideo();
+    _prepararVideo();
+  }
+
+  @override
+  void didUpdateWidget(TurneroVideoSlide oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.activo && !oldWidget.activo) {
+      _arrancar();
+    } else if (!widget.activo && oldWidget.activo) {
+      _detener();
+    }
   }
 
   @override
@@ -62,11 +86,16 @@ class _TurneroVideoSlideState extends State<TurneroVideoSlide> {
     super.dispose();
   }
 
-  Future<void> _iniciarVideo() async {
+  Future<void> _prepararVideo() async {
     _timeoutTimer = Timer(const Duration(seconds: 60), _onTimeout);
 
     _completedSub = _player.stream.completed.listen((done) {
-      if (done) widget.onFinalizado();
+      // Solo avanza el carrusel si este slide es el que está al aire y
+      // efectivamente estaba reproduciendo.
+      if (done && widget.activo && _reproduciendo) {
+        _reproduciendo = false;
+        widget.onFinalizado();
+      }
     });
 
     _errorSub = _player.stream.error.listen(_onPlayerError);
@@ -77,6 +106,15 @@ class _TurneroVideoSlideState extends State<TurneroVideoSlide> {
         if (native is NativePlayer) {
           await native.setProperty('hwdec', 'no');
           await native.setProperty('vd-lavc-threads', '4');
+          // Salta el filtro de deblocking: baja bastante el costo de decodificar
+          // HEVC por software, a cambio de algo de bloqueo en la imagen. Sin
+          // esto el CPU de 32 bits no llega a 24 fps y arranca a tirones.
+          await native.setProperty('vd-lavc-skiploopfilter', 'all');
+          // Sin audio: la publicidad va muteada, pero mpv seguía decodificando
+          // la pista y usándola como reloj maestro (video-sync=audio). Con un
+          // decoder de video ajustado eso forzaba descarte de frames al inicio.
+          // Además evita el setup de AudioTrack/OpenSLES en cada slide.
+          await native.setProperty('audio', 'no');
         }
       }
 
@@ -99,16 +137,45 @@ class _TurneroVideoSlideState extends State<TurneroVideoSlide> {
         return;
       }
 
-      await _player.open(media, play: true);
-
-      await Future.delayed(const Duration(milliseconds: 800));
+      // Abre en pausa: decodifica el primer frame y deja el decoder caliente
+      // sin que corra el reloj de reproducción. Cuando el slide entra al aire
+      // arranca ya listo, en vez de en frío.
+      await _player.open(media, play: false);
 
       _timeoutTimer?.cancel();
-      if (mounted) setState(() => _cargando = false);
+      if (!mounted) return;
+      _preparado = true;
+
+      if (widget.activo) {
+        await _arrancar();
+      }
     } catch (e) {
       _timeoutTimer?.cancel();
       _mostrarError(e.toString());
     }
+  }
+
+  Future<void> _arrancar() async {
+    if (!_preparado || _reproduciendo || _error) return;
+    _reproduciendo = true;
+    try {
+      await _player.seek(Duration.zero);
+      await _player.play();
+      if (mounted) setState(() => _cargando = false);
+    } catch (e) {
+      _reproduciendo = false;
+      _mostrarError(e.toString());
+    }
+  }
+
+  Future<void> _detener() async {
+    if (!_reproduciendo) return;
+    _reproduciendo = false;
+    try {
+      await _player.pause();
+      await _player.seek(Duration.zero);
+    } catch (_) {}
+    if (mounted) setState(() => _cargando = true);
   }
 
   void _onTimeout() {
