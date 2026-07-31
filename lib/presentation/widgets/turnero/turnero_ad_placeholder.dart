@@ -123,6 +123,15 @@ class _TurneroAdPlaceholderState extends ConsumerState<TurneroAdPlaceholder> {
   void _irSiguiente() {
     if (!mounted || !_pageController.hasClients || _publicidad.isEmpty) return;
     final next = (_paginaActual + 1) % _publicidad.length;
+
+    // Al volver al inicio hay que saltar, no animar: animateToPage recorre
+    // todas las páginas intermedias y dispara onPageChanged en cada una, lo
+    // que arranca videos que no están en turno.
+    if (next < _paginaActual) {
+      _pageController.jumpToPage(next);
+      return;
+    }
+
     _pageController.animateToPage(
       next,
       duration: const Duration(milliseconds: 500),

@@ -37,6 +37,7 @@ class _TurneroVideoSlideState extends State<TurneroVideoSlide> {
   late final VideoController _controller;
 
   StreamSubscription<bool>? _completedSub;
+  StreamSubscription<Duration>? _positionSub;
   StreamSubscription<String>? _errorSub;
 
   Timer? _timeoutTimer;
@@ -78,6 +79,7 @@ class _TurneroVideoSlideState extends State<TurneroVideoSlide> {
 
   @override
   void dispose() {
+    _positionSub?.cancel();
     _timeoutTimer?.cancel();
     _avanceTimer?.cancel();
     _completedSub?.cancel();
@@ -93,8 +95,20 @@ class _TurneroVideoSlideState extends State<TurneroVideoSlide> {
       // Solo avanza el carrusel si este slide es el que está al aire y
       // efectivamente estaba reproduciendo.
       if (done && widget.activo && _reproduciendo) {
-        _reproduciendo = false;
-        widget.onFinalizado();
+        _finalizar();
+      }
+    });
+
+    // Fin por posición: en la TV Amlogic mpv reinicia el archivo al llegar a
+    // EOF (con loop-file=no y playlist de 1 item) y recién emite `completed`
+    // al final de la segunda pasada, así que cada video se veía dos veces.
+    // Cortamos nosotros al terminar la primera.
+    _positionSub = _player.stream.position.listen((pos) {
+      if (!_reproduciendo || !widget.activo) return;
+      final dur = _player.state.duration;
+      if (dur > Duration.zero &&
+          pos >= dur - const Duration(milliseconds: 300)) {
+        _finalizar();
       }
     });
 
@@ -115,6 +129,10 @@ class _TurneroVideoSlideState extends State<TurneroVideoSlide> {
           // decoder de video ajustado eso forzaba descarte de frames al inicio.
           // Además evita el setup de AudioTrack/OpenSLES en cada slide.
           await native.setProperty('audio', 'no');
+          // En este TV mpv reiniciaba el archivo una vez al llegar a EOF
+          // (el video se veía 2 veces). Sin loop explícito, por las dudas.
+          await native.setProperty('loop-file', 'no');
+          await native.setProperty('loop-playlist', 'no');
         }
       }
 
@@ -166,6 +184,15 @@ class _TurneroVideoSlideState extends State<TurneroVideoSlide> {
       _reproduciendo = false;
       _mostrarError(e.toString());
     }
+  }
+
+  /// Termina la reproducción actual y avanza el carrusel. Idempotente:
+  /// llega tanto por `completed` como por el corte de posición.
+  void _finalizar() {
+    if (!_reproduciendo) return;
+    _reproduciendo = false;
+    _player.pause();
+    widget.onFinalizado();
   }
 
   Future<void> _detener() async {
