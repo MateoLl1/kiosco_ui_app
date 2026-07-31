@@ -11,6 +11,7 @@ class KeycloakService {
   final Dio _dio;
   String? _token;
   DateTime? _expiry;
+  Future<String?>? _refreshEnCurso;
 
   KeycloakService._(String baseUrl)
       : _dio = Dio(BaseOptions(
@@ -19,13 +20,17 @@ class KeycloakService {
           receiveTimeout: const Duration(seconds: 10),
         ));
 
-  Future<String?> getToken() async {
+  Future<String?> getToken() {
     if (_token != null &&
         _expiry != null &&
         DateTime.now().isBefore(_expiry!)) {
-      return _token;
+      return Future.value(_token);
     }
-    return _refresh();
+    // Deduplica refrescos concurrentes: si varios requests encuentran el
+    // token vencido a la vez, todos esperan el mismo GET /auth/token en
+    // lugar de disparar uno cada uno.
+    return _refreshEnCurso ??=
+        _refresh().whenComplete(() => _refreshEnCurso = null);
   }
 
   /// Token actual si está en caché y no expiró; null si requiere refresh async.

@@ -98,8 +98,11 @@ class _TurneroAdPlaceholderState extends ConsumerState<TurneroAdPlaceholder> {
         _paginaActual = 0;
       });
 
-      // Pre-descarga todos los archivos en paralelo para que las siguientes
+      // Borra de disco la publicidad que ya no está configurada (se espera
+      // antes de descargar para no pisar los .tmp de las descargas nuevas) y
+      // pre-descarga los archivos vigentes en paralelo para que las siguientes
       // vueltas del slideshow los sirvan desde disco.
+      await TurneroMediaCache.prune(items.map((e) => e.url));
       for (final item in items) {
         TurneroMediaCache.get(item.url);
       }
