@@ -7,28 +7,33 @@ import 'package:kiosco_au/presentation/providers/providers.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
 
 
+final Set<int> _citasEnProceso = <int>{};
+
 Future<void> ejecutarAccionCitaGuardia({
   required BuildContext context,
   required WidgetRef ref,
   required Cita cita,
   required Future<void> Function() onRefresh,
 }) async {
-  final confirmado = await mostrarConfirmacionGuardia(
-    context: context,
-    cita: cita,
-  );
-
-  if (confirmado != true) return;
-
-  final session = ref.read(appSessionProvider);
-  final repository = ref.read(kioscoRepositoryProvider);
-
-  if (session == null || session.agenciaId == null) {
-    mostrarErrorGuardia(context, 'No existe una sesión activa.');
-    return;
-  }
+  if (_citasEnProceso.contains(cita.codigoCita)) return;
+  _citasEnProceso.add(cita.codigoCita);
 
   try {
+    final confirmado = await mostrarConfirmacionGuardia(
+      context: context,
+      cita: cita,
+    );
+
+    if (confirmado != true) return;
+
+    final session = ref.read(appSessionProvider);
+    final repository = ref.read(kioscoRepositoryProvider);
+
+    if (session == null || session.agenciaId == null) {
+      mostrarErrorGuardia(context, 'No existe una sesión activa.');
+      return;
+    }
+
     final response = await repository.registrarLlegada(
       agenciaId: session.agenciaId!,
       citaId: cita.codigoCita,
@@ -46,5 +51,7 @@ Future<void> ejecutarAccionCitaGuardia({
   } catch (_) {
     if (!context.mounted) return;
     mostrarErrorGuardia(context, 'No se pudo registrar la llegada.');
+  } finally {
+    _citasEnProceso.remove(cita.codigoCita);
   }
 }
