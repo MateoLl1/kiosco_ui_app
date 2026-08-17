@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:kiosco_au/presentation/widgets/widgets.dart';
 
 class GuardiaTablaHeader extends StatelessWidget {
   const GuardiaTablaHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final isWide = width >= 900;
-    final esMovil = width < 600;
+    final isWide = MediaQuery.of(context).size.width >= 900;
+    final espacio = GuardiaTablaColumnas.espacioColumnas(isWide);
 
     return Container(
-      width: double.infinity,
+      width: GuardiaTablaColumnas.anchoFila(isWide),
       padding: EdgeInsets.symmetric(
-        horizontal: isWide ? 20 : 12,
+        horizontal: GuardiaTablaColumnas.paddingHorizontal(isWide),
         vertical: isWide ? 14 : 12,
       ),
       decoration: BoxDecoration(
@@ -25,23 +25,23 @@ class GuardiaTablaHeader extends StatelessWidget {
           fontWeight: FontWeight.w700,
           fontSize: isWide ? 20 : 14,
         ),
-        child: esMovil
-            ? const Row(
-                children: [
-                  Expanded(child: Text('Hora')),
-                  Expanded(child: Text('Placa')),
-                  Expanded(flex: 2, child: Text('Cliente')),
-                  Text('Bahía'),
-                ],
-              )
-            : const Row(
-                children: [
-                  Expanded(flex: 2, child: Text('Hora')),
-                  Expanded(flex: 2, child: Text('Placa')),
-                  Expanded(flex: 5, child: Text('Cliente')),
-                  Expanded(flex: 2, child: Text('Bahía', textAlign: TextAlign.center)),
-                ],
-              ),
+        child: Row(
+          children: [
+            // Mismo ancho que la barra de acento de CitaTitle para que las
+            // columnas de abajo queden alineadas con estos títulos.
+            SizedBox(width: GuardiaTablaColumnas.acento),
+            SizedBox(width: GuardiaTablaColumnas.hora(isWide), child: const Text('Hora')),
+            SizedBox(width: espacio),
+            SizedBox(width: GuardiaTablaColumnas.placa(isWide), child: const Text('Placa')),
+            SizedBox(width: espacio),
+            SizedBox(width: GuardiaTablaColumnas.cliente(isWide), child: const Text('Cliente')),
+            SizedBox(width: espacio),
+            SizedBox(
+              width: GuardiaTablaColumnas.bahia(isWide),
+              child: const Text('Bahía', textAlign: TextAlign.center),
+            ),
+          ],
+        ),
       ),
     );
   }

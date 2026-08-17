@@ -24,43 +24,54 @@ class _CitaTitleState extends State<CitaTitle> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final guardia = Theme.of(context).extension<GuardiaTheme>()!;
-    final width = MediaQuery.of(context).size.width;
-    final isWide = width >= 900;
-    final esMovil = width < 600;
-    final fondo = resolverColorCita(guardia, widget.cita.claveVisual);
+    final isWide = MediaQuery.of(context).size.width >= 900;
+    final acento = resolverColorCita(guardia, widget.cita.claveVisual);
 
     return Material(
       color: Colors.transparent,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: widget.onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         onFocusChange: (focused) => setState(() => _isFocused = focused),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 120),
+          width: GuardiaTablaColumnas.anchoFila(isWide),
           decoration: BoxDecoration(
-            color: fondo,
-            borderRadius: BorderRadius.circular(16),
+            color: colors.surface,
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: _isFocused ? colors.primary : Colors.transparent,
-              width: 3,
+              color: _isFocused
+                  ? colors.primary
+                  : colors.outline.withValues(alpha: 0.15),
+              width: _isFocused ? 2.5 : 1,
             ),
           ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: isWide ? 20 : 14,
-              vertical: isWide ? 18 : 14,
-            ),
-            child: esMovil
-                ? _CitaTitleMovil(
-                    cita: widget.cita,
-                    colors: colors,
-                  )
-                : _CitaTileDesktop(
-                    cita: widget.cita,
-                    colors: colors,
-                    isWide: isWide,
+          child: IntrinsicHeight(
+            child: Row(
+              children: [
+                // Comunica el tipo de labor (ver GuardiaLeyenda) sin ocupar
+                // una tarjeta entera coloreada — permite una fila por cita.
+                Container(
+                  width: GuardiaTablaColumnas.acento,
+                  decoration: BoxDecoration(
+                    color: acento,
+                    borderRadius: const BorderRadius.horizontal(
+                      left: Radius.circular(12),
+                    ),
                   ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: GuardiaTablaColumnas.paddingHorizontal(isWide),
+                      vertical: isWide ? 14 : 12,
+                    ),
+                    child: _CitaFila(cita: widget.cita, isWide: isWide),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -68,154 +79,77 @@ class _CitaTitleState extends State<CitaTitle> {
   }
 }
 
-class _CitaTileDesktop extends StatelessWidget {
+class _CitaFila extends StatelessWidget {
   final Cita cita;
-  final ColorScheme colors;
   final bool isWide;
 
-  const _CitaTileDesktop({
-    required this.cita,
-    required this.colors,
-    required this.isWide,
-  });
+  const _CitaFila({required this.cita, required this.isWide});
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final espacio = GuardiaTablaColumnas.espacioColumnas(isWide);
+
     return Row(
       children: [
-        Expanded(
-          flex: 2,
+        SizedBox(
+          width: GuardiaTablaColumnas.hora(isWide),
           child: Text(
             cita.horaCita,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            softWrap: false,
             style: TextStyle(
               color: colors.onSurface,
-              fontSize: isWide ? 24 : 18,
+              fontSize: isWide ? 20 : 16,
               fontWeight: FontWeight.w800,
             ),
           ),
         ),
-        Expanded(
-          flex: 2,
+        SizedBox(width: espacio),
+        SizedBox(
+          width: GuardiaTablaColumnas.placa(isWide),
           child: Text(
             cita.placa,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            softWrap: false,
             style: TextStyle(
               color: colors.onSurface,
-              fontSize: isWide ? 20 : 16,
+              fontSize: isWide ? 18 : 15,
               fontWeight: FontWeight.w700,
             ),
           ),
         ),
-        Expanded(
-          flex: 5,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                cita.nombreCliente,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: colors.onSurface,
-                  fontSize: isWide ? 19 : 15,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                cita.tipoLabor.replaceAll('_', ' '),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: colors.onSurfaceVariant,
-                  fontSize: isWide ? 15 : 13,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
+        SizedBox(width: espacio),
+        SizedBox(
+          width: GuardiaTablaColumnas.cliente(isWide),
+          child: Text(
+            cita.nombreCliente,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            softWrap: false,
+            style: TextStyle(
+              color: colors.onSurface,
+              fontSize: isWide ? 17 : 14,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
-        Expanded(
-          flex: 2,
+        SizedBox(width: espacio),
+        SizedBox(
+          width: GuardiaTablaColumnas.bahia(isWide),
           child: Text(
             cita.bahia,
             textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            softWrap: false,
             style: TextStyle(
               color: colors.onSurface,
-              fontSize: isWide ? 22 : 18,
+              fontSize: isWide ? 20 : 16,
               fontWeight: FontWeight.w800,
             ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _CitaTitleMovil extends StatelessWidget {
-  final Cita cita;
-  final ColorScheme colors;
-
-  const _CitaTitleMovil({
-    required this.cita,
-    required this.colors,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                cita.horaCita,
-                style: TextStyle(
-                  color: colors.onSurface,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-            Text(
-              cita.bahia,
-              style: TextStyle(
-                color: colors.onSurface,
-                fontSize: 20,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Text(
-          cita.placa,
-          style: TextStyle(
-            color: colors.onSurface,
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          cita.nombreCliente,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: colors.onSurface,
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          cita.tipoLabor.replaceAll('_', ' '),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: colors.onSurfaceVariant,
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
           ),
         ),
       ],

@@ -54,47 +54,38 @@ class _GuardiaHeaderState extends State<GuardiaHeader> {
                     color: colors.onSurface,
                   ),
                 ),
-                if (!isWide) ...[
-                  const SizedBox(height: 2),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.swipe_up_rounded,
-                        size: 13,
-                        color: colors.onSurfaceVariant,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        'Desliza hacia abajo para actualizar',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: colors.onSurfaceVariant,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
               ],
             ),
           ),
-          if (isWide && widget.onRefresh != null)
+          if (widget.onRefresh != null) ...[
+            const SizedBox(width: 12),
+            // Botón explícito en vez de gesto de swipe: el swipe-to-refresh
+            // es dificil de descubrir y de ejecutar para usuarios mayores.
             _cargando
                 ? SizedBox(
-                    width: 36,
-                    height: 36,
+                    width: isWide ? 52 : 48,
+                    height: isWide ? 52 : 48,
                     child: CircularProgressIndicator(
-                      strokeWidth: 2.5,
+                      strokeWidth: 3,
                       color: colors.primary,
                     ),
                   )
-                : IconButton(
+                : FilledButton.tonalIcon(
                     onPressed: _recargar,
                     icon: const Icon(Icons.refresh_rounded),
-                    tooltip: 'Actualizar',
-                    color: colors.primary,
-                    iconSize: 28,
+                    label: const Text('Actualizar'),
+                    style: FilledButton.styleFrom(
+                      minimumSize: Size(0, isWide ? 52 : 48),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isWide ? 20 : 16,
+                      ),
+                      textStyle: TextStyle(
+                        fontSize: isWide ? 16 : 15,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
+          ],
         ],
       ),
     );
