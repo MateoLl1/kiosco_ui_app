@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 const _kGreen = Color(0xFF22C55E);
+const _kRed = Color(0xFFEF4444);
 
 class TurneroBottomModulesBar extends StatelessWidget {
   final Set<String> activeModulos;
@@ -27,7 +28,8 @@ class TurneroBottomModulesBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: modulosActivos.map((module) {
-          final isActive = activeModulos.contains(module.toString());
+          final enAtencion = activeModulos.contains(module.toString());
+          final dotColor = enAtencion ? _kRed : _kGreen;
 
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -35,33 +37,29 @@ class TurneroBottomModulesBar extends StatelessWidget {
               children: [
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  width: isActive ? 10 : 8,
-                  height: isActive ? 10 : 8,
+                  width: enAtencion ? 10 : 8,
+                  height: enAtencion ? 10 : 8,
                   decoration: BoxDecoration(
-                    color: isActive
-                        ? _kGreen
-                        : colors.onSurface.withValues(alpha: 0.25),
+                    color: dotColor,
                     shape: BoxShape.circle,
-                    boxShadow: isActive
-                        ? [
-                            BoxShadow(
-                              color: _kGreen.withValues(alpha: 0.50),
-                              blurRadius: 8,
-                              spreadRadius: 1,
-                            ),
-                          ]
-                        : null,
+                    boxShadow: [
+                      BoxShadow(
+                        color: dotColor.withValues(alpha: 0.50),
+                        blurRadius: 8,
+                        spreadRadius: 1,
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(width: 7),
                 Text(
                   'MÓDULO $module',
                   style: TextStyle(
-                    color: isActive
+                    color: enAtencion
                         ? colors.onSurface
-                        : colors.onSurface.withValues(alpha: 0.40),
+                        : colors.onSurface.withValues(alpha: 0.70),
                     fontSize: 12,
-                    fontWeight: isActive ? FontWeight.w800 : FontWeight.w500,
+                    fontWeight: enAtencion ? FontWeight.w800 : FontWeight.w600,
                   ),
                 ),
               ],
