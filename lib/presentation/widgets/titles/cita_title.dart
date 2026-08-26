@@ -5,11 +5,15 @@ import 'package:kiosco_au/presentation/widgets/widgets.dart';
 
 class CitaTitle extends StatefulWidget {
   final Cita cita;
+  final GuardiaTablaAnchos anchos;
+  final bool isWide;
   final VoidCallback onTap;
 
   const CitaTitle({
     super.key,
     required this.cita,
+    required this.anchos,
+    required this.isWide,
     required this.onTap,
   });
 
@@ -24,8 +28,9 @@ class _CitaTitleState extends State<CitaTitle> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final guardia = Theme.of(context).extension<GuardiaTheme>()!;
-    final isWide = MediaQuery.of(context).size.width >= 900;
     final acento = resolverColorCita(guardia, widget.cita.claveVisual);
+    final anchos = widget.anchos;
+    final isWide = widget.isWide;
 
     return Material(
       color: Colors.transparent,
@@ -36,7 +41,7 @@ class _CitaTitleState extends State<CitaTitle> {
         onFocusChange: (focused) => setState(() => _isFocused = focused),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 120),
-          width: GuardiaTablaColumnas.anchoFila(isWide),
+          width: anchos.anchoFila,
           decoration: BoxDecoration(
             color: colors.surface,
             borderRadius: BorderRadius.circular(12),
@@ -53,7 +58,7 @@ class _CitaTitleState extends State<CitaTitle> {
                 // Comunica el tipo de labor (ver GuardiaLeyenda) sin ocupar
                 // una tarjeta entera coloreada — permite una fila por cita.
                 Container(
-                  width: GuardiaTablaColumnas.acento,
+                  width: GuardiaTablaAnchos.acento,
                   decoration: BoxDecoration(
                     color: acento,
                     borderRadius: const BorderRadius.horizontal(
@@ -64,10 +69,10 @@ class _CitaTitleState extends State<CitaTitle> {
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: GuardiaTablaColumnas.paddingHorizontal(isWide),
+                      horizontal: anchos.paddingHorizontal,
                       vertical: isWide ? 14 : 12,
                     ),
-                    child: _CitaFila(cita: widget.cita, isWide: isWide),
+                    child: _CitaFila(cita: widget.cita, anchos: anchos, isWide: isWide),
                   ),
                 ),
               ],
@@ -81,75 +86,55 @@ class _CitaTitleState extends State<CitaTitle> {
 
 class _CitaFila extends StatelessWidget {
   final Cita cita;
+  final GuardiaTablaAnchos anchos;
   final bool isWide;
 
-  const _CitaFila({required this.cita, required this.isWide});
+  const _CitaFila({
+    required this.cita,
+    required this.anchos,
+    required this.isWide,
+  });
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final espacio = GuardiaTablaColumnas.espacioColumnas(isWide);
 
     return Row(
       children: [
         SizedBox(
-          width: GuardiaTablaColumnas.hora(isWide),
+          width: anchos.hora,
           child: Text(
             cita.horaCita,
             maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            softWrap: false,
-            style: TextStyle(
-              color: colors.onSurface,
-              fontSize: isWide ? 20 : 16,
-              fontWeight: FontWeight.w800,
-            ),
+            style: GuardiaColumnaEstilos.hora(isWide).copyWith(color: colors.onSurface),
           ),
         ),
-        SizedBox(width: espacio),
+        SizedBox(width: anchos.espacioColumnas),
         SizedBox(
-          width: GuardiaTablaColumnas.placa(isWide),
+          width: anchos.placa,
           child: Text(
             cita.placa,
             maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            softWrap: false,
-            style: TextStyle(
-              color: colors.onSurface,
-              fontSize: isWide ? 18 : 15,
-              fontWeight: FontWeight.w700,
-            ),
+            style: GuardiaColumnaEstilos.placa(isWide).copyWith(color: colors.onSurface),
           ),
         ),
-        SizedBox(width: espacio),
+        SizedBox(width: anchos.espacioColumnas),
         SizedBox(
-          width: GuardiaTablaColumnas.cliente(isWide),
+          width: anchos.cliente,
           child: Text(
             cita.nombreCliente,
             maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            softWrap: false,
-            style: TextStyle(
-              color: colors.onSurface,
-              fontSize: isWide ? 17 : 14,
-              fontWeight: FontWeight.w700,
-            ),
+            style: GuardiaColumnaEstilos.cliente(isWide).copyWith(color: colors.onSurface),
           ),
         ),
-        SizedBox(width: espacio),
+        SizedBox(width: anchos.espacioColumnas),
         SizedBox(
-          width: GuardiaTablaColumnas.bahia(isWide),
+          width: anchos.bahia,
           child: Text(
             cita.bahia,
             textAlign: TextAlign.center,
             maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            softWrap: false,
-            style: TextStyle(
-              color: colors.onSurface,
-              fontSize: isWide ? 20 : 16,
-              fontWeight: FontWeight.w800,
-            ),
+            style: GuardiaColumnaEstilos.bahia(isWide).copyWith(color: colors.onSurface),
           ),
         ),
       ],

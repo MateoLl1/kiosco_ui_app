@@ -77,10 +77,17 @@ class _GuardiaBodyState extends ConsumerState<GuardiaBody> {
 
         final isWide = MediaQuery.of(context).size.width >= 900;
 
-        // Columnas de ancho fijo (ver GuardiaTablaColumnas): el texto nunca
-        // se aprieta ni se parte en dos líneas. Si la tabla no entra en la
-        // pantalla, se desplaza lateralmente en vez de comprimirse — la
-        // barra queda siempre visible para que sea evidente que hay más.
+        // Anchos calculados a partir del contenido real y de la letra que
+        // el usuario configuró a nivel de sistema (accesibilidad): el texto
+        // nunca se recorta. Si la tabla no entra en la pantalla, se
+        // desplaza lateralmente en vez de comprimirse — la barra queda
+        // siempre visible para que sea evidente que hay más.
+        final anchos = GuardiaTablaAnchos.calcular(
+          citas: citas,
+          isWide: isWide,
+          textScaler: MediaQuery.textScalerOf(context),
+        );
+
         return Scrollbar(
           controller: _scrollHorizontal,
           thumbVisibility: true,
@@ -89,10 +96,10 @@ class _GuardiaBodyState extends ConsumerState<GuardiaBody> {
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.only(bottom: 12),
             child: SizedBox(
-              width: GuardiaTablaColumnas.anchoFila(isWide),
+              width: anchos.anchoFila,
               child: Column(
                 children: [
-                  const GuardiaTablaHeader(),
+                  GuardiaTablaHeader(anchos: anchos, isWide: isWide),
                   const SizedBox(height: 8),
                   ...List.generate(citas.length, (index) {
                     final cita = citas[index];
@@ -101,6 +108,8 @@ class _GuardiaBodyState extends ConsumerState<GuardiaBody> {
                       padding: EdgeInsets.only(bottom: index == citas.length - 1 ? 0 : 8),
                       child: CitaTitle(
                         cita: cita,
+                        anchos: anchos,
+                        isWide: isWide,
                         onTap: () => ejecutarAccionCitaGuardia(
                           context: context,
                           ref: ref,

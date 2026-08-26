@@ -14,7 +14,7 @@ class CustomTextCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Text(
-          'Tome asiento en la sala de espera. Su turno será llamado en pantalla.',
+          'Su turno será llamado en pantalla. Por favor espere.',
           style: textStyle.bodyLarge,
           textAlign: TextAlign.center,
         ),
