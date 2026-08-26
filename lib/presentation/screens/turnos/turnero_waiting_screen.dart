@@ -10,6 +10,7 @@ import 'package:kiosco_au/domain/domain.dart';
 import 'package:kiosco_au/infrastructure/http/dio_factory.dart';
 import 'package:kiosco_au/presentation/providers/providers.dart';
 import 'package:kiosco_au/presentation/widgets/widgets.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class TurneroWaitingScreen extends ConsumerStatefulWidget {
   const TurneroWaitingScreen({super.key});
@@ -38,6 +39,8 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
   void initState() {
     super.initState();
 
+    WakelockPlus.enable();
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
@@ -52,6 +55,7 @@ class _TurneroWaitingScreenState extends ConsumerState<TurneroWaitingScreen> {
 
   @override
   void dispose() {
+    WakelockPlus.disable();
     overlayTimer?.cancel();
     audioPlayer.dispose();
 
