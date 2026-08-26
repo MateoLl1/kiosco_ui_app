@@ -50,13 +50,6 @@ class TurnoAsignadoScreen extends ConsumerWidget {
         ? AppValidators.formatearTipoTurno(turnoGenerado!.tipo)
         : 'Sin cita';
 
-    final personasPorDelante =
-        turnoCliente?.personasPorDelante ?? turnoGenerado?.personasPorDelante;
-
-    final colaTexto = personasPorDelante == null
-        ? '-- persona(s) antes'
-        : '$personasPorDelante persona(s) antes';
-
     final telefonoInicial = _obtenerTelefonoInicial(
       turnoCliente: turnoCliente,
       cliente: clienteProvider,
@@ -145,11 +138,6 @@ class TurnoAsignadoScreen extends ConsumerWidget {
                                           label: 'Tipo',
                                           descripcion: tipoTexto,
                                           icon: Icons.confirmation_number,
-                                        ),
-                                        DetalleTurno(
-                                          label: 'En cola',
-                                          descripcion: colaTexto,
-                                          icon: Icons.people,
                                         ),
                                       ],
                                     ),
