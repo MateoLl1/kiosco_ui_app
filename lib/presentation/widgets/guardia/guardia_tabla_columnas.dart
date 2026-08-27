@@ -10,27 +10,38 @@ import 'package:kiosco_au/domain/domain.dart';
 class GuardiaColumnaEstilos {
   const GuardiaColumnaEstilos._();
 
+  // fontFamily explícito en los 5: TextPainter (usado para medir el ancho
+  // de columna) no hereda el 'Montserrat' de ThemeData como sí lo hace el
+  // Text real en pantalla, así que si no coincidieran acá la medición
+  // quedaría corta y la placa se vería recortada según los caracteres.
+  static const _fontFamily = 'Montserrat';
+
   static TextStyle hora(bool isWide) => TextStyle(
+        fontFamily: _fontFamily,
         fontSize: isWide ? 20 : 16,
         fontWeight: FontWeight.w800,
       );
 
   static TextStyle placa(bool isWide) => TextStyle(
+        fontFamily: _fontFamily,
         fontSize: isWide ? 18 : 15,
         fontWeight: FontWeight.w700,
       );
 
   static TextStyle cliente(bool isWide) => TextStyle(
+        fontFamily: _fontFamily,
         fontSize: isWide ? 17 : 14,
         fontWeight: FontWeight.w700,
       );
 
   static TextStyle bahia(bool isWide) => TextStyle(
+        fontFamily: _fontFamily,
         fontSize: isWide ? 20 : 16,
         fontWeight: FontWeight.w800,
       );
 
   static TextStyle header(bool isWide) => TextStyle(
+        fontFamily: _fontFamily,
         fontSize: isWide ? 20 : 14,
         fontWeight: FontWeight.w700,
       );

@@ -41,11 +41,20 @@ Future<void> ejecutarAccionCitaGuardia({
 
     if (!context.mounted) return;
 
-    await mostrarTurnoGeneradoGuardia(
-      context: context,
-      turno: response.turno,
-      mensaje: response.mensaje,
-    );
+    if (response.resultado == 'atencion_directa') {
+      await mostrarAtencionDirectaGuardia(
+        context: context,
+        bahia: response.bahia,
+        tecnico: response.tecnico,
+        mensaje: response.mensaje,
+      );
+    } else {
+      await mostrarTurnoGeneradoGuardia(
+        context: context,
+        turno: response.turno,
+        mensaje: response.mensaje,
+      );
+    }
 
     await onRefresh();
   } catch (_) {

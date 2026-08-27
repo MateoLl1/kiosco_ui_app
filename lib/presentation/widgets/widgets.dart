@@ -28,6 +28,7 @@ export './guardia/guardia_tabla_header.dart';
 export './guardia/guardia_tabla_columnas.dart';
 export './helper/guardia_confirmacion_sheet.dart';
 export './helper/guardia_turno_generado_sheet.dart';
+export './helper/guardia_atencion_directa_sheet.dart';
 export './helper/guardia_error_helper.dart';
 export './helper/guardia_cita_action.dart';
 export './helper/guardia_turno_actions.dart';
