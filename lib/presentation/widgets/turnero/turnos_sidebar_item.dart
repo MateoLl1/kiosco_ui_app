@@ -21,19 +21,6 @@ class TurnosSidebarItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
-            width: 18,
-            child: Text(
-              '${index + 1}',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: colors.onSurface.withValues(alpha: 0.35),
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
             decoration: BoxDecoration(
