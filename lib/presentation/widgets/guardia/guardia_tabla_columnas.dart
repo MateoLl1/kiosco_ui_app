@@ -54,7 +54,7 @@ class GuardiaColumnaEstilos {
 /// ve desplazando hacia los lados (GuardiaBody ya envuelve todo en un
 /// scroll horizontal).
 class GuardiaTablaAnchos {
-  static const double acento = 6;
+  static const double acento = 14;
 
   final double hora;
   final double placa;

@@ -12,7 +12,6 @@ class Cita {
     final double tlCodigo;
     final String estado;
     final String tipoLabor;
-    final String claveVisual;
 
     Cita({
         required this.codigoCita,
@@ -25,7 +24,6 @@ class Cita {
         required this.tlCodigo,
         required this.estado,
         required this.tipoLabor,
-        required this.claveVisual,
     });
 
     

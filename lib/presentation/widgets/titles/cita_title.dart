@@ -28,7 +28,7 @@ class _CitaTitleState extends State<CitaTitle> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final guardia = Theme.of(context).extension<GuardiaTheme>()!;
-    final acento = resolverColorCita(guardia, widget.cita.claveVisual);
+    final acento = resolverColorCita(guardia, widget.cita.estado, widget.cita.tipoLabor);
     final anchos = widget.anchos;
     final isWide = widget.isWide;
 
@@ -43,7 +43,10 @@ class _CitaTitleState extends State<CitaTitle> {
           duration: const Duration(milliseconds: 120),
           width: anchos.anchoFila,
           decoration: BoxDecoration(
-            color: colors.surface,
+            // Tinte suave de fondo con el mismo color de la barra, para que
+            // el tipo se note en toda la fila y no solo en una franja
+            // angosta a la izquierda.
+            color: Color.alphaBlend(acento.withValues(alpha: 0.10), colors.surface),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: _isFocused

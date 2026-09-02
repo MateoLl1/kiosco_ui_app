@@ -13,7 +13,6 @@ class CitaMapper {
       tlCodigo: (json['tlCodigo'] as num?)?.toDouble() ?? 0,
       estado: json['estado'] as String? ?? '',
       tipoLabor: json['tipoLabor'] as String? ?? '',
-      claveVisual: json['claveVisual'] as String? ?? '',
     );
   }
 }
