@@ -210,6 +210,7 @@ class _IngresarRucScreenState extends ConsumerState<IngresarRucScreen> {
     final esAncho = ancho >= 900;
 
     final content = KioskIdleDetector(
+      paused: _consultando,
       child: Scaffold(
         body: SafeArea(
           child: Stack(

@@ -73,6 +73,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final colors = Theme.of(context).colorScheme;
 
     return KioskIdleDetector(
+      paused: _generandoTurno,
       child: Scaffold(
         body: SafeArea(
           child: Stack(
